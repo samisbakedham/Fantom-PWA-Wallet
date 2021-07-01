@@ -131,6 +131,14 @@ export default {
             type: String,
             default: '',
         },
+        extendLock: {
+            type: Boolean,
+            default: false,
+        },
+        lockedFromEpochTimestamp: {
+            type: Number,
+            default: 0,
+        },
     },
 
     data() {
@@ -146,6 +154,7 @@ export default {
             amount: '',
             amountDelegated: 0,
             amountErrMsg: '',
+            isValidator: false,
             // sliderLabels: ['', ''],
             id: getUniqueId(),
         };
@@ -249,12 +258,19 @@ export default {
                 this.fetchDelegation(this.stakerId),
                 this.$fWallet.getStakerById(this.stakerId),
             ]);
-            const sfcConfig = await this.$fWallet.getSFCConfig();
-
-            this.minLock = sfcConfig.minLockupDuration.num;
 
             this.delegation = data[0];
             this.validator = data[1];
+
+            this.isValidator = this.currentAccount.address.toLowerCase() === this.validator.stakerAddress.toLowerCase();
+
+            if (!this.extendLock) {
+                const sfcConfig = await this.$fWallet.getSFCConfig();
+
+                this.minLock = sfcConfig.minLockupDuration.num;
+            } else {
+                this.minLock = this.delegationLockedUntil - this.lockedFromEpochTimestamp + dayS;
+            }
 
             this.amountDelegated = parseFloat(this.$fWallet.WEIToFTM(this.delegation.amountDelegated));
             this.amount = this.amountDelegated.toString(10);
@@ -403,11 +419,10 @@ export default {
             if (this.canLockDelegation && this.valueIsCorrect) {
                 if (this.lockDaysInputValue === this.maxLockDays) {
                     lockDuration = this.validatorLockedUntil - this.now();
+                    lockDuration -= 7300;
                 } else {
                     lockDuration = this.lockDaysInputValue * dayS;
                 }
-
-                lockDuration -= 7200;
 
                 if (appConfig.useTestnet && this.lockDaysInputValue === 14) {
                     lockDuration = 10 * 60 + 5;
@@ -421,6 +436,8 @@ export default {
                         lockDuration,
                         amount: amountDelegated,
                         amountHex: this.delegation.amountDelegated,
+                        extendLock: this.extendLock,
+                        lockedFromEpochTimestamp: this.lockedFromEpochTimestamp,
                         // amountDelegated: this.delegation.amountDelegated,
                         // max: amount >= this.amountDelegated,
                     },

@@ -173,6 +173,14 @@
                                     Lock Delegation
                                 </button>
                                 <button
+                                    v-show="canExtendDelegationLock"
+                                    class="btn large"
+                                    :disabled="!canExtendDelegationLock"
+                                    @click="extendDelegationLock()"
+                                >
+                                    Extend Delegation Lock
+                                </button>
+                                <button
                                     v-show="canMintSFTM"
                                     class="btn large"
                                     :disabled="!canMintSFTM"
@@ -268,6 +276,7 @@ import FMessage from '../core/FMessage/FMessage.vue';
 import FPlaceholder from '@/components/core/FPlaceholder/FPlaceholder.vue';
 import gql from 'graphql-tag';
 import { SFC_CLAIM_MAX_EPOCHS } from '@/plugins/fantom-web3-wallet.js';
+import dayjs from 'dayjs';
 
 export default {
     name: 'StakingInfo',
@@ -292,6 +301,7 @@ export default {
             isFluidStakingActive: false,
             lockedUntil: '',
             isDelegationLocked: false,
+            lockedFromEpochTimestamp: -1,
             explorerUrl: appConfig.explorerUrl2,
             claimMaxEpochs: SFC_CLAIM_MAX_EPOCHS,
             /** @type {DefiToken} */
@@ -396,6 +406,26 @@ export default {
             return this.canUndelegate && !this.isDelegationLocked;
         },
 
+        canExtendDelegationLock() {
+            if (
+                !this.isDelegationLocked ||
+                this.lockedFromEpochTimestamp <= 0 ||
+                !this.stakerInfo ||
+                this._delegation.lockedUntil === '0x0'
+            ) {
+                return false;
+            }
+
+            const lockedFrom = dayjs.utc(this.lockedFromEpochTimestamp * 1000);
+            const lockedUntil = dayjs.utc(parseInt(this._delegation.lockedUntil, 16) * 1000);
+            const lockDuration = lockedUntil.subtract(lockedFrom);
+            const now = dayjs().utc();
+            const stakerLockedUntil = dayjs.utc(parseInt(this.stakerInfo.lockedUntil, 16) * 1000);
+
+            // (stakerLockedUntil - (now + lockDuration)) > 0
+            return this.isValidator || stakerLockedUntil.diff(now.add(lockDuration), 'day') > 0;
+        },
+
         canMintSFTM() {
             const { delegation } = this.accountInfo;
             let delegationOk = true;
@@ -420,6 +450,14 @@ export default {
                 this._delegation.outstandingSFTM !== '0x0' &&
                 this.outstandingSFTM <= this.availableSFTM
             );
+        },
+
+        isValidator() {
+            if (!this.stakerInfo) {
+                return false;
+            }
+
+            return this.currentAccount.address.toLowerCase() === this.stakerInfo.stakerAddress.toLowerCase();
         },
 
         showRepaySFTMMessage() {
@@ -554,6 +592,8 @@ export default {
 
             accountInfo.preparedForWithdrawal = delegation && delegation.pendingRewards.amount === '0x0';
 
+            await this.setLockedFromEpochTimestamp(this._delegation.lockedFromEpoch);
+
             return accountInfo;
         },
 
@@ -645,6 +685,22 @@ export default {
             });
         },
 
+        extendDelegationLock() {
+            if (!this.canExtendDelegationLock) {
+                return;
+            }
+
+            this.$emit('change-component', {
+                to: 'delegation-lock',
+                from: 'staking-info',
+                data: {
+                    stakerId: this.stakerId,
+                    extendLock: true,
+                    lockedFromEpochTimestamp: this.lockedFromEpochTimestamp,
+                },
+            });
+        },
+
         mintSFTM() {
             if (!this.canMintSFTM) {
                 return;
@@ -687,6 +743,18 @@ export default {
 
         now() {
             return new Date().getTime();
+        },
+
+        async setLockedFromEpochTimestamp(lockedFromEpoch) {
+            if (this.lockedFromEpochTimestamp < 0) {
+                this.lockedFromEpochTimestamp = 0;
+
+                const epoch = await this.$fWallet.fetchEpoch(lockedFromEpoch);
+
+                console.log('??', parseInt(epoch.endTime, 16));
+
+                this.lockedFromEpochTimestamp = epoch.endTime === '0x0' ? dayjs().unix() : parseInt(epoch.endTime, 16);
+            }
         },
 
         async claimRewards() {
@@ -770,6 +838,7 @@ export default {
                             tokenizerAllowedToWithdraw
                             isFluidStakingActive
                             isDelegationLocked
+                            lockedFromEpoch
                             lockedUntil
                             pendingRewards {
                                 amount

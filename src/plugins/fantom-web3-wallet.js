@@ -510,6 +510,31 @@ export class FantomWeb3Wallet {
         }
     }
 
+    async fetchEpoch(id) {
+        try {
+            const data = await this.apolloClient.query({
+                query: gql`
+                    query GetEpoch($id: Long!) {
+                        epoch(id: $id) {
+                            id
+                            endTime
+                            duration
+                        }
+                    }
+                `,
+                variables: {
+                    id: id,
+                },
+                fetchPolicy: 'network-only',
+            });
+
+            return data && data.data.epoch ? data.data.epoch : '';
+        } catch (_error) {
+            console.error(_error);
+            return '';
+        }
+    }
+
     /**
      * Fetch all records.
      *
@@ -737,6 +762,10 @@ export class FantomWeb3Wallet {
             gasLimit = GAS_LIMITS.max;
         }*/
 
+        if (error) {
+            console.error(error);
+        }
+
         return {
             value: value,
             // from,
@@ -773,6 +802,10 @@ export class FantomWeb3Wallet {
             gasLimit = GAS_LIMITS.max;
         }*/
 
+        if (error) {
+            console.error(error);
+        }
+
         return {
             ..._tx,
             gasPrice,
@@ -804,6 +837,10 @@ export class FantomWeb3Wallet {
         /*if (!gasLimit) {
             gasLimit = GAS_LIMITS.max;
         }*/
+
+        if (error) {
+            console.error(error);
+        }
 
         return {
             ..._tx,

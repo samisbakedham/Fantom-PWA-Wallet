@@ -49,13 +49,10 @@ import TxConfirmation from '@/components/TxConfirmation/TxConfirmation.vue';
 import LedgerConfirmationContent from '@/components/LedgerConfirmationContent/LedgerConfirmationContent.vue';
 import { toFTM } from '@/utils/transactions.js';
 import { formatDate, timestampToDate } from '@/filters.js';
-import appConfig from '../../../app.config.js';
 import { toBigNumber, toHex } from '@/utils/big-number.js';
 
 /** Day in seconds. */
 const dayS = 86400;
-/** Minimal lock duration in days. */
-const minDays = 14;
 
 export default {
     name: 'DelegationLockConfirmation',
@@ -87,6 +84,14 @@ export default {
         max: {
             type: Boolean,
             default: false,
+        },
+        extendLock: {
+            type: Boolean,
+            default: false,
+        },
+        lockedFromEpochTimestamp: {
+            type: Number,
+            default: 0,
         },
     },
 
@@ -133,14 +138,20 @@ export default {
 
         async setTx() {
             const stakerId = parseInt(this.stakerId, 16);
-            let bAmount = toBigNumber(this.$fWallet.toWei(this.amount));
-            let bDlgAmount = toBigNumber(this.amountHex);
 
-            if (bAmount.comparedTo(bDlgAmount.times(0.9995)) === 1) {
-                bAmount = bDlgAmount;
-            }
+            if (this.extendLock) {
+                this.tx = await this.$fWallet.getSFCTransactionToSign(
+                    sfcUtils.relockDelegationTx(stakerId, this.lockDuration, 0),
+                    this.currentAccount.address
+                );
+            } else {
+                let bAmount = toBigNumber(this.$fWallet.toWei(this.amount));
+                let bDlgAmount = toBigNumber(this.amountHex);
 
-            if (this.lockDuration > minDays * dayS || appConfig.useTestnet) {
+                if (bAmount.comparedTo(bDlgAmount.times(0.9995)) === 1) {
+                    bAmount = bDlgAmount;
+                }
+
                 this.tx = await this.$fWallet.getSFCTransactionToSign(
                     sfcUtils.lockupDelegationTx(stakerId, this.lockDuration, toHex(bAmount)),
                     this.currentAccount.address
@@ -178,6 +189,8 @@ export default {
                 from: 'delegation-lock-confirmation',
                 data: {
                     stakerId: this.stakerId,
+                    extendLock: this.extendLock,
+                    lockedFromEpochTimestamp: this.lockedFromEpochTimestamp,
                 },
             });
         },
