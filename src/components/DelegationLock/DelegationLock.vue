@@ -204,7 +204,15 @@ export default {
          * @return {number} Timestamp.
          */
         validatorLockedUntil() {
-            return this.validator ? parseInt(this.validator.lockedUntil, 16) : 0;
+            if (this.validator) {
+                if (this.isValidator) {
+                    return this.now() + 365 * dayS;
+                } else {
+                    return parseInt(this.validator.lockedUntil, 16);
+                }
+            }
+
+            return 0;
         },
 
         /**

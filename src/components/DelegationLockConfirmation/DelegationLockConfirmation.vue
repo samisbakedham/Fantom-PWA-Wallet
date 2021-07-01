@@ -113,7 +113,7 @@ export default {
         },
 
         lockedUntilDays() {
-            return Math.floor(this.lockDuration / dayS);
+            return Math.round(this.lockDuration / dayS);
         },
 
         validatorName() {
