@@ -89,7 +89,7 @@ export default {
             type: Boolean,
             default: false,
         },
-        lockedFromEpochTimestamp: {
+        delegationLockDuration: {
             type: Number,
             default: 0,
         },
@@ -140,8 +140,14 @@ export default {
             const stakerId = parseInt(this.stakerId, 16);
 
             if (this.extendLock) {
+                let { lockDuration } = this;
+
+                if (this.extendLock && lockDuration < this.delegationLockDuration) {
+                    lockDuration = this.delegationLockDuration;
+                }
+
                 this.tx = await this.$fWallet.getSFCTransactionToSign(
-                    sfcUtils.relockDelegationTx(stakerId, this.lockDuration, 0),
+                    sfcUtils.relockDelegationTx(stakerId, lockDuration, 0),
                     this.currentAccount.address
                 );
             } else {
@@ -190,7 +196,7 @@ export default {
                 data: {
                     stakerId: this.stakerId,
                     extendLock: this.extendLock,
-                    lockedFromEpochTimestamp: this.lockedFromEpochTimestamp,
+                    delegationLockDuration: this.delegationLockDuration,
                 },
             });
         },

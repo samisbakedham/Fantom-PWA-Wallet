@@ -301,7 +301,7 @@ export default {
             isFluidStakingActive: false,
             lockedUntil: '',
             isDelegationLocked: false,
-            lockedFromEpochTimestamp: -1,
+            lockDuration: 0,
             explorerUrl: appConfig.explorerUrl2,
             claimMaxEpochs: SFC_CLAIM_MAX_EPOCHS,
             /** @type {DefiToken} */
@@ -409,16 +409,14 @@ export default {
         canExtendDelegationLock() {
             if (
                 !this.isDelegationLocked ||
-                this.lockedFromEpochTimestamp <= 0 ||
                 !this.stakerInfo ||
-                this._delegation.lockedUntil === '0x0'
+                this._delegation.lockedUntil === '0x0' ||
+                this.lockDuration === 0
             ) {
                 return false;
             }
 
-            const lockedFrom = dayjs.utc(this.lockedFromEpochTimestamp * 1000);
-            const lockedUntil = dayjs.utc(parseInt(this._delegation.lockedUntil, 16) * 1000);
-            const lockDuration = lockedUntil.subtract(lockedFrom);
+            const lockDuration = dayjs.utc(this.lockDuration * 1000);
             const now = dayjs().utc();
             const stakerLockedUntil = dayjs.utc(parseInt(this.stakerInfo.lockedUntil, 16) * 1000);
 
@@ -576,6 +574,7 @@ export default {
                 this._delegation = delegation;
                 this.isFluidStakingActive = delegation.isFluidStakingActive;
                 this.lockedUntil = delegation.lockedUntil;
+                this.lockDuration = parseInt(delegation.lockDuration, 16);
                 this.isDelegationLocked = delegation.isDelegationLocked;
             }
 
@@ -591,8 +590,6 @@ export default {
             accountInfo.createdTime = delegation ? delegation.createdTime : '';
 
             accountInfo.preparedForWithdrawal = delegation && delegation.pendingRewards.amount === '0x0';
-
-            await this.setLockedFromEpochTimestamp(this._delegation.lockedFromEpoch);
 
             return accountInfo;
         },
@@ -696,7 +693,7 @@ export default {
                 data: {
                     stakerId: this.stakerId,
                     extendLock: true,
-                    lockedFromEpochTimestamp: this.lockedFromEpochTimestamp,
+                    delegationLockDuration: this.lockDuration,
                 },
             });
         },
@@ -743,18 +740,6 @@ export default {
 
         now() {
             return new Date().getTime();
-        },
-
-        async setLockedFromEpochTimestamp(lockedFromEpoch) {
-            if (this.lockedFromEpochTimestamp < 0) {
-                this.lockedFromEpochTimestamp = 0;
-
-                const epoch = await this.$fWallet.fetchEpoch(lockedFromEpoch);
-
-                console.log('??', parseInt(epoch.endTime, 16));
-
-                this.lockedFromEpochTimestamp = epoch.endTime === '0x0' ? dayjs().unix() : parseInt(epoch.endTime, 16);
-            }
         },
 
         async claimRewards() {
@@ -838,7 +823,7 @@ export default {
                             tokenizerAllowedToWithdraw
                             isFluidStakingActive
                             isDelegationLocked
-                            lockedFromEpoch
+                            lockDuration
                             lockedUntil
                             pendingRewards {
                                 amount
