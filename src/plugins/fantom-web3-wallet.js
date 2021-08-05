@@ -777,6 +777,7 @@ export class FantomWeb3Wallet {
             nonce,
             data: memo ? Web3.utils.asciiToHex(memo) : '0x',
             _error: error || undefined,
+            _fee: !error ? this.WEIToFTM(this.getTransactionFee(gasPrice, gasLimit)) : 0,
         };
     }
 
@@ -813,6 +814,7 @@ export class FantomWeb3Wallet {
             gasLimit: gasLimit,
             nonce,
             _error: error || undefined,
+            _fee: !error ? this.WEIToFTM(this.getTransactionFee(gasPrice, gasLimit)) : 0,
         };
     }
 
@@ -849,6 +851,7 @@ export class FantomWeb3Wallet {
             gasLimit: gasLimit,
             nonce,
             _error: error || undefined,
+            _fee: !error ? this.WEIToFTM(this.getTransactionFee(gasPrice, gasLimit)) : 0,
         };
     }
 
