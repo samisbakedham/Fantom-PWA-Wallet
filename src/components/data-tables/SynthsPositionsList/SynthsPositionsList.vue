@@ -23,17 +23,49 @@
             <template v-slot:column-amount="{ value, item, column }">
                 <div v-if="column" class="row no-collapse no-vert-col-padding">
                     <div class="col-6 f-row-label">{{ column.label }}</div>
-                    <div class="col break-word">{{ formatDebt(item) }}</div>
+                    <div class="col break-word">
+                        <f-token-value
+                            :value="formatDebt(item)"
+                            :token="item"
+                            :use-placeholder="false"
+                            :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                            no-currency
+                        />
+                    </div>
                 </div>
-                <template v-else>{{ formatDebt(item) }}</template>
+                <template v-else>
+                    <f-token-value
+                        :value="formatDebt(item)"
+                        :token="item"
+                        :use-placeholder="false"
+                        :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                        no-currency
+                    />
+                </template>
             </template>
 
             <template v-slot:column-amount_fusd="{ value, item, column }">
                 <div v-if="column" class="row no-collapse no-vert-col-padding">
                     <div class="col-6 f-row-label">{{ column.label }}</div>
-                    <div class="col break-word">{{ formatDebtFUSD(item) }}</div>
+                    <div class="col break-word">
+                        <f-token-value
+                            :value="formatDebtFUSD(item)"
+                            :token="{ symbol: 'FUSD' }"
+                            :use-placeholder="false"
+                            :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                            no-currency
+                        />
+                    </div>
                 </div>
-                <template v-else>{{ formatDebtFUSD(item) }}</template>
+                <template v-else>
+                    <f-token-value
+                        :value="formatDebtFUSD(item)"
+                        :token="{ symbol: 'FUSD' }"
+                        :use-placeholder="false"
+                        :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                        no-currency
+                    />
+                </template>
             </template>
 
             <template v-slot:column-actions="{ value, item, column }">
@@ -75,13 +107,13 @@ import FDataTable from '@/components/core/FDataTable/FDataTable.vue';
 import FCryptoSymbol from '@/components/core/FCryptoSymbol/FCryptoSymbol.vue';
 import { numberSort, stringSort } from '@/utils/array-sorting.js';
 import DepositOrBorrowTokenWindow from '@/components/windows/DepositOrBorrowTokenWindow/DepositOrBorrowTokenWindow.vue';
-import { formatNumberByLocale } from '@/filters.js';
 import { MAX_TOKEN_DECIMALS_IN_TABLES } from '@/plugins/fantom-web3-wallet.js';
+import FTokenValue from '@/components/core/FTokenValue/FTokenValue.vue';
 
 export default {
     name: 'SynthsPositionsList',
 
-    components: { DepositOrBorrowTokenWindow, FCryptoSymbol, FDataTable },
+    components: { FTokenValue, DepositOrBorrowTokenWindow, FCryptoSymbol, FDataTable },
 
     props: {
         /** @type {DefiToken[]} */
@@ -166,6 +198,7 @@ export default {
                     css: { textAlign: 'right' },
                 },
             ],
+            MAX_TOKEN_DECIMALS_IN_TABLES,
         };
     },
 
@@ -213,9 +246,7 @@ export default {
         formatDebt(_token) {
             const debt = '_debt' in _token ? _token._debt : this.getDebt(_token);
 
-            return debt > 0
-                ? formatNumberByLocale(debt, this.defi.getTokenDecimals(_token, MAX_TOKEN_DECIMALS_IN_TABLES))
-                : 0;
+            return debt > 0 ? debt : 0;
         },
 
         /**
@@ -225,12 +256,7 @@ export default {
         formatDebtFUSD(_token) {
             const debt = this.getDebt(_token);
 
-            return debt > 0
-                ? formatNumberByLocale(
-                      debt * this.defi.getTokenPrice(_token),
-                      this.defi.getTokenDecimals({ symbol: 'FUSD' }, MAX_TOKEN_DECIMALS_IN_TABLES)
-                  )
-                : 0;
+            return debt > 0 ? debt * this.defi.getTokenPrice(_token) : 0;
         },
 
         /**

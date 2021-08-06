@@ -20,17 +20,51 @@
                 </template>
             </template>
 
+            <template v-slot:column-available="{ value, item, column }">
+                <div v-if="column" class="row no-collapse no-vert-col-padding">
+                    <div class="col-6 f-row-label">{{ column.label }}</div>
+                    <div class="col break-word">
+                        <f-token-value
+                            :value="value"
+                            :token="item"
+                            :use-placeholder="false"
+                            :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                            no-currency
+                        />
+                    </div>
+                </div>
+                <template v-else>
+                    <f-token-value
+                        :value="value"
+                        :token="item"
+                        :use-placeholder="false"
+                        :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                        no-currency
+                    />
+                </template>
+            </template>
+
             <template v-slot:column-balance="{ value, item, column }">
                 <div v-if="column" class="row no-collapse no-vert-col-padding">
                     <div class="col-6 f-row-label">{{ column.label }}</div>
                     <div class="col break-word">
-                        {{ value }}
-                        <!-- <span class="currency-light">{{ $defi.getTokenSymbol(item) }}</span>-->
+                        <f-token-value
+                            :value="value"
+                            :token="item"
+                            :use-placeholder="false"
+                            :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                            no-currency
+                        />
                     </div>
                 </div>
                 <template v-else>
-                    {{ value }}
-                    <!-- <span class="currency-light">{{ $defi.getTokenSymbol(item) }}</span>-->
+                    <f-token-value
+                        :value="value"
+                        :token="item"
+                        :use-placeholder="false"
+                        :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                        no-currency
+                    />
                 </template>
             </template>
 
@@ -38,13 +72,47 @@
                 <div v-if="column" class="row no-collapse no-vert-col-padding">
                     <div class="col-6 f-row-label">{{ column.label }}</div>
                     <div class="col break-word">
-                        {{ value }}
-                        <!-- <span class="currency-light">{{ $defi.getTokenSymbol(item) }}</span>-->
+                        <f-token-value
+                            :value="value"
+                            :token="item"
+                            :use-placeholder="false"
+                            :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                            no-currency
+                        />
                     </div>
                 </div>
                 <template v-else>
-                    {{ value }}
-                    <!-- <span class="currency-light">{{ $defi.getTokenSymbol(item) }}</span>-->
+                    <f-token-value
+                        :value="value"
+                        :token="item"
+                        :use-placeholder="false"
+                        :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                        no-currency
+                    />
+                </template>
+            </template>
+
+            <template v-slot:column-totalSupply="{ value, item, column }">
+                <div v-if="column" class="row no-collapse no-vert-col-padding">
+                    <div class="col-6 f-row-label">{{ column.label }}</div>
+                    <div class="col break-word">
+                        <f-token-value
+                            :value="value"
+                            :token="item"
+                            :use-placeholder="false"
+                            :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                            no-currency
+                        />
+                    </div>
+                </div>
+                <template v-else>
+                    <f-token-value
+                        :value="value"
+                        :token="item"
+                        :use-placeholder="false"
+                        :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                        no-currency
+                    />
                 </template>
             </template>
 
@@ -143,13 +211,14 @@
 import FDataTable from '@/components/core/FDataTable/FDataTable.vue';
 import FCryptoSymbol from '@/components/core/FCryptoSymbol/FCryptoSymbol.vue';
 import { stringSort } from '@/utils/array-sorting.js';
-import { formatNumberByLocale } from '@/filters.js';
+// import { formatNumberByLocale } from '@/filters.js';
 import { MAX_TOKEN_DECIMALS_IN_TABLES } from '@/plugins/fantom-web3-wallet.js';
+import FTokenValue from '@/components/core/FTokenValue/FTokenValue.vue';
 
 export default {
     name: 'AssetsList',
 
-    components: { FCryptoSymbol, FDataTable },
+    components: { FTokenValue, FCryptoSymbol, FDataTable },
 
     props: {
         /** @type {DefiToken[]} */
@@ -205,12 +274,7 @@ export default {
                     formatter: (_availableBalance, _item) => {
                         const balance = this.$defi.fromTokenValue(_availableBalance, _item);
 
-                        return balance > 0
-                            ? formatNumberByLocale(
-                                  balance,
-                                  this.defi.getTokenDecimals(_item, MAX_TOKEN_DECIMALS_IN_TABLES)
-                              )
-                            : 0;
+                        return balance > 0 ? balance : 0;
                     },
                     css: { textAlign: 'center' },
                     // width: '100px',
@@ -222,12 +286,7 @@ export default {
                     formatter: (_availableBalance, _item) => {
                         const collateral = this.getCollateral(_item);
 
-                        return collateral > 0
-                            ? formatNumberByLocale(
-                                  collateral,
-                                  this.defi.getTokenDecimals(_item, MAX_TOKEN_DECIMALS_IN_TABLES)
-                              )
-                            : 0;
+                        return collateral > 0 ? collateral : 0;
                     },
                     css: { textAlign: 'center' },
                     // width: '100px',
@@ -239,12 +298,7 @@ export default {
                     formatter: (_value, _item) => {
                         const debt = this.getDebt(_item);
 
-                        return debt > 0
-                            ? formatNumberByLocale(
-                                  debt,
-                                  this.defi.getTokenDecimals(_item, MAX_TOKEN_DECIMALS_IN_TABLES)
-                              )
-                            : 0;
+                        return debt > 0 ? debt : 0;
                     },
                     css: { textAlign: 'center' },
                 },
@@ -253,10 +307,11 @@ export default {
                     label: 'Supply',
                     hidden: !this.defiAssetsList,
                     formatter: (_value, _item) => {
-                        return formatNumberByLocale(
+                        return this.$defi.fromTokenValue(_value, _item);
+                        /*return formatNumberByLocale(
                             this.$defi.fromTokenValue(_value, _item),
                             this.defi.getTokenDecimals(_item, MAX_TOKEN_DECIMALS_IN_TABLES)
-                        );
+                        );*/
                     },
                     css: { textAlign: 'center' },
                 },
@@ -275,6 +330,7 @@ export default {
                     css: { textAlign: 'right' },
                 },
             ],
+            MAX_TOKEN_DECIMALS_IN_TABLES,
         };
     },
 

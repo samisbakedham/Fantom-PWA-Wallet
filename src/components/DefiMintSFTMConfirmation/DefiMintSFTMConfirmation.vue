@@ -20,7 +20,16 @@
                 <button type="button" class="btn light" @click="onBackBtnClick">Back</button>
             </h2>
 
-            <div class="confirmation-info">You’re minting {{ parseFloat(dAmountDelegated).toFixed(2) }} sFTM</div>
+            <div class="confirmation-info">
+                You’re minting
+                <f-token-value
+                    :value="dAmountDelegated"
+                    :decimals="filtersOptions.fractionDigits"
+                    :use-placeholder="false"
+                    no-currency
+                />
+                sFTM
+            </div>
 
             <template #window-content>
                 <ledger-confirmation-content :to="tx.to" :amount="0" :max-fee="tx._fee" />
@@ -42,11 +51,13 @@ import { mapGetters } from 'vuex';
 import { toKebabCase } from '@/utils';
 import sfcUtils from 'fantom-ledgerjs/src/sfc-utils.js';
 import Web3 from 'web3';
+import FTokenValue from '@/components/core/FTokenValue/FTokenValue.vue';
+import { filtersOptions } from '@/filters.js';
 
 export default {
     name: 'DefiMintSFTMConfirmation',
 
-    components: { FMessage, LedgerConfirmationContent, FBackButton, TxConfirmation },
+    components: { FTokenValue, FMessage, LedgerConfirmationContent, FBackButton, TxConfirmation },
 
     // mixins: [viewHelpersMixin],
 
@@ -75,6 +86,7 @@ export default {
             dAmountDelegated: 0,
             d_stakerId: this.stakerId,
             d_amountDelegated: this.amountDelegated,
+            filtersOptions,
         };
     },
 

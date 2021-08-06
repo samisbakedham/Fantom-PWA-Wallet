@@ -26,9 +26,13 @@
                 <div class="df-data-item smaller">
                     <h3 class="label">Current {{ wftmTokenSymbol }} price</h3>
                     <div class="value">
-                        <f-placeholder :content-loaded="!!tokenPrice" replacement-text="$0.00000">
-                            {{ currentPrice }}
-                        </f-placeholder>
+                        <f-token-value
+                            :value="currentPrice"
+                            :content-loaded="!!tokenPrice"
+                            :decimals="5"
+                            number-currency="USD"
+                            no-currency
+                        />
                     </div>
                 </div>
             </div>
@@ -260,7 +264,6 @@
 </template>
 
 <script>
-import { formatNumberByLocale } from '../../filters.js';
 import { mapGetters } from 'vuex';
 import FMessage from '../../components/core/FMessage/FMessage.vue';
 import { getUniqueId } from '../../utils';
@@ -372,7 +375,8 @@ export default {
         },
 
         currentPrice() {
-            return formatNumberByLocale(this.tokenPrice, 5, 'USD');
+            return this.tokenPrice;
+            // return formatNumberByLocale(this.tokenPrice, 5, 'USD');
         },
 
         pendingRewards() {

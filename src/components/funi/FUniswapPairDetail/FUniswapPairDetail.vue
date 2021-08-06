@@ -474,7 +474,7 @@ export default {
             return data.filter((_item) => {
                 const ts = dayjs(_item.time).unix();
 
-                console.log(_item.time, ts >= _fromDate && ts <= _toDate);
+                // console.log(_item.time, ts >= _fromDate && ts <= _toDate);
                 return ts >= _fromDate && ts <= _toDate;
             });
         },

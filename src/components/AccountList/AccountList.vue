@@ -75,18 +75,30 @@
                                 </span>
                             </span>
                             <span class="col col-6-md">
-                                <span class="value">{{ toFTM(account.balance) }} <span class="ftm">FTM</span></span>
+                                <span class="value">
+                                    <f-t-m-token-value :value="account.balance" convert no-currency />
+                                    <span class="ftm"> FTM</span>
+                                </span>
                                 <span class="currency">
-                                    {{ formatCurrencyByLocale(account.balance, tokenPrice) }}
+                                    <f-t-m-token-value
+                                        :value="WEIToFTM(account.balance) * tokenPrice"
+                                        with-price-currency
+                                        no-currency
+                                    />
                                 </span>
                                 <span class="label">Available</span>
                             </span>
                             <span class="col col-6-md">
                                 <span class="value">
-                                    {{ toFTM(account.totalBalance) }} <span class="ftm">FTM</span>
+                                    <f-t-m-token-value :value="account.totalBalance" convert no-currency />
+                                    <span class="ftm"> FTM</span>
                                 </span>
                                 <span class="currency">
-                                    {{ formatCurrencyByLocale(account.totalBalance, tokenPrice) }}
+                                    <f-t-m-token-value
+                                        :value="WEIToFTM(account.totalBalance) * tokenPrice"
+                                        with-price-currency
+                                        no-currency
+                                    />
                                 </span>
                                 <span class="label">Total</span>
                             </span>
@@ -126,7 +138,7 @@
 <script>
 import FCard from '../core/FCard/FCard.vue';
 import { mapGetters } from 'vuex';
-import { toFTM } from '../../utils/transactions.js';
+import { WEIToFTM } from '../../utils/transactions.js';
 import {
     DEACTIVATE_ACTIVE_ACCOUNT,
     SET_ACTIVE_ACCOUNT_ADDRESS,
@@ -138,13 +150,13 @@ import AccountSettingsWindow from '../windows/AccountSettingsWindow/AccountSetti
 import AccountName from '../AccountName/AccountName.vue';
 import { pollingMixin } from '../../mixins/polling.js';
 import FCopyButton from '../core/FCopyButton/FCopyButton.vue';
-import { formatCurrencyByLocale } from '../../filters.js';
 import { isAriaAction } from '../../utils/aria.js';
+import FTMTokenValue from '@/components/core/FTMTokenValue/FTMTokenValue.vue';
 
 export default {
     name: 'AccountList',
 
-    components: { FCopyButton, AccountName, AccountSettingsWindow, FCard },
+    components: { FTMTokenValue, FCopyButton, AccountName, AccountSettingsWindow, FCard },
 
     mixins: [eventBusMixin, pollingMixin],
 
@@ -295,8 +307,7 @@ export default {
             }
         },
 
-        formatCurrencyByLocale,
-        toFTM,
+        WEIToFTM,
     },
 };
 </script>

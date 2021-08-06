@@ -11,6 +11,28 @@
                 no-f-l-padding
                 class="f-data-table-body-bg-color"
             >
+                <template v-slot:column-amount="{ value, item, column }">
+                    <div v-if="column" class="row no-collapse no-vert-col-padding">
+                        <div class="col-6 f-row-label">{{ column.label }}</div>
+                        <div class="col break-word">
+                            <f-token-value
+                                :value="value"
+                                :decimals="filtersOptions.fractionDigits"
+                                :use-placeholder="false"
+                                no-currency
+                            />
+                        </div>
+                    </div>
+                    <template v-else>
+                        <f-token-value
+                            :value="value"
+                            :decimals="filtersOptions.fractionDigits"
+                            :use-placeholder="false"
+                            no-currency
+                        />
+                    </template>
+                </template>
+
                 <template v-slot:column-withdrawal="{ value, item, column }">
                     <div v-if="column" class="row no-collapse no-vert-col-padding">
                         <div class="col-6 f-row-label">{{ column.label }}</div>
@@ -49,11 +71,12 @@
 </template>
 
 <script>
-import { formatDate, formatNumberByLocale, prepareTimestamp, timestampToDate } from '../../filters.js';
+import { filtersOptions, formatDate, prepareTimestamp, timestampToDate } from '../../filters.js';
 import { WEIToFTM } from '../../utils/transactions.js';
 import FDataTable from '../core/FDataTable/FDataTable.vue';
 import dayjs from 'dayjs';
 import { sortByHex } from '../../utils/array-sorting.js';
+import FTokenValue from '@/components/core/FTokenValue/FTokenValue.vue';
 
 /** Estimated time of block in seconds. */
 const blockTime = 15 * 60;
@@ -61,7 +84,7 @@ const blockTime = 15 * 60;
 export default {
     name: 'WithdrawRequestList',
 
-    components: { FDataTable },
+    components: { FTokenValue, FDataTable },
 
     props: {
         /**
@@ -91,7 +114,7 @@ export default {
                     name: 'amount',
                     label: 'Amount (FTM)',
                     formatter: (_value) => {
-                        return formatNumberByLocale(WEIToFTM(_value));
+                        return WEIToFTM(_value);
                     },
                     width: '234px',
                 },
@@ -110,6 +133,7 @@ export default {
                 },
             ],
             sfcConfig: {},
+            filtersOptions,
         };
     },
 

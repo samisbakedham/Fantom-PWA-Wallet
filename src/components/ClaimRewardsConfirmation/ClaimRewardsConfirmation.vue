@@ -32,7 +32,7 @@
                     <div class="col break-word">
                         <f-placeholder :content-loaded="!!dAccountInfo.stakerId" :replacement-num-chars="14">
                             <template v-if="dAccountInfo.stakerId">
-                                {{ toFTM(dAccountInfo.delegation.pendingRewards.amount) }} FTM
+                                <f-t-m-token-value :value="dAccountInfo.delegation.pendingRewards.amount" convert />
                             </template>
                         </f-placeholder>
                     </div>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { toFTM } from '@/utils/transactions.js';
+import { toFTM, WEIToFTM } from '@/utils/transactions.js';
 import { mapGetters } from 'vuex';
 import sfcUtils from 'fantom-ledgerjs/src/sfc-utils.js';
 import TxConfirmation from '../TxConfirmation/TxConfirmation.vue';
@@ -68,11 +68,12 @@ import LedgerConfirmationContent from '../LedgerConfirmationContent/LedgerConfir
 import FPlaceholder from '@/components/core/FPlaceholder/FPlaceholder.vue';
 import gql from 'graphql-tag';
 import FMessage from '@/components/core/FMessage/FMessage.vue';
+import FTMTokenValue from '@/components/core/FTMTokenValue/FTMTokenValue.vue';
 
 export default {
     name: 'ClaimRewardsConfirmation',
 
-    components: { FMessage, FPlaceholder, LedgerConfirmationContent, TxConfirmation },
+    components: { FTMTokenValue, FMessage, FPlaceholder, LedgerConfirmationContent, TxConfirmation },
 
     props: {
         /** `accountInfo` object from `StakingInfo` component. */
@@ -225,6 +226,7 @@ export default {
         },
 
         toFTM,
+        WEIToFTM,
     },
 };
 </script>

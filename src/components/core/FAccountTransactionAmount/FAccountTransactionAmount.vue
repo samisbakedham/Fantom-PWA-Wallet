@@ -1,13 +1,19 @@
 <template>
     <span class="f-account-t-amount" :class="cClass">
-        <template v-if="!cIsZero"><template v-if="cReceived">+</template><template v-else>-</template></template
-        >{{ amount }}
+        <template v-if="!cIsZero"><template v-if="cReceived">+</template><template v-else>-</template></template>
+        <f-token-value :value="amount" :decimals="filtersOptions.fractionDigits" :use-placeholder="false" no-currency />
     </span>
 </template>
 
 <script>
-// formatter for account transaction amount
+import FTokenValue from '@/components/core/FTokenValue/FTokenValue.vue';
+import { filtersOptions } from '@/filters.js';
+
+/**
+ * Formatter for account transaction amount
+ */
 export default {
+    components: { FTokenValue },
     props: {
         // account address
         address: {
@@ -26,7 +32,7 @@ export default {
         },
         // transaction's amount
         amount: {
-            type: String,
+            type: [String, Number],
             default: '',
         },
         // zero amount
@@ -36,13 +42,20 @@ export default {
         },
     },
 
+    data() {
+        return {
+            filtersOptions,
+        };
+    },
+
     computed: {
         cReceived() {
             return this.address.toLocaleLowerCase() === this.to.toLocaleLowerCase();
         },
 
         cIsZero() {
-            return this.amount === this.zero;
+            return this.amount === 0;
+            // return this.amount === this.zero;
         },
 
         cClass() {

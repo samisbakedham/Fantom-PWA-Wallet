@@ -46,7 +46,9 @@
                             <template v-if="token.address">
                                 ( <f-token-value :value="maxRemainingErc20TokenBalance" :token="token" />
                             </template>
-                            <template v-else> ( {{ toFTM(currentAccount.balance) }} FTM </template>
+                            <template v-else>
+                                ( <f-t-m-token-value :value="currentAccount.balance" convert />
+                            </template>
                             <template v-if="currentAccount.name">, {{ currentAccount.name }}</template> )
                         </span>
                     </div>
@@ -145,9 +147,10 @@ import erc20Utils from 'fantom-ledgerjs/src/erc20-utils.js';
 import FTokenValue from '@/components/core/FTokenValue/FTokenValue.vue';
 import FMessage from '@/components/core/FMessage/FMessage.vue';
 import appConfig from '../../../app.config.js';
+import FTMTokenValue from '@/components/core/FTMTokenValue/FTMTokenValue.vue';
 
 export default {
-    components: { FMessage, FTokenValue, TxConfirmation },
+    components: { FTMTokenValue, FMessage, FTokenValue, TxConfirmation },
 
     props: {
         // transaction data from SendTransactionForm

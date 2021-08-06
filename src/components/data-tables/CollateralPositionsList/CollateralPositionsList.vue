@@ -23,17 +23,49 @@
             <template v-slot:column-amount="{ value, item, column }">
                 <div v-if="column" class="row no-collapse no-vert-col-padding">
                     <div class="col-6 f-row-label">{{ column.label }}</div>
-                    <div class="col break-word">{{ formatCollateral(item) }}</div>
+                    <div class="col break-word">
+                        <f-token-value
+                            :value="formatCollateral(item)"
+                            :token="item"
+                            :use-placeholder="false"
+                            :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                            no-currency
+                        />
+                    </div>
                 </div>
-                <template v-else>{{ formatCollateral(item) }}</template>
+                <template v-else>
+                    <f-token-value
+                        :value="formatCollateral(item)"
+                        :token="item"
+                        :use-placeholder="false"
+                        :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                        no-currency
+                    />
+                </template>
             </template>
 
             <template v-slot:column-amount_fusd="{ value, item, column }">
                 <div v-if="column" class="row no-collapse no-vert-col-padding">
                     <div class="col-6 f-row-label">{{ column.label }}</div>
-                    <div class="col break-word">{{ formatCollateralFUSD(item) }}</div>
+                    <div class="col break-word">
+                        <f-token-value
+                            :value="formatCollateralFUSD(item)"
+                            :token="{ symbol: 'FUSD' }"
+                            :use-placeholder="false"
+                            :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                            no-currency
+                        />
+                    </div>
                 </div>
-                <template v-else>{{ formatCollateralFUSD(item) }}</template>
+                <template v-else>
+                    <f-token-value
+                        :value="formatCollateralFUSD(item)"
+                        :token="{ symbol: 'FUSD' }"
+                        :use-placeholder="false"
+                        :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                        no-currency
+                    />
+                </template>
             </template>
 
             <template v-slot:column-actions="{ value, item, column }">
@@ -83,14 +115,14 @@ import FDataTable from '@/components/core/FDataTable/FDataTable.vue';
 import FCryptoSymbol from '@/components/core/FCryptoSymbol/FCryptoSymbol.vue';
 import { numberSort, stringSort } from '@/utils/array-sorting.js';
 import DepositOrBorrowTokenWindow from '@/components/windows/DepositOrBorrowTokenWindow/DepositOrBorrowTokenWindow.vue';
-import { formatNumberByLocale } from '@/filters.js';
 import { mapGetters } from 'vuex';
 import { MAX_TOKEN_DECIMALS_IN_TABLES } from '@/plugins/fantom-web3-wallet.js';
+import FTokenValue from '@/components/core/FTokenValue/FTokenValue.vue';
 
 export default {
     name: 'CollateralPositionsList',
 
-    components: { DepositOrBorrowTokenWindow, FCryptoSymbol, FDataTable },
+    components: { FTokenValue, DepositOrBorrowTokenWindow, FCryptoSymbol, FDataTable },
 
     props: {
         /** @type {DefiToken[]} */
@@ -177,6 +209,7 @@ export default {
                     css: { textAlign: 'right' },
                 },
             ],
+            MAX_TOKEN_DECIMALS_IN_TABLES,
         };
     },
 
@@ -239,9 +272,7 @@ export default {
         formatCollateral(_token) {
             const collateral = '_collateral' in _token ? _token._collateral : this.getCollateral(_token);
 
-            return collateral > 0
-                ? formatNumberByLocale(collateral, this.defi.getTokenDecimals(_token, MAX_TOKEN_DECIMALS_IN_TABLES))
-                : 0;
+            return collateral > 0 ? collateral : 0;
         },
 
         /**
@@ -251,12 +282,7 @@ export default {
         formatCollateralFUSD(_token) {
             const collateral = this.getCollateral(_token);
 
-            return collateral > 0
-                ? formatNumberByLocale(
-                      collateral * this.defi.getTokenPrice(_token),
-                      this.defi.getTokenDecimals({ symbol: 'FUSD' }, MAX_TOKEN_DECIMALS_IN_TABLES)
-                  )
-                : 0;
+            return collateral > 0 ? collateral * this.defi.getTokenPrice(_token) : 0;
         },
 
         /**

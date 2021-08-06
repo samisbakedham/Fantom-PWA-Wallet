@@ -5,19 +5,33 @@
             <div class="col balances">
                 <div class="balance">
                     <h3 class="align-center-lg">
-                        <span>{{ formatNumberByLocale(accountsBalance) }} <span class="ftm">FTM</span></span>
+                        <span>
+                            <f-t-m-token-value :value="accountsBalance" no-currency />
+                            <span class="ftm"> FTM</span>
+                        </span>
                     </h3>
                     <div class="currency">
-                        {{ formatCurrencyByLocale(accountsBalance, this.$store.state.tokenPrice, false) }}
+                        <f-t-m-token-value
+                            :value="accountsBalance * this.$store.state.tokenPrice"
+                            with-price-currency
+                            no-currency
+                        />
                     </div>
                     <div class="label h3">Available (Sum)</div>
                 </div>
                 <div class="balance total-balance">
                     <h3 class="align-center-lg">
-                        <span>{{ formatNumberByLocale(accountsTotalBalance) }} <span class="ftm">FTM</span></span>
+                        <span>
+                            <f-t-m-token-value :value="accountsTotalBalance" no-currency />
+                            <span class="ftm"> FTM</span>
+                        </span>
                     </h3>
                     <div class="currency">
-                        {{ formatCurrencyByLocale(accountsTotalBalance, this.$store.state.tokenPrice, false) }}
+                        <f-t-m-token-value
+                            :value="accountsTotalBalance * this.$store.state.tokenPrice"
+                            with-price-currency
+                            no-currency
+                        />
                     </div>
                     <div class="label h3">Total (Sum)</div>
                 </div>
@@ -28,15 +42,15 @@
 
 <script>
 import FCard from '../core/FCard/FCard.vue';
-import { formatCurrencyByLocale, formatNumberByLocale } from '../../filters.js';
-import { toFTM, WEIToFTM } from '../../utils/transactions.js';
+import { WEIToFTM } from '../../utils/transactions.js';
 import { mapGetters } from 'vuex';
 import DashboardActionsBox from '../DashboardActionsBox/DashboardActionsBox.vue';
+import FTMTokenValue from '@/components/core/FTMTokenValue/FTMTokenValue.vue';
 
 export default {
     name: 'DashboardInfoBox',
 
-    components: { DashboardActionsBox, FCard },
+    components: { FTMTokenValue, DashboardActionsBox, FCard },
 
     computed: {
         ...mapGetters(['accounts']),
@@ -52,13 +66,6 @@ export default {
                 return _total + WEIToFTM(_currItem.totalBalance);
             }, 0);
         },
-    },
-
-    methods: {
-        formatCurrencyByLocale,
-        formatNumberByLocale,
-        WEIToFTM,
-        toFTM,
     },
 };
 </script>

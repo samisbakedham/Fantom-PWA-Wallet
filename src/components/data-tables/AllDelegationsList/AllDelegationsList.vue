@@ -47,6 +47,29 @@
                         {{ value.id | formatHexToInt }}
                     </template>
                 </template>
+
+                <template v-slot:column-amount="{ value, item, column }">
+                    <div v-if="column" class="row no-collapse no-vert-col-padding">
+                        <div class="col-6 f-row-label">{{ column.label }}</div>
+                        <div class="col break-word">
+                            <f-token-value
+                                :value="value"
+                                :decimals="filtersOptions.fractionDigits"
+                                :use-placeholder="false"
+                                no-currency
+                            />
+                        </div>
+                    </div>
+                    <template v-else>
+                        <f-token-value
+                            :value="value"
+                            :decimals="filtersOptions.fractionDigits"
+                            :use-placeholder="false"
+                            no-currency
+                        />
+                    </template>
+                </template>
+
                 <template v-slot:column-detail="{ value, item, column }">
                     <div v-if="column" class="row no-collapse no-vert-col-padding">
                         <div class="col-5 f-row-label">{{ column.label }}</div>
@@ -88,16 +111,17 @@
 import FDataTable from '@/components/core/FDataTable/FDataTable.vue';
 import gql from 'graphql-tag';
 // import { cloneObject } from '@/utils';
-import { formatDate, formatNumberByLocale, timestampToDate } from '@/filters.js';
+import { filtersOptions, formatDate, timestampToDate } from '@/filters.js';
 import { WEIToFTM } from '@/utils/transactions.js';
 import appConfig from '../../../../app.config.js';
 import { mapGetters } from 'vuex';
 import FEllipsis from '@/components/core/FEllipsis/FEllipsis.vue';
+import FTokenValue from '@/components/core/FTokenValue/FTokenValue.vue';
 // import { formatHexToInt } from '@/filters.js';
 export default {
     name: 'AllDelegationsList',
 
-    components: { FEllipsis, FDataTable },
+    components: { FTokenValue, FEllipsis, FDataTable },
 
     props: {
         /** */
@@ -140,7 +164,7 @@ export default {
                     name: 'amount',
                     label: 'Amount (FTM)',
                     itemProp: 'delegation.amount',
-                    formatter: (_value) => formatNumberByLocale(WEIToFTM(_value)),
+                    formatter: (_value) => WEIToFTM(_value),
                     width: '160px',
                     css: { textAlign: 'center' },
                 },
@@ -172,6 +196,7 @@ export default {
             stopLoading: false,
             delegationsByAddressError: '',
             totalCount: 0,
+            filtersOptions,
         };
     },
 

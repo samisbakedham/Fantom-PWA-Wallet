@@ -38,9 +38,14 @@
                 <div class="df-data-item smaller">
                     <h3 class="label">Current price</h3>
                     <div class="value">
-                        <f-placeholder :content-loaded="!!tokenPrice" replacement-text="$0.00000">
-                            {{ currentPrice }}
-                        </f-placeholder>
+                        <f-token-value
+                            :value="currentPrice"
+                            :content-loaded="!!tokenPrice"
+                            :decimals="2"
+                            number-currency="USD"
+                            replacement-text="$0.00000"
+                            no-currency
+                        />
                     </div>
                 </div>
 
@@ -376,7 +381,7 @@ export default {
 
         currentPrice() {
             // return formatNumberByLocale(this.tokenPrice, 5, 'USD');
-            return formatNumberByLocale(this.$defi.getTokenPrice(this.dToken), 2, 'USD');
+            return this.$defi.getTokenPrice(this.dToken);
         },
 
         borrowLimit() {

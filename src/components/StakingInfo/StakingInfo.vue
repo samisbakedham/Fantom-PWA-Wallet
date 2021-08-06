@@ -22,7 +22,9 @@
                         <div class="col f-row-label">Delegated</div>
                         <div class="col">
                             <f-placeholder :content-loaded="!!accountInfo" block :replacement-num-chars="10">
-                                <template v-if="accountInfo">{{ toFTM(accountInfo.delegated) }} FTM</template>
+                                <template v-if="accountInfo">
+                                    <f-t-m-token-value :value="accountInfo.delegated" convert />
+                                </template>
                             </f-placeholder>
                         </div>
                     </div>
@@ -30,7 +32,9 @@
                         <div class="col f-row-label">Pending Rewards</div>
                         <div class="col">
                             <f-placeholder :content-loaded="!!accountInfo" block :replacement-num-chars="10">
-                                <template v-if="accountInfo">{{ toFTM(accountInfo.pendingRewards) }} FTM</template>
+                                <template v-if="accountInfo">
+                                    <f-t-m-token-value :value="accountInfo.pendingRewards" convert />
+                                </template>
                             </f-placeholder>
                         </div>
                     </div>
@@ -49,7 +53,10 @@
                         <div class="col f-row-label">Minted sFTM</div>
                         <div class="col">
                             <f-placeholder :content-loaded="!!accountInfo" block :replacement-num-chars="10">
-                                <template v-if="accountInfo">{{ outstandingSFTM.toFixed(2) }} sFTM</template>
+                                <template v-if="accountInfo">
+                                    <f-t-m-token-value :value="outstandingSFTM" convert no-currency />
+                                    sFTM
+                                </template>
                             </f-placeholder>
                         </div>
                     </div>
@@ -277,11 +284,12 @@ import FPlaceholder from '@/components/core/FPlaceholder/FPlaceholder.vue';
 import gql from 'graphql-tag';
 import { SFC_CLAIM_MAX_EPOCHS } from '@/plugins/fantom-web3-wallet.js';
 import dayjs from 'dayjs';
+import FTMTokenValue from '@/components/core/FTMTokenValue/FTMTokenValue.vue';
 
 export default {
     name: 'StakingInfo',
 
-    components: { FPlaceholder, FMessage, WithdrawRequestList, FCard },
+    components: { FTMTokenValue, FPlaceholder, FMessage, WithdrawRequestList, FCard },
 
     props: {
         /***/

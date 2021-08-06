@@ -25,7 +25,9 @@
                     <div class="col-3 f-row-label">From</div>
                     <div class="col break-word">
                         {{ currentAccount.address }}
-                        <span class="f-row-label">( {{ toFTM(currentAccount.balance) }} FTM )</span>
+                        <span class="f-row-label">
+                            ( <f-t-m-token-value :value="currentAccount.balance" convert /> )
+                        </span>
                     </div>
                 </div>
 
@@ -57,16 +59,16 @@
 </template>
 
 <script>
-import { toFTM } from '../../utils/transactions.js';
 import { mapGetters } from 'vuex';
 import sfcUtils from 'fantom-ledgerjs/src/sfc-utils.js';
 import TxConfirmation from '../TxConfirmation/TxConfirmation.vue';
 import LedgerConfirmationContent from '../LedgerConfirmationContent/LedgerConfirmationContent.vue';
+import FTMTokenValue from '@/components/core/FTMTokenValue/FTMTokenValue.vue';
 
 export default {
     name: 'WithdrawFTMConfirmation',
 
-    components: { LedgerConfirmationContent, TxConfirmation },
+    components: { FTMTokenValue, LedgerConfirmationContent, TxConfirmation },
 
     props: {
         /** `accountInfo` object from `UnstakeFTM` component. */
@@ -160,8 +162,6 @@ export default {
         onChangeComponent(_data) {
             this.$emit('change-component', _data);
         },
-
-        toFTM,
     },
 };
 </script>

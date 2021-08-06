@@ -5,19 +5,33 @@
             <div class="col balances">
                 <div class="balance">
                     <h3 class="align-center-lg">
-                        <span>{{ toFTM(accountBalance) }} <span class="ftm">FTM</span></span>
+                        <span>
+                            <f-t-m-token-value :value="accountBalance" convert no-currency />
+                            <span class="ftm"> FTM</span>
+                        </span>
                     </h3>
                     <div class="currency">
-                        {{ formatCurrencyByLocale(accountBalance, tokenPrice) }}
+                        <f-t-m-token-value
+                            :value="WEIToFTM(accountBalance) * tokenPrice"
+                            with-price-currency
+                            no-currency
+                        />
                     </div>
                     <div class="label h3">Available</div>
                 </div>
                 <div class="balance total-balance">
                     <h3 class="align-center-lg">
-                        <span>{{ toFTM(accountTotalBalance) }} <span class="ftm">FTM</span></span>
+                        <span>
+                            <f-t-m-token-value :value="accountTotalBalance" convert no-currency />
+                            <span class="ftm"> FTM</span>
+                        </span>
                     </h3>
                     <div class="currency">
-                        {{ formatCurrencyByLocale(accountTotalBalance, tokenPrice) }}
+                        <f-t-m-token-value
+                            :value="WEIToFTM(accountTotalBalance) * tokenPrice"
+                            with-price-currency
+                            no-currency
+                        />
                     </div>
                     <div class="label h3">Total</div>
                 </div>
@@ -30,13 +44,13 @@
 import FCard from '../core/FCard/FCard.vue';
 import AccountActionsBox from '../AccountActionsBox/AccountActionsBox.vue';
 import { mapGetters } from 'vuex';
-import { formatCurrencyByLocale } from '../../filters.js';
-import { toFTM } from '../../utils/transactions.js';
+import { WEIToFTM } from '../../utils/transactions.js';
 import { pollingMixin } from '../../mixins/polling.js';
 import { UPDATE_ACCOUNT_BALANCE } from '../../store/actions.type.js';
+import FTMTokenValue from '@/components/core/FTMTokenValue/FTMTokenValue.vue';
 
 export default {
-    components: { FCard, AccountActionsBox },
+    components: { FTMTokenValue, FCard, AccountActionsBox },
 
     mixins: [pollingMixin],
 
@@ -67,8 +81,7 @@ export default {
     },
 
     methods: {
-        formatCurrencyByLocale,
-        toFTM,
+        WEIToFTM,
     },
 };
 </script>

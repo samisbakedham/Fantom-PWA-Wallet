@@ -27,9 +27,14 @@
                 <div class="df-data-item smaller">
                     <h3 class="label">Current price</h3>
                     <div class="value">
-                        <f-placeholder :content-loaded="!!tokenPrice" replacement-text="$0.00000">
-                            {{ currentPrice }}
-                        </f-placeholder>
+                        <f-token-value
+                            :value="currentPrice"
+                            :content-loaded="!!tokenPrice"
+                            :decimals="5"
+                            number-currency="USD"
+                            replacement-text="$0.00000"
+                            no-currency
+                        />
                     </div>
                 </div>
 
@@ -163,7 +168,6 @@ import FSlider from '../../components/core/FSlider/FSlider.vue';
 import FCircleProgress from '../../components/core/FCircleProgress/FCircleProgress.vue';
 import { getUniqueId } from '../../utils';
 import { mapGetters } from 'vuex';
-import { formatNumberByLocale } from '../../filters.js';
 import { getAppParentNode } from '../../app-structure.js';
 import FMessage from '../../components/core/FMessage/FMessage.vue';
 import { eventBusMixin } from '../../mixins/event-bus.js';
@@ -230,7 +234,7 @@ export default {
         },
 
         currentPrice() {
-            return formatNumberByLocale(this.tokenPrice, 5, 'USD');
+            return this.tokenPrice;
         },
 
         availableBalance() {

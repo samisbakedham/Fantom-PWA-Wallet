@@ -42,15 +42,45 @@
                 <div v-if="column" class="row no-collapse no-vert-col-padding">
                     <div class="col-6 f-row-label">{{ column.label }}</div>
                     <div class="col break-word">
-                        <template v-if="item._collateral > 0">{{
-                            formatCollateral(item, item._fMintAccount)
-                        }}</template>
-                        <template v-if="item._debt > 0">{{ formatDebt(item) }}</template>
+                        <template v-if="item._collateral > 0">
+                            <f-token-value
+                                :value="formatCollateral(item, item._fMintAccount)"
+                                :token="item"
+                                :use-placeholder="false"
+                                :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                                no-currency
+                            />
+                        </template>
+                        <template v-if="item._debt > 0">
+                            <f-token-value
+                                :value="formatDebt(item, item._fMintAccount)"
+                                :token="item"
+                                :use-placeholder="false"
+                                :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                                no-currency
+                            />
+                        </template>
                     </div>
                 </div>
                 <template v-else>
-                    <template v-if="item._collateral > 0">{{ formatCollateral(item, item._fMintAccount) }}</template>
-                    <template v-if="item._debt > 0">{{ formatDebt(item, item._fMintAccount) }}</template>
+                    <template v-if="item._collateral > 0">
+                        <f-token-value
+                            :value="formatCollateral(item, item._fMintAccount)"
+                            :token="item"
+                            :use-placeholder="false"
+                            :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                            no-currency
+                        />
+                    </template>
+                    <template v-if="item._debt > 0">
+                        <f-token-value
+                            :value="formatDebt(item, item._fMintAccount)"
+                            :token="item"
+                            :use-placeholder="false"
+                            :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                            no-currency
+                        />
+                    </template>
                 </template>
             </template>
 
@@ -261,7 +291,6 @@
 import FDataTable from '@/components/core/FDataTable/FDataTable.vue';
 import FCryptoSymbol from '@/components/core/FCryptoSymbol/FCryptoSymbol.vue';
 import DepositOrBorrowTokenWindow from '@/components/windows/DepositOrBorrowTokenWindow/DepositOrBorrowTokenWindow.vue';
-import { formatNumberByLocale } from '@/filters.js';
 import { mapGetters } from 'vuex';
 import FTokenValue from '@/components/core/FTokenValue/FTokenValue.vue';
 import FEllipsis from '@/components/core/FEllipsis/FEllipsis.vue';
@@ -350,6 +379,7 @@ export default {
                     css: { textAlign: 'right' },
                 },
             ],
+            MAX_TOKEN_DECIMALS_IN_TABLES,
         };
     },
 
@@ -471,25 +501,7 @@ export default {
         formatDebt(_token, _account) {
             const debt = '_debt' in _token ? _token._debt : this.getDebt(_token, _account);
 
-            return debt > 0
-                ? formatNumberByLocale(debt, this.defi.getTokenDecimals(_token, MAX_TOKEN_DECIMALS_IN_TABLES))
-                : 0;
-        },
-
-        /**
-         * @param {DefiToken} _token
-         * @param {FMintAccount} _account
-         * @return {*|number}
-         */
-        formatDebtFUSD(_token, _account) {
-            const debt = this.getDebt(_token, _account);
-
-            return debt > 0
-                ? formatNumberByLocale(
-                      debt * this.defi.getTokenPrice(_token),
-                      this.defi.getTokenDecimals({ symbol: 'FUSD' }, MAX_TOKEN_DECIMALS_IN_TABLES)
-                  )
-                : 0;
+            return debt > 0 ? debt : 0;
         },
 
         /**
@@ -512,9 +524,7 @@ export default {
         formatCollateral(_token, _account) {
             const collateral = '_collateral' in _token ? _token._collateral : this.getCollateral(_token, _account);
 
-            return collateral > 0
-                ? formatNumberByLocale(collateral, this.defi.getTokenDecimals(_token, MAX_TOKEN_DECIMALS_IN_TABLES))
-                : 0;
+            return collateral > 0 ? collateral : 0;
         },
 
         /**
