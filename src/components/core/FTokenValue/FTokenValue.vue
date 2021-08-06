@@ -5,11 +5,15 @@
             :content-loaded="!!token.symbol || contentLoaded"
             :replacement-text="replacementText"
         >
-            <span class="f-token-value__value">{{ tokenValue }}<span v-if="showDots">..</span></span>
+            <span class="f-token-value__value">
+                {{ tokenValue }}<span v-if="showDots" class="f-token-value__dots">&#8230;</span>
+            </span>
             <span v-if="!noCurrency" class="currency">{{ tokenSymbol }}</span>
         </f-placeholder>
         <template v-else>
-            <span class="f-token-value__value">{{ tokenValue }}<span v-if="showDots">..</span></span>
+            <span class="f-token-value__value">
+                {{ tokenValue }}<span v-if="showDots" class="f-token-value__dots">&#8230;</span>
+            </span>
             <span v-if="!noCurrency" class="currency">{{ tokenSymbol }}</span>
         </template>
     </span>
@@ -121,7 +125,7 @@ export default {
 
             return _value === 0
                 ? 0
-                : formatNumberByLocale(parseFloat(_value).toFixed(cDecimals), cDecimals, this.numberCurrency, true);
+                : formatNumberByLocale(parseFloat(_value).toFixed(cDecimals), cDecimals, this.numberCurrency);
         },
     },
 };

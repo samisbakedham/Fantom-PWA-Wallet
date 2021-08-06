@@ -100,19 +100,13 @@
                             :value="value"
                             :token="item"
                             :use-placeholder="false"
-                            :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
+                            :decimals="0"
                             no-currency
                         />
                     </div>
                 </div>
                 <template v-else>
-                    <f-token-value
-                        :value="value"
-                        :token="item"
-                        :use-placeholder="false"
-                        :max-decimals="MAX_TOKEN_DECIMALS_IN_TABLES"
-                        no-currency
-                    />
+                    <f-token-value :value="value" :token="item" :use-placeholder="false" :decimals="0" no-currency />
                 </template>
             </template>
 
