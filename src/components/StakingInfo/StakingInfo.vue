@@ -179,14 +179,14 @@
                                 >
                                     Lock Delegation
                                 </button>
-                                <button
+                                <!--                                <button
                                     v-show="canExtendDelegationLock"
                                     class="btn large"
                                     :disabled="!canExtendDelegationLock"
                                     @click="extendDelegationLock()"
                                 >
                                     Extend Delegation Lock
-                                </button>
+                                </button>-->
                                 <button
                                     v-show="canMintSFTM"
                                     class="btn large"
