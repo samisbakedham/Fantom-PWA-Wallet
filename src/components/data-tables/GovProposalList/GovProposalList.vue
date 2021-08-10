@@ -182,7 +182,7 @@ export default {
                         return _value._voted !== undefined ? _value._voted : '';
                     },
                     width: '80px',
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                 },
                 {
                     name: 'votes',
@@ -199,7 +199,7 @@ export default {
                         return '';
                     },
                     width: '80px',
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                 },
                 {
                     name: 'winner',
@@ -220,7 +220,7 @@ export default {
                         return '-';
                     },
                     width: '180px',
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                 },
                 {
                     name: 'state',
@@ -234,13 +234,13 @@ export default {
 
                         return '-';
                     },
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                     width: '110px',
                 },
                 {
                     name: 'detail',
                     width: '130px',
-                    css: { textAlign: 'right' },
+                    cssClass: 'align-end',
                 },
             ],
             fracDigits: GOV_PERCENTAGE_FRAC_DIGITS,

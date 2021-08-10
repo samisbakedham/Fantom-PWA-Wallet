@@ -223,7 +223,7 @@ export default {
                     itemProp: 'delegation._validator',
                     // formatter: (_value, _item) => _item._validator,
                     width: '150px',
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                 },
                 {
                     name: 'amount',
@@ -231,7 +231,7 @@ export default {
                     itemProp: 'delegation.amount',
                     formatter: (_value) => WEIToFTM(_value),
                     width: '160px',
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                 },
                 /*{
                     name: 'rewards',
@@ -239,21 +239,21 @@ export default {
                     itemProp: 'delegation.pendingRewards',
                     formatter: (_value) => (_value ? formatNumberByLocale(WEIToFTM(_value.amount)) : '-'),
                     width: '160px',
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                 },
                 {
                     name: '',
                     label: 'Unlock Date',
                     itemProp: 'delegation.lockedUntil',
                     formatter: (_value) => formatDate(timestampToDate(_value), true) || '-',
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                 },*/
                 {
                     name: 'detail',
                     label: 'Action',
                     // itemProp: 'delegation.lockedUntil',
                     formatter: () => true,
-                    css: { textAlign: 'right' },
+                    cssClass: 'align-end',
                 },
             ],
             dItems: [],

@@ -104,7 +104,7 @@ export default {
                               )
                             : 0;
                     },
-                    css: { textAlign: 'right' },
+                    cssClass: 'align-end',
                     // width: '100px',
                 },
                 {
@@ -121,7 +121,7 @@ export default {
                               )
                             : 0;
                     },
-                    css: { textAlign: 'right' },
+                    cssClass: 'align-end',
                     // width: '100px',
                 },
                 {
@@ -147,7 +147,7 @@ export default {
                             return (_direction === 'desc' ? -1 : 1) * numberSort(a, b);
                         };
                     },
-                    css: { textAlign: 'right' },
+                    cssClass: 'align-end',
                     // width: '100px',
                 },
             ],

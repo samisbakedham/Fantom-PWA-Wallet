@@ -3,4 +3,8 @@
     &.received {
         color: var(--f-success-color);
     }
+
+    .f-token-value {
+        margin-left: -4px;
+    }
 }

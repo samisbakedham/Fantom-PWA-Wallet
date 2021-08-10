@@ -270,7 +270,7 @@ export default {
 
                         return balance > 0 ? balance : 0;
                     },
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                     // width: '100px',
                 },
                 {
@@ -282,7 +282,7 @@ export default {
 
                         return collateral > 0 ? collateral : 0;
                     },
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                     // width: '100px',
                 },
                 {
@@ -294,7 +294,7 @@ export default {
 
                         return debt > 0 ? debt : 0;
                     },
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                 },
                 {
                     name: 'totalSupply',
@@ -307,21 +307,21 @@ export default {
                             this.defi.getTokenDecimals(_item, MAX_TOKEN_DECIMALS_IN_TABLES)
                         );*/
                     },
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                 },
                 {
                     name: 'actions',
                     label: 'Actions',
                     hidden: !this.defiAssetsList,
                     width: '120px',
-                    css: { textAlign: 'right' },
+                    cssClass: 'align-end',
                 },
                 {
                     name: 'actions-account',
                     label: 'Actions',
                     hidden: this.defiAssetsList,
                     width: '120px',
-                    css: { textAlign: 'right' },
+                    cssClass: 'align-end',
                 },
             ],
             MAX_TOKEN_DECIMALS_IN_TABLES,

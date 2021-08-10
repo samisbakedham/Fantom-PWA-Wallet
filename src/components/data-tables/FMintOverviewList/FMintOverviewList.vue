@@ -360,23 +360,23 @@ export default {
                 {
                     name: 'amount',
                     label: 'Amount',
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                 },
                 {
                     name: 'cratio',
                     label: 'C-Ratio',
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                 },
                 {
                     name: 'rewards',
                     label: 'Est. Pending / Stashed Rewards',
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                 },
                 {
                     name: 'actions',
                     label: 'Actions',
                     width: '180px',
-                    css: { textAlign: 'right' },
+                    cssClass: 'align-end',
                 },
             ],
             MAX_TOKEN_DECIMALS_IN_TABLES,

@@ -96,7 +96,7 @@ export default {
                     formatter: (_value, _item) => {
                         return formatNumberByLocale(this.$defi.getTokenPrice(_item), 2, 'USD');
                     },
-                    css: { textAlign: 'right' },
+                    cssClass: 'align-end',
                 },
                 {
                     name: 'borrowed',
@@ -111,7 +111,7 @@ export default {
                               )
                             : 0;
                     },
-                    css: { textAlign: 'right' },
+                    cssClass: 'align-end',
                 },
                 {
                     name: 'borrowed_fusd',
@@ -135,7 +135,7 @@ export default {
                             return (_direction === 'desc' ? -1 : 1) * numberSort(a, b);
                         };
                     },
-                    css: { textAlign: 'right' },
+                    cssClass: 'align-end',
                 },
             ],
         };

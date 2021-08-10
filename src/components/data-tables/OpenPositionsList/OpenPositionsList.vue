@@ -150,7 +150,7 @@ export default {
                 {
                     name: 'balance',
                     label: 'Position',
-                    // css: { textAlign: 'right' },
+                    // cssClass: 'align-end',
                 },
                 {
                     name: 'balance_fusd',
@@ -166,7 +166,7 @@ export default {
                             return (_direction === 'desc' ? -1 : 1) * numberSort(a, b);
                         };
                     },
-                    // css: { textAlign: 'right' },
+                    // cssClass: 'align-end',
                 },
             ],
         };

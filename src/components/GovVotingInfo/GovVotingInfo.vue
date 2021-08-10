@@ -99,9 +99,7 @@ export default {
                     name: 'agreementRatio',
                     label: 'Agreement',
                     formatter: (_value) => this.toFloat(_value) * 100,
-                    css: {
-                        textAlign: 'right',
-                    },
+                    cssClass: 'align-end',
                 },
             ],
             fracDigits: GOV_PERCENTAGE_FRAC_DIGITS,

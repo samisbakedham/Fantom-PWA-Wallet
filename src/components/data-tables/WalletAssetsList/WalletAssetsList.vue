@@ -184,7 +184,7 @@ export default {
 
                         return balance > 0 ? balance : 0;
                     },
-                    css: { textAlign: 'right' },
+                    cssClass: 'align-end',
                     // width: '100px',
                 },
                 {
@@ -196,7 +196,7 @@ export default {
 
                         return collateral > 0 ? collateral : 0;
                     },
-                    css: { textAlign: 'right' },
+                    cssClass: 'align-end',
                     // width: '100px',
                 },
                 {
@@ -208,13 +208,13 @@ export default {
 
                         return debt > 0 ? debt : 0;
                     },
-                    css: { textAlign: 'right' },
+                    cssClass: 'align-end',
                 },
                 {
                     name: 'actions-account',
                     label: 'Actions',
                     width: '120px',
-                    css: { textAlign: 'right' },
+                    cssClass: 'align-end',
                 },
             ],
             MAX_TOKEN_DECIMALS_IN_TABLES,

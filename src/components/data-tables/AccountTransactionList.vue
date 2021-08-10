@@ -278,9 +278,7 @@ export default {
                         return WEIToFTM(_value);
                     },
                     width: '150px',
-                    css: {
-                        textAlign: 'right',
-                    },
+                    cssClass: 'align-end',
                 },
             ],
         };

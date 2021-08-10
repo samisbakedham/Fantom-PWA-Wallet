@@ -260,7 +260,7 @@ export default {
                 {
                     name: 'amount',
                     label: 'Amount',
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                 },
                 {
                     name: 'amount_fusd',
@@ -276,12 +276,12 @@ export default {
                             return (_direction === 'desc' ? -1 : 1) * numberSort(a, b);
                         };
                     },
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                 },
                 {
                     name: 'rewards',
                     label: 'Est. Pending / Stashed Rewards',
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                 },
                 {
                     name: 'type',
@@ -308,13 +308,13 @@ export default {
                         return type.join(', ');
                     },
                     width: '160px',
-                    css: { textAlign: 'center' },
+                    cssClass: 'align-center',
                 },
                 {
                     name: 'actions',
                     label: 'Actions',
                     width: '180px',
-                    css: { textAlign: 'right' },
+                    cssClass: 'align-end',
                 },
             ],
         };
