@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import VuexPersist from 'vuex-persist';
 import appConfig from '../../app.config.js';
+import { walletlink } from '@/plugins/walletlink/Walletlink.js';
 
 import {
     APPEND_ACCOUNT,
@@ -37,6 +38,7 @@ import {
     UPDATE_CONTACT,
     ADD_CONTACT,
     ADD_METAMASK_ACCOUNT,
+    ADD_COINBASE_ACCOUNT,
 } from './actions.type.js';
 import { fWallet } from '../plugins/fantom-web3-wallet.js';
 import { arrayEquals } from '@/utils/array.js';
@@ -543,6 +545,27 @@ export const store = new Vuex.Store({
         },
         /**
          * @param {Object} _context
+         * @param {string} _address
+         */
+        async [ADD_COINBASE_ACCOUNT](_context, _address) {
+            const address = fWallet.toChecksumAddress(_address);
+
+            if (!_context.getters.getAccountByAddress(address)) {
+                const balance = await fWallet.getBalance(address);
+                const account = {
+                    address,
+                    balance: balance.balance,
+                    totalBalance: balance.totalValue,
+                    pendingRewards: getPendingRewards(balance),
+                    isCoinbaseAccount: true,
+                    name: `Wallet ${_context.state.accounts.length + 1}`,
+                };
+
+                _context.commit(APPEND_ACCOUNT, account);
+            }
+        },
+        /**
+         * @param {Object} _context
          */
         async [UPDATE_ACCOUNTS_BALANCES](_context) {
             const accounts = _context.getters.accounts;
@@ -642,6 +665,11 @@ export const store = new Vuex.Store({
                 if (index === _context.state.activeAccountIndex) {
                     _context.commit(DEACTIVATE_ACTIVE_ACCOUNT);
                     activeAccountRemoved = true;
+                }
+
+                if (account.isCoinbaseAccount) {
+                    console.log('!!!!!!!!!!!!!!!!!!!!!!');
+                    walletlink.disconnect();
                 }
             }
 

@@ -13,6 +13,7 @@
         </f-window>
 
         <ledger-accounts-window ref="ledgerAccountsWindow" />
+        <coinbase-wallet-notice-window v-if="showCBWindow" ref="coinbaseNoticeWindow" />
     </div>
 </template>
 
@@ -20,11 +21,19 @@
 import FWindow from '@/components/core/FWindow/FWindow.vue';
 import LedgerAccountsWindow from '@/components/windows/LedgerAccountsWindow/LedgerAccountsWindow.vue';
 import WalletList from '@/components/WalletList/WalletList.vue';
+import { ADD_COINBASE_ACCOUNT } from '@/store/actions.type.js';
+import CoinbaseWalletNoticeWindow from '@/components/windows/CoinbaseWalletNoticeWindow/CoinbaseWalletNoticeWindow.vue';
 
 export default {
     name: 'ConnectWalletWindow',
 
-    components: { WalletList, LedgerAccountsWindow, FWindow },
+    components: { CoinbaseWalletNoticeWindow, WalletList, LedgerAccountsWindow, FWindow },
+
+    data() {
+        return {
+            showCBWindow: false,
+        };
+    },
 
     methods: {
         show() {
@@ -32,6 +41,8 @@ export default {
         },
 
         async onWalletPicked(_wallet) {
+            // this.$walletlink.disconnect();
+
             if (_wallet.code === 'metamask') {
                 // root node (App.vue)
                 const appNode = this.$root.$children[0];
@@ -56,6 +67,24 @@ export default {
             } else if (_wallet.code === 'ledger') {
                 this.$refs.win.hide('fade-leave-active');
                 this.$refs.ledgerAccountsWindow.show();
+            } else if (_wallet.code === 'coinbase') {
+                // console.log(this.$walletlink);
+                try {
+                    const accounts = await this.$walletlink.connect();
+                    await this.$store.dispatch(ADD_COINBASE_ACCOUNT, accounts[0]);
+
+                    if (!this.$walletlink.isCorrectChainId()) {
+                        this.$refs.win.hide('fade-leave-active');
+                        this.showCBWindow = true;
+                        this.$nextTick(() => {
+                            this.$refs.coinbaseNoticeWindow.show();
+                        });
+                    } else {
+                        this.$router.push({ name: 'account-history', params: { address: accounts[0] } });
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
             }
         },
     },

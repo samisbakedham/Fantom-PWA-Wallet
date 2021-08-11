@@ -33,7 +33,7 @@
                 <template #suffix><slot name="suffix"></slot></template>
             </f-ellipsis>
         </template>
-        <span v-if="isActiveMetamaskAccount" class="metamask-account-active"></span>
+        <span v-if="isActiveMetamaskAccount || isActiveCoinbaseWalletAccount" class="account-active"></span>
     </span>
 </template>
 
@@ -122,6 +122,12 @@ export default {
             const { address } = this.account;
 
             return address.toLowerCase() === this.metamaskAccount;
+        },
+
+        isActiveCoinbaseWalletAccount() {
+            const { address } = this.account;
+
+            return address.toLowerCase() === this.$walletlink.selectedAddress;
         },
     },
 };

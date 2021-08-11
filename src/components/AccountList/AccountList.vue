@@ -69,6 +69,9 @@
                                     <template v-else-if="account.isMetamaskAccount">
                                         Metamask
                                     </template>
+                                    <template v-else-if="account.isCoinbaseAccount">
+                                        Coinbase
+                                    </template>
                                     <template v-else>
                                         Keystore file
                                     </template>
