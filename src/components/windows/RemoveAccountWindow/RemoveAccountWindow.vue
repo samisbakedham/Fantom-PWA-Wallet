@@ -31,6 +31,7 @@ import FWindow from '../../core/FWindow/FWindow.vue';
 import { REMOVE_ACCOUNT_BY_ADDRESS } from '../../../store/actions.type.js';
 import { mapGetters } from 'vuex';
 import FMessage from '../../core/FMessage/FMessage.vue';
+import { walletlink } from '@/plugins/walletlink/Walletlink.js';
 
 export default {
     name: 'RemoveAccountWindow',
@@ -75,12 +76,17 @@ export default {
          * @param {string} _address
          */
         async removeAccount(_address) {
+            const { isCoinbaseAccount } = this.dAccount;
             const activeAccountRemoved = await this.$store.dispatch(REMOVE_ACCOUNT_BY_ADDRESS, _address);
 
             if (this.accounts.length === 0) {
                 this.$router.replace({ path: '/' });
             } else if (activeAccountRemoved && this.$route.name !== 'dashboard') {
                 this.$router.replace({ name: 'dashboard' });
+            }
+
+            if (isCoinbaseAccount) {
+                walletlink.disconnect();
             }
         },
 

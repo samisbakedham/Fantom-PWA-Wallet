@@ -68,7 +68,6 @@ export default {
                 this.$refs.win.hide('fade-leave-active');
                 this.$refs.ledgerAccountsWindow.show();
             } else if (_wallet.code === 'coinbase') {
-                // console.log(this.$walletlink);
                 try {
                     const accounts = await this.$walletlink.connect();
                     await this.$store.dispatch(ADD_COINBASE_ACCOUNT, accounts[0]);

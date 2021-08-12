@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import VuexPersist from 'vuex-persist';
 import appConfig from '../../app.config.js';
-import { walletlink } from '@/plugins/walletlink/Walletlink.js';
 
 import {
     APPEND_ACCOUNT,
@@ -665,11 +664,6 @@ export const store = new Vuex.Store({
                 if (index === _context.state.activeAccountIndex) {
                     _context.commit(DEACTIVATE_ACTIVE_ACCOUNT);
                     activeAccountRemoved = true;
-                }
-
-                if (account.isCoinbaseAccount) {
-                    console.log('!!!!!!!!!!!!!!!!!!!!!!');
-                    walletlink.disconnect();
                 }
             }
 

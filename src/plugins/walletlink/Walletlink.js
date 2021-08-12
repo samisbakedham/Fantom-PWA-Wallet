@@ -2,6 +2,8 @@ import appConfig from '../../../app.config.js';
 // import Web3 from 'web3';
 import WalletLink from 'walletlink';
 import Web3 from 'web3';
+import { store } from '@/store';
+import { SET_WALLETLINK_CHAIN_ID } from '@/plugins/walletlink/store.js';
 const OPERA_CHAIN_ID = appConfig.chainId;
 
 /** @type {Walletlink} */
@@ -42,15 +44,17 @@ export class Walletlink {
         if (!this._initialized && !appConfig.isChromeExtension) {
             this._walletLink = new WalletLink({
                 appName: appConfig.name,
-                // appLogoUrl: 'https://ftmscan.com/images/svg/brands/fantom.svg?v=1.3',
-                // appLogoUrl: 'https://seeklogo.com/images/F/fantom-ftm-logo-3566C53917-seeklogo.com.png',
                 appLogoUrl:
                     'https://play-lh.googleusercontent.com/R3re-12NV0ImOlXiem3jMUwnjFlWJOQix0G5aRZxuPA1-Kli0z2KMwR0lvL71lRhdms=s180-rw',
-                darkMode: false,
+                darkMode: true,
             });
 
             this._provider = this._walletLink.makeWeb3Provider(appConfig.mainnet.rpc, appConfig.mainnet.chainId);
             this._web3 = new Web3(this._provider);
+
+            this._provider.on('chainChanged', (chainId) => {
+                this._setChainId(chainId);
+            });
 
             this.selectedAddress = this._provider.selectedAddress || '';
         }
@@ -59,19 +63,18 @@ export class Walletlink {
     }
 
     async connect() {
-        const accounts = await this._provider
-            .enable()
-            .then((accounts) => {
-                return accounts;
-            })
-            .catch((error) => {
-                return Promise.reject(error);
-            });
+        /*
+        setTimeout(() => {
+            this.adjustPopup();
+        }, 100);
+        */
+
+        const accounts = await this._provider.enable();
 
         this._web3.eth.defaultAccount = accounts[0];
         this.selectedAddress = accounts[0];
 
-        console.log('accounts: ', accounts, this._provider);
+        // console.log('accounts: ', accounts, this._provider);
 
         return accounts;
     }
@@ -86,8 +89,8 @@ export class Walletlink {
     /**
      * @return {boolean}
      */
-    isCorrectChainId() {
-        return this._provider && this._provider.chainId === OPERA_CHAIN_ID;
+    isCorrectChainId(chainId) {
+        return this._provider && this._provider.chainId === (chainId || OPERA_CHAIN_ID);
     }
 
     /**
@@ -136,4 +139,27 @@ export class Walletlink {
             return txHash;
         }
     }
+
+    /**
+     * @param {string} _chainId Hex number.
+     * @private
+     */
+    _setChainId(_chainId) {
+        store.commit(`walletlink/${SET_WALLETLINK_CHAIN_ID}`, _chainId);
+    }
+
+    /*adjustPopup() {
+        const ePopup = document.querySelector('.-walletlink-extension-dialog-box');
+
+        if (!ePopup) {
+            return;
+        }
+
+        ePopup.classList.add('walletlinkpopup');
+
+        const eH2 = ePopup.querySelector('.-walletlink-extension-dialog-box-bottom-description-region h2');
+        if (eH2) {
+            eH2.innerText = 'Scan to connect';
+        }
+    }*/
 }

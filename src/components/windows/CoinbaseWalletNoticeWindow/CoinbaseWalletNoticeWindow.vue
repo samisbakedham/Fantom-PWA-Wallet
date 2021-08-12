@@ -8,8 +8,8 @@
         animation-in="scale-center-enter-active"
         animation-out="scale-center-leave-active"
     >
-        <div v-if="!$walletlink.isCorrectChainId()">
-            Please select Fantom Opera network on Coinbase Wallet:
+        <div v-if="!$walletlink.isCorrectChainId(walletlinkChainId)">
+            Please select <b>Fantom Opera</b> network on Coinbase Wallet:
             <ol>
                 <li>
                     Tap the
@@ -32,7 +32,7 @@
 
 <script>
 import FWindow from '@/components/core/FWindow/FWindow.vue';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
     name: 'CoinbaseWalletNoticeWindow',
@@ -41,6 +41,20 @@ export default {
 
     computed: {
         ...mapGetters(['currentAccount']),
+
+        ...mapState('walletlink', {
+            walletlinkChainId: 'chainId',
+        }),
+    },
+
+    watch: {
+        walletlinkChainId() {
+            if (this.$walletlink.isCorrectChainId()) {
+                this.$refs.window.hide();
+            } else {
+                this.$refs.window.show();
+            }
+        },
     },
 
     methods: {

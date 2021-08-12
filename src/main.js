@@ -43,7 +43,7 @@ Vue.config.productionTip = false;
 // measure performance
 // Vue.config.performance = true;
 
-new Vue({
+export const vueInstance = new Vue({
     render: (h) => h(App),
     router,
     store,

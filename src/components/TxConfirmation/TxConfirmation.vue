@@ -331,35 +331,37 @@ export default {
 
                     this.waiting = false;
                 } else if (currentAccount.isCoinbaseAccount) {
-                    console.log('TADY!', this.$walletlink, this.$walletlink.selectedAddress);
                     if (!this.areWalletlinkParamsOk()) {
                         this.$refs.coinbaseNoticeWindow.show();
-                    }
+                    } else {
+                        try {
+                            const from = currentAccount.address;
+                            const to = this.tx.to;
 
-                    try {
-                        const from = currentAccount.address;
-                        const to = this.tx.to;
+                            this.waiting = true;
+                            const txHash = await this.$walletlink.signTransaction(
+                                { ...this.tx },
+                                currentAccount.address
+                            );
 
-                        this.waiting = true;
-                        const txHash = await this.$walletlink.signTransaction({ ...this.tx }, currentAccount.address);
-
-                        if (this.onSendTransactionSuccess && txHash) {
-                            this.onSendTransactionSuccess({
-                                data: {
-                                    sendTransaction: {
-                                        hash: txHash,
-                                        from,
-                                        to,
+                            if (this.onSendTransactionSuccess && txHash) {
+                                this.onSendTransactionSuccess({
+                                    data: {
+                                        sendTransaction: {
+                                            hash: txHash,
+                                            from,
+                                            to,
+                                        },
                                     },
-                                },
-                            });
-                        }
-                    } catch (err) {
-                        if (!this.$walletlink.selectedAddress) {
-                            await this.$walletlink.connect();
-                        }
+                                });
+                            }
+                        } catch (err) {
+                            if (!this.$walletlink.selectedAddress) {
+                                await this.$walletlink.connect();
+                            }
 
-                        this.waiting = false;
+                            this.waiting = false;
+                        }
                     }
                 }
 
