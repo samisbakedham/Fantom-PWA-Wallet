@@ -63,18 +63,7 @@
                                     </button>
                                 </span>
                                 <span class="label">
-                                    <template v-if="account.isLedgerAccount">
-                                        Ledger
-                                    </template>
-                                    <template v-else-if="account.isMetamaskAccount">
-                                        Metamask
-                                    </template>
-                                    <template v-else-if="account.isCoinbaseAccount">
-                                        Coinbase
-                                    </template>
-                                    <template v-else>
-                                        Keystore file
-                                    </template>
+                                    {{ $fWallet.getAccountTypeName(account) }}
                                 </span>
                             </span>
                             <span class="col col-6-md">

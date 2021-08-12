@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import web3utils from 'web3-utils';
 import Accounts from 'web3-eth-accounts';
 import { fFetch } from '@/plugins/ffetch.js';
-import { isArray } from '@/utils';
+import { isArray, isObject } from '@/utils';
 import { toBigNumber, toHex } from '@/utils/big-number.js';
 
 const bip39 = require('bip39');
@@ -1025,5 +1025,25 @@ export class FantomWeb3Wallet {
         }
 
         return false;
+    }
+
+    /**
+     * @param {WalletAccount} account
+     * @returns {string}
+     */
+    getAccountTypeName(account) {
+        if (!isObject(account)) {
+            return '';
+        }
+
+        if (account.isLedgerAccount) {
+            return 'Ledger';
+        } else if (account.isMetamaskAccount) {
+            return 'Metamask';
+        } else if (account.isCoinbaseAccount) {
+            return 'Coinbase';
+        } else {
+            return 'Keystore file';
+        }
     }
 }

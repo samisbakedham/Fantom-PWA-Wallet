@@ -36,6 +36,12 @@
                     </div>
                     <br />
 
+                    <span class="form-label">Type</span>
+                    <div class="break-word">
+                        {{ $fWallet.getAccountTypeName(account) }}
+                    </div>
+                    <br />
+
                     <f-input
                         :value="accountName"
                         type="text"
