@@ -103,7 +103,7 @@
                     </button>
                 </div>
                 <!--
-                <div class="align-right">
+                <div class="align-end">
                     <div class="defi-label">Today's change</div>
                     <div class="value">2.38%</div>
                 </div>

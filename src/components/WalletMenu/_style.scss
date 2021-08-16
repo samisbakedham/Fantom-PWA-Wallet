@@ -133,6 +133,20 @@
     }
 }
 
+html[dir="rtl"], body[dir="rtl"] {
+    .wallet-menu {
+        .f-hamburger-switch {
+            right: unset;
+            left: 16px;
+        }
+
+        .f-drawer {
+            border-radius: 20px 0 0 0;
+            transform: translateX(var(--f-left-menu-width));
+        }
+    }
+}
+
 @include media-min($bp-menu) {
     .wallet-menu {
         .f-simple-navigation {
@@ -171,14 +185,14 @@
 
     .wallet-menu {
         .logo {
-            text-align: left;
-            padding-left: 32px;
+            text-align: start;
+            padding-inline-start: 32px;
             padding-bottom: 64px;
 
             .wallet-label {
                 display: inline;
                 font-size: 21px;
-                padding-left: 12px;
+                padding-inline-start: 12px;
             }
         }
 
@@ -194,10 +208,13 @@
 
                     @include links() {
                         display: flex;
-                        padding: 8px 8px 8px 34px;
+                        padding-top: 8px;
+                        padding-bottom: 8px;
+                        padding-inline-start: 34px;
+                        padding-inline-end: 8px;
 
                         .title {
-                            padding-left: 20px;
+                            padding-inline-start: 20px;
                         }
                     }
                 }
@@ -252,7 +269,7 @@
         .right-col {
             .f-simple-navigation {
                 display: none;
-                margin-right: 0;
+                margin-inline-end: 0;
             }
         }
 
@@ -273,4 +290,3 @@
         }
     }
 }
-

@@ -29,7 +29,7 @@
                     <icon data="@/assets/svg/ellipsis-v.svg" width="24" height="24" aria-hidden="true" />
                 </button>
             </div>
-            <div v-if="!mobileView" class="col-4 align-right align-center-md">
+            <div v-if="!mobileView" class="col-4 align-end align-center-md">
                 <address-actions-box />
             </div>
         </div>

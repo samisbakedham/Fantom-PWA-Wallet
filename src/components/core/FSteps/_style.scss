@@ -24,7 +24,7 @@
         padding: var(--fsteps-step-padding);
 
         &:first-child {
-            padding-left: 0;
+            padding-inline-start: 0;
         }
 
         &::before {
@@ -69,6 +69,19 @@
 
         &-active {
             color: var(--fsteps-label-active-color);
+        }
+    }
+}
+
+html[dir="rtl"], body[dir="rtl"] {
+    .fsteps {
+        &_step {
+            &-active {
+                &::after {
+                    right: unset;
+                    left: 0;
+                }
+            }
         }
     }
 }

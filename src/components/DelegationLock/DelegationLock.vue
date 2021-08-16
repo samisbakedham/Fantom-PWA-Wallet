@@ -1,7 +1,7 @@
 <template>
     <div class="delegation-lock">
         <f-card class="f-card-double-padding f-data-layout">
-            <h2 class="align-left cont-with-back-btn">
+            <h2 class="align-start cont-with-back-btn">
                 <span>
                     Lock Delegation <span v-if="canLockDelegation" class="f-steps"><b>1</b> / 2</span>
                 </span>

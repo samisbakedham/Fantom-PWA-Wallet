@@ -13,7 +13,7 @@
     label {
         display: block;
         width: 100%;
-        text-align: left;
+        text-align: start;
         padding-bottom: 8px;
         cursor: pointer;
 
@@ -27,7 +27,7 @@
             }
 
             .title {
-                padding-left: 16px;
+                padding-inline-start: 16px;
             }
         }
 

@@ -28,11 +28,11 @@
         }
 
         .minting-limit-col {
-            text-align: right;
+            text-align: end;
         }
 
         .right-col {
-            text-align: right;
+            text-align: end;
         }
     }
 
@@ -75,6 +75,17 @@
     .f-colored-number-range {
         color: var(--f-primary-color);
         font-weight: 600;
+    }
+}
+
+html[dir="rtl"], body[dir="rtl"] {
+    .view-defi-manage-collateral {
+        .collateral-info {
+            &.increase {
+                right: unset;
+                left: 0;
+            }
+        }
     }
 }
 

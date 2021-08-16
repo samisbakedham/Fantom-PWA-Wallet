@@ -25,11 +25,11 @@
         }
 
         .minting-limit-col {
-            text-align: right;
+            text-align: end;
         }
 
         .right-col {
-            text-align: right;
+            text-align: end;
         }
     }
 
@@ -82,6 +82,17 @@
     &.borrow-or-repay {
         .token-info {
             display: none;
+        }
+    }
+}
+
+html[dir="rtl"], body[dir="rtl"] {
+    .defi-borrow {
+        .token-info {
+            &.increase {
+                right: unset;
+                left: 0;
+            }
         }
     }
 }

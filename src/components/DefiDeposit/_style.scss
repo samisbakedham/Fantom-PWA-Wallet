@@ -26,11 +26,11 @@
         }
 
         .minting-limit-col {
-            text-align: right;
+            text-align: end;
         }
 
         .right-col {
-            text-align: right;
+            text-align: end;
         }
     }
 
@@ -91,6 +91,17 @@
 
         .defi-price-input {
             margin-bottom: 24px;
+        }
+    }
+}
+
+html[dir="rtl"], body[dir="rtl"] {
+    .defi-deposit {
+        .collateral-info {
+            &.increase {
+                right: unset;
+                left: 0;
+            }
         }
     }
 }

@@ -250,10 +250,10 @@ export default {
 
     .right-col {
         /*display: flex;*/
-        text-align: right;
+        text-align: end;
 
         .f-navigation {
-            margin-right: 16px;
+            margin-inline-end: 16px;
         }
     }
 
@@ -267,7 +267,17 @@ export default {
 .search-box-on {
     .f-header {
         .right-col {
-            padding-right: 52px;
+            padding-inline-end: 52px;
+        }
+    }
+}
+
+html[dir='rtl'],
+body[dir='rtl'] {
+    .f-header {
+        .f-hamburger-switch {
+            right: unset;
+            left: 16px;
         }
     }
 }
@@ -312,7 +322,7 @@ export default {
         .right-col {
             .f-navigation {
                 display: none;
-                margin-right: 0;
+                margin-inline-end: 0;
             }
         }
 
@@ -321,8 +331,8 @@ export default {
             z-index: 12;
             top: 8px;
             left: 50%;
-            margin-right: 0;
-            margin-left: 0;
+            margin-inline-end: 0;
+            margin-inline-start: 0;
             /*transform: scale(0.5);*/
 
             &.small.expandable {
@@ -346,6 +356,16 @@ export default {
         &.drawer-on {
             .f-navigation {
                 display: block;
+            }
+        }
+    }
+
+    html[dir='rtl'],
+    body[dir='rtl'] {
+        .f-header {
+            .logo {
+                left: unset;
+                right: 16px;
             }
         }
     }

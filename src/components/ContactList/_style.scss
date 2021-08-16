@@ -14,8 +14,8 @@
 
     .f-card {
         height: 100%;
-        padding-left: 30px;
-        padding-right: 30px;
+        padding-inline-start: 30px;
+        padding-inline-end: 30px;
 
         &:not(.off) {
             .label {
@@ -30,7 +30,7 @@
         //position: relative;
         display: block;
 
-        padding-right: 32px;
+        padding-inline-end: 32px;
 
         button.btn-edit, .f-copy-button {
             position: absolute;
@@ -54,5 +54,16 @@
 
     .account-name.has-name .an-address {
         margin-top: 0;
+    }
+}
+
+html[dir="rtl"], body[dir="rtl"] {
+    .contact-list {
+        .address-col {
+            button.btn-edit, .f-copy-button {
+                right: unset;
+                left: 20px;
+            }
+        }
     }
 }

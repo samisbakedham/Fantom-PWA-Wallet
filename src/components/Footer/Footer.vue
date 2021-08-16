@@ -5,7 +5,7 @@
                 <div class="col align-center-sm">
                     <social-media-links></social-media-links>
                 </div>
-                <div class="col align-center-sm align-right">
+                <div class="col align-center-sm align-end">
                     <a href="https://fantom.foundation/" target="_blank" rel="nofollow">©2020 Fantom Foundation </a>
                 </div>
             </div>

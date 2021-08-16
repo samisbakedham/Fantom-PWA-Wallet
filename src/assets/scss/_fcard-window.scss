@@ -28,6 +28,15 @@
     }
 }
 
+html[dir="rtl"], body[dir="rtl"] {
+    .f-card:not(.off).window {
+        .footer {
+            left: unset;
+            right: 0;
+        }
+    }
+}
+
 @include media-max($bp-small) {
     .f-card:not(.off).window {
         .header {

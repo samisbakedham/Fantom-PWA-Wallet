@@ -104,7 +104,7 @@
                             </span>
 
                             <!--
-                            <span v-if="editMode" class="col-1 col-2-md align-right">
+                            <span v-if="editMode" class="col-1 col-2-md align-end">
                                 <ul class="account-edit-actions">
                                     <li>
                                         <button
