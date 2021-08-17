@@ -51,6 +51,7 @@ import { eventBusMixin } from './mixins/event-bus.js';
 import FNetworkStatus from '@/components/core/FNetworkStatus/FNetworkStatus.vue';
 import MetamaskAccountPickerWindow from '@/components/metamask/MetamaskAccountPickerWindow/MetamaskAccountPickerWindow.vue';
 import { mapGetters } from 'vuex';
+import { switchRTLDirection } from '@/components/RTLSwitch/RTLSwitch.vue';
 
 export default {
     name: 'App',
@@ -93,6 +94,7 @@ export default {
         // const useDarkColorScheme = window.matchMedia('(prefers-color-scheme: dark)');
 
         this.darkMode(this.$store.state.darkMode);
+        switchRTLDirection(this.$store.state.rtlDir);
 
         // useDarkColorScheme.addEventListener('change', (_event) => this.darkMode(_event.matches));
 

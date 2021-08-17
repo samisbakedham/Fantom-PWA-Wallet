@@ -5,6 +5,7 @@ export const SET_FRACTION_DIGITS = 'setFractionDigits';
 export const SET_DEFI_SLIPPAGE_RESERVE = 'setDefiSlippageReserve';
 export const SET_FUNISWAP_SLIPPAGE_TOLERANCE = 'setFUniswapSlippageTolerance';
 export const SET_DARK_MODE = 'setDarkMode';
+export const SET_RTL_DIR = 'setRTLDir';
 export const SET_ACTIVE_ACCOUNT_BY_ADDRESS = 'setActiveAccountByAddress';
 export const SET_ACTIVE_ACCOUNT_ADDRESS = 'setActiveAccountAddress';
 export const SET_SEND_DIRECTION = 'setSendDirection';

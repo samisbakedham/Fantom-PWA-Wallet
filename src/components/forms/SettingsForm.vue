@@ -45,6 +45,8 @@
                         -->
                         <br />
                         <f-dark-mode-switch />
+                        <br />
+                        <r-t-l-switch />
                     </div>
                 </fieldset>
             </f-form>
@@ -58,11 +60,12 @@ import FForm from '../core/FForm/FForm.vue';
 import FSelect from '../core/FSelect/FSelect.vue';
 import appConfig from '../../../app.config.js';
 import FDarkModeSwitch from '@/components/core/FDarkModeSwitch/FDarkModeSwitch.vue';
+import RTLSwitch from '@/components/RTLSwitch/RTLSwitch.vue';
 
 export default {
     name: 'SettingsForm',
 
-    components: { FDarkModeSwitch, FSelect, FForm, FCard },
+    components: { RTLSwitch, FDarkModeSwitch, FSelect, FForm, FCard },
 
     data() {
         return {

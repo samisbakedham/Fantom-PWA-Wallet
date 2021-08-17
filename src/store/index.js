@@ -26,6 +26,7 @@ import {
     SET_DEFI_SLIPPAGE_RESERVE,
     SET_DARK_MODE,
     SET_FUNISWAP_SLIPPAGE_TOLERANCE,
+    SET_RTL_DIR,
 } from './mutations.type.js';
 import {
     ADD_ACCOUNT,
@@ -59,6 +60,7 @@ const vuexLocalStorage = new VuexPersist({
         defiSlippageReserve: _state.defiSlippageReserve,
         fUniswapSlippageTolerance: _state.fUniswapSlippageTolerance,
         darkMode: _state.darkMode,
+        rtlDir: _state.rtlDir,
         accounts: _state.accounts,
         contacts: _state.contacts,
         bnbridgePendingRequests: _state.bnbridgePendingRequests,
@@ -98,6 +100,7 @@ export const store = new Vuex.Store({
         defiSlippageReserve: appConfig.settings.defaultDefiSlippageReserve,
         fUniswapSlippageTolerance: appConfig.settings.defaultFUniswapSlippageTolerance,
         darkMode: true,
+        rtlDir: false,
         /** @type {[WalletAccount]} */
         accounts: [],
         /** @type {[WalletContact]} */
@@ -311,6 +314,13 @@ export const store = new Vuex.Store({
          */
         [SET_DARK_MODE](_state, _on) {
             _state.darkMode = _on;
+        },
+        /**
+         * @param {Object} _state
+         * @param {boolean} _on
+         */
+        [SET_RTL_DIR](_state, _on) {
+            _state.rtlDir = _on;
         },
         /**
          * @param {Object} _state
