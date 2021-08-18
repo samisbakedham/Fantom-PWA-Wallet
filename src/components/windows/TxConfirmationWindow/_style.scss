@@ -10,17 +10,16 @@
         }
     }
 
-    .transaction-success-message, .transaction-reject-message {
+    .transaction-success-message,
+    .transaction-reject-message {
         margin: 0;
     }
 }
 
-@include prefers-reduced-motion(false) {
-    .view-transition-on {
-        .tx-confirmation-f-window {
-            .body {
-                overflow-x: hidden;
-            }
+.view-transition-on {
+    .tx-confirmation-f-window {
+        .body {
+            overflow-x: hidden;
         }
     }
 }

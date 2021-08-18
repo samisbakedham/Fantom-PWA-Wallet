@@ -1,30 +1,31 @@
-@include prefers-reduced-motion(false) {
-    .view-transition {
-        &.animation-container {
-            &.children-absolute {
-                position: relative;
+.view-transition {
+    &.animation-container {
+        &.children-absolute {
+            position: relative;
 
-                > *[class*="-enter-active"], > *[class*="-leave-active"] {
-                    position: absolute;
-                    left: 0;
-                    width: 100%;
-                }
+            > *[class*='-enter-active'],
+            > *[class*='-leave-active'] {
+                position: absolute;
+                left: 0;
+                width: 100%;
             }
         }
     }
+}
 
-    .view-transition-on {
-        overflow-x: hidden;
-    }
+.view-transition-on {
+    overflow-x: hidden;
+}
 
-    html[dir="rtl"], body[dir="rtl"] {
-        .view-transition {
-            &.animation-container {
-                &.children-absolute {
-                    > *[class*="-enter-active"], > *[class*="-leave-active"] {
-                        left: unset;
-                        right: 0;
-                    }
+html[dir='rtl'],
+body[dir='rtl'] {
+    .view-transition {
+        &.animation-container {
+            &.children-absolute {
+                > *[class*='-enter-active'],
+                > *[class*='-leave-active'] {
+                    left: unset;
+                    right: 0;
                 }
             }
         }
