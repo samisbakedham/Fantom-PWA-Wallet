@@ -15,10 +15,12 @@
     }
 }
 
-.view-transition-on {
-    .tx-confirmation-f-window {
-        .body {
-            overflow-x: hidden;
+@include prefers-reduced-motion(false) {
+    .view-transition-on {
+        .tx-confirmation-f-window {
+            .body {
+                overflow-x: hidden;
+            }
         }
     }
 }
