@@ -221,12 +221,12 @@ export class FantomWeb3Wallet {
      */
     async getBalance(_address, _withDelegations, _justBalance) {
         let query = gql`
-            query AccountByAddress($address: Address!, $cursor: Cursor) {
+            query AccountByAddress($address: Address!, $cursor: Cursor, $count: Int) {
                 account(address: $address) {
                     address
                     balance
                     totalValue
-                    delegations(cursor: $cursor) {
+                    delegations(cursor: $cursor, count: $count) {
                         pageInfo {
                             first
                             last
@@ -249,11 +249,11 @@ export class FantomWeb3Wallet {
 
         if (_justBalance) {
             query = gql`
-                query AccountByAddress($address: Address!, $cursor: Cursor) {
+                query AccountByAddress($address: Address!, $cursor: Cursor, $count: Int) {
                     account(address: $address) {
                         address
                         balance
-                        delegations(cursor: $cursor) {
+                        delegations(cursor: $cursor, count: $count) {
                             pageInfo {
                                 first
                                 last
@@ -275,7 +275,7 @@ export class FantomWeb3Wallet {
             `;
         } else if (_withDelegations) {
             query = gql`
-                query AccountByAddress($address: Address!, $cursor: Cursor) {
+                query AccountByAddress($address: Address!, $cursor: Cursor, $count: Int) {
                     account(address: $address) {
                         address
                         balance
@@ -285,7 +285,7 @@ export class FantomWeb3Wallet {
                             createdTime
                             isActive
                         }
-                        delegations(cursor: $cursor) {
+                        delegations(cursor: $cursor, count: $count) {
                             pageInfo {
                                 first
                                 last
@@ -341,6 +341,7 @@ export class FantomWeb3Wallet {
                 variables: {
                     address: _address,
                     cursor: null,
+                    count: 50,
                 },
             },
             'account.delegations'

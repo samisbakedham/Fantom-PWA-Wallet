@@ -115,7 +115,7 @@ export default {
             const balance = await this.$fWallet.getBalance(account.address);
 
             account.balance = balance.balance;
-            account.totalBalance = balance.totalBalance;
+            account.totalBalance = balance.totalValue;
 
             this.accounts.push(account);
         },
