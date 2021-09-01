@@ -43,7 +43,7 @@
                     </template>
                 </ratio-info>
             </div>
-            <div class="align-right">
+            <div class="align-end">
                 <h2>Synths</h2>
                 <div class="df-data-item smaller">
                     <h3 class="label">Max mintable</h3>
@@ -92,7 +92,7 @@
 
         <div class="form-buttons">
             <div class="row">
-                <div class="col align-left align-center-md">
+                <div class="col align-start align-center-md">
                     <router-link :to="{ name: 'defi-lock', params: { token: { ...wftmToken } } }" class="btn large">
                         Lock Collateral
                     </router-link>
@@ -135,7 +135,7 @@
                         Push Rewards
                     </button>
                 </div>
-                <div class="col align-right align-center-md">
+                <div class="col align-end align-center-md">
                     <router-link :to="{ name: 'defi-mint' }" class="btn large">Mint Synths</router-link>
                     <br />
                     <router-link :to="{ name: 'defi-repay' }" class="btn large secondary">Repay Synths</router-link>

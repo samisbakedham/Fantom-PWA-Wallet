@@ -208,7 +208,7 @@
                                     v-if="!canUndelegate && canClaimRewards"
                                     type="info"
                                     with-icon
-                                    class="align-left"
+                                    class="align-start"
                                 >
                                     You need to claim all pending rewards before
                                     <!--increasing your delegation or-->
@@ -217,10 +217,10 @@
                                     You can claim rewards for a maximum of {{ claimMaxEpochs }} epochs at once (use
                                     repeatedly if needed).-->
                                 </f-message>
-                                <f-message v-if="showRepaySFTMMessage" type="info" with-icon class="align-left">
+                                <f-message v-if="showRepaySFTMMessage" type="info" with-icon class="align-start">
                                     Can't repay sFTM, not enough unlocked sFTM
                                 </f-message>
-                                <f-message v-if="showUndelegateMessage" type="info" with-icon class="align-left">
+                                <f-message v-if="showUndelegateMessage" type="info" with-icon class="align-start">
                                     Can't undelegate, repay sFTM first please
                                 </f-message>
                             </template>
@@ -257,7 +257,7 @@
                 v-if="outstandingSFTM > 0"
                 type="warning"
                 with-icon
-                class="align-left"
+                class="align-start"
                 style="margin-bottom: 16px;"
             >
                 Can't withdraw, repay sFTM first please

@@ -469,7 +469,7 @@ export default {
 
         .ab-balance {
             font-size: 26px;
-            text-align: right;
+            text-align: end;
         }
     }
 }

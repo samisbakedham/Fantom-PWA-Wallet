@@ -1,7 +1,7 @@
 @import "../../assets/scss/vars";
 
 .view-wallet {
-    padding-left: var(--f-left-menu-width);
+    padding-inline-start: var(--f-left-menu-width);
 
     .main {
         padding-top: 0;
@@ -14,7 +14,7 @@
 
 @include media-max($bp-menu) {
     .view-wallet {
-        padding-left: 0;
+        padding-inline-start: 0;
 
         > .narrow-container {
             //margin-top: 24px;

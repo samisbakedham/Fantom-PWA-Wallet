@@ -50,7 +50,8 @@ import { filtersOptions } from './filters.js';
 import { eventBusMixin } from './mixins/event-bus.js';
 import FNetworkStatus from '@/components/core/FNetworkStatus/FNetworkStatus.vue';
 import MetamaskAccountPickerWindow from '@/components/metamask/MetamaskAccountPickerWindow/MetamaskAccountPickerWindow.vue';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
+import { switchRTLDirection } from '@/components/RTLSwitch/RTLSwitch.vue';
 
 export default {
     name: 'App',
@@ -79,26 +80,42 @@ export default {
         */
 
         ...mapGetters(['getAccountByAddress']),
+
+        ...mapState(['autoDarkMode']),
     },
 
-    /*
     watch: {
-        metamaskAccount(_account) {
-            console.log(_account, this.getAccountByAddress(_account));
+        autoDarkMode(value) {
+            if (value) {
+                const useDarkColorScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+                if (useDarkColorScheme) {
+                    this.darkMode(useDarkColorScheme.matches);
+                }
+            }
         },
     },
-    */
 
     created() {
-        // const useDarkColorScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const { state } = this.$store;
 
-        this.darkMode(this.$store.state.darkMode);
+        const useDarkColorScheme = window.matchMedia('(prefers-color-scheme: dark)');
 
-        // useDarkColorScheme.addEventListener('change', (_event) => this.darkMode(_event.matches));
+        if (useDarkColorScheme) {
+            useDarkColorScheme.addEventListener('change', (_event) => {
+                if (state.autoDarkMode) {
+                    this.darkMode(_event.matches);
+                }
+            });
+        }
 
-        filtersOptions.currency = this.$store.state.currency;
-        filtersOptions.fractionDigits = this.$store.state.fractionDigits;
-        this.setTokenPrice(this.$store.state.currency);
+        this.darkMode(state.autoDarkMode && useDarkColorScheme ? useDarkColorScheme.matches : state.darkMode);
+
+        switchRTLDirection(state.rtlDir);
+
+        filtersOptions.currency = state.currency;
+        filtersOptions.fractionDigits = state.fractionDigits;
+        this.setTokenPrice(state.currency);
 
         this.$bnb.setFSTRequestPushCallback((_request) => {
             this.onFSTRequestPush(_request);
@@ -109,7 +126,7 @@ export default {
         this.$bnb.setFSTRequestCancelCallback((_request) => {
             this.onFSTRequestCancel(_request);
         });
-        this.$bnb.setFSTPendingRequests([...this.$store.state.bnbridgePendingRequests]);
+        this.$bnb.setFSTPendingRequests([...state.bnbridgePendingRequests]);
         this.$bnb.processFSTPendingRequests();
     },
 

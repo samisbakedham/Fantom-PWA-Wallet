@@ -112,7 +112,7 @@
                 //flex: 1 0 25%;
                 flex: 1 0 calc(100% / (var(--f-slider-labels-num) - 1));
                 position: relative;
-                text-align: left;
+                text-align: start;
 
                 > span {
                     position: absolute;
@@ -122,6 +122,28 @@
                     color: var(--f-slider-label-color);
                     font-size: var(--f-slider-label-font-size);
                     font-weight: var(--f-slider-label-font-weight);
+                }
+            }
+        }
+    }
+}
+
+html[dir="rtl"], body[dir="rtl"] {
+    .f-slider {
+        &.use-upper-fill-bar {
+            .f-input .f-inp::after {
+                left: unset;
+                right: calc(var(--f-slider-value) * 1%);
+            }
+        }
+
+        .labels {
+            > div {
+                > * {
+                    > span {
+                        left: unset;
+                        right: 0;
+                    }
                 }
             }
         }

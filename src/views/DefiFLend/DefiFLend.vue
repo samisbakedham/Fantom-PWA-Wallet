@@ -29,7 +29,7 @@
                     :value="debtLimit"
                 />
             </div>
-            <div class="align-right">
+            <div class="align-end">
                 <h2>Debt</h2>
                 <div class="df-data-item smaller">
                     <h3 class="label">Total Borrowed</h3>

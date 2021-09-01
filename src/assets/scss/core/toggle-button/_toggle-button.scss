@@ -4,7 +4,7 @@
     position: relative;
     display: inline-block;
     vertical-align: middle;
-    margin-right: var(--f-spacer-xs);
+    margin-inline-end: var(--f-spacer-xs);
 
     &__btn {
         position: relative;
@@ -146,7 +146,7 @@
 
     &__label {
         color: var(--f-toggle-btn-label-color);
-        padding-left: 8px;
+        padding-inline-start: 8px;
     }
 
     &--invalid {
@@ -174,5 +174,13 @@
     &--xs {
         --f-toggle-btn-width: var(--f-toggle-btn-xs-width);
         --f-toggle-btn-height: var(--f-toggle-btn-xs-height);
+    }
+}
+
+html[dir=rtl] {
+    .toggle-btn {
+        &_btn {
+            transform: scale(-1);
+        }
     }
 }

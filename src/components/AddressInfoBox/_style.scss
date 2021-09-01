@@ -19,7 +19,7 @@
         width: 100%;
 
         svg {
-            margin-left: 8px;
+            margin-inline-start: 8px;
         }
     }
 
@@ -44,7 +44,7 @@
 
 @include media-max($bp-menu) {
     .address-info-box {
-        padding-left: 8px;
+        padding-inline-start: 8px;
 
         .address {
             font-size: 22px;
@@ -56,7 +56,7 @@
 
             > button:first-child {
                 max-width: 84%;
-                margin-right: 4%;
+                margin-inline-end: 4%;
             }
         }
     }

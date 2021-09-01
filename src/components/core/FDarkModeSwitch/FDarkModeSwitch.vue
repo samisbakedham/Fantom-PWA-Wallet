@@ -1,6 +1,13 @@
 <template>
     <div class="f-dark-mode-switch">
-        <f-toggle-button v-model="darkModeOn" :title="title" :aria-label="title" label="Dark Mode" />
+        <f-toggle-button
+            v-model="darkModeOn"
+            :title="title"
+            :aria-label="title"
+            label="Dark Mode"
+            :disabled="disabled"
+            v-bind="$attrs"
+        />
     </div>
 </template>
 
@@ -11,9 +18,16 @@ export default {
 
     components: { FToggleButton },
 
+    props: {
+        disabled: {
+            type: Boolean,
+            default: false,
+        },
+    },
+
     data() {
         return {
-            darkModeOn: false,
+            darkModeOn: this.$store.state.darkMode,
         };
     },
 
@@ -25,16 +39,24 @@ export default {
 
     watch: {
         darkModeOn(_value) {
-            const appNode = this.$root.$children[0];
+            this.setDarkMode(_value);
+        },
 
-            if (appNode) {
-                appNode.setDarkMode(_value);
+        disabled(value) {
+            if (!value) {
+                this.setDarkMode(this.darkModeOn);
             }
         },
     },
 
-    created() {
-        this.darkModeOn = this.$store.state.darkMode;
+    methods: {
+        setDarkMode(on) {
+            const appNode = this.$root.$children[0];
+
+            if (appNode) {
+                appNode.setDarkMode(on);
+            }
+        },
     },
 };
 </script>

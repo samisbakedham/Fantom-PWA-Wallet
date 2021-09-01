@@ -44,7 +44,16 @@
                         </f-input>
                         -->
                         <br />
-                        <f-dark-mode-switch />
+                        <div class="settings-form__darkmodeswitches">
+                            <f-dark-mode-switch :disabled="autoDarkModeOn" />
+                            <f-toggle-button
+                                v-model="autoDarkModeOn"
+                                label="Auto Dark Mode"
+                                title="Sets the dark theme according to the system settings"
+                            />
+                        </div>
+                        <br />
+                        <r-t-l-switch />
                     </div>
                 </fieldset>
             </f-form>
@@ -58,11 +67,14 @@ import FForm from '../core/FForm/FForm.vue';
 import FSelect from '../core/FSelect/FSelect.vue';
 import appConfig from '../../../app.config.js';
 import FDarkModeSwitch from '@/components/core/FDarkModeSwitch/FDarkModeSwitch.vue';
+import RTLSwitch from '@/components/RTLSwitch/RTLSwitch.vue';
+import FToggleButton from '../core/FToggleButton/FToggleButton.vue';
+import { SET_AUTO_DARK_MODE } from '../../store/mutations.type.js';
 
 export default {
     name: 'SettingsForm',
 
-    components: { FDarkModeSwitch, FSelect, FForm, FCard },
+    components: { FToggleButton, RTLSwitch, FDarkModeSwitch, FSelect, FForm, FCard },
 
     data() {
         return {
@@ -75,7 +87,8 @@ export default {
                 { value: '5', label: '5' },
                 { value: '6', label: '6' },
             ],
-            darkModeOn: false,
+            darkModeOn: this.$store.state.darkMode,
+            autoDarkModeOn: this.$store.state.autoDarkMode,
         };
     },
 
@@ -100,25 +113,11 @@ export default {
         },
     },
 
-    created() {
-        this.darkModeOn = this.$store.state.darkMode;
-
-        /*
-        this._useDarkColorScheme = window.matchMedia('(prefers-color-scheme: dark)');
-
-        if (this._useDarkColorScheme) {
-            this._useDarkColorScheme.addEventListener('change', this.onDarkMode);
-        }
-        */
+    watch: {
+        autoDarkModeOn(value) {
+            this.$store.commit(SET_AUTO_DARK_MODE, value);
+        },
     },
-
-    /*
-    beforeDestroy() {
-        if (this._useDarkColorScheme) {
-            this._useDarkColorScheme.removeEventListener('change', this.onDarkMode);
-        }
-    },
-    */
 
     methods: {
         /**
@@ -161,8 +160,14 @@ export default {
 
         onDarkMode(_event) {
             this.darkModeOn = _event.matches;
-            console.log(this.darkModeOn);
         },
     },
 };
 </script>
+
+<style lang="scss">
+.settings-form__darkmodeswitches {
+    display: flex;
+    gap: 16px;
+}
+</style>

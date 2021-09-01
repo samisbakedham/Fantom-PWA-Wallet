@@ -77,7 +77,7 @@ details {
     }
 
     summary {
-        text-align: left;
+        text-align: start;
         cursor: pointer;
     }
 
@@ -138,7 +138,7 @@ form {
             display: block;
             font-weight: bold;
             padding-bottom: 4px;
-            text-align: left;
+            text-align: start;
         }
     }
 
@@ -146,7 +146,7 @@ form {
         display: block;
         font-weight: bold;
         padding-bottom: 4px;
-        text-align: left;
+        text-align: start;
     }
 }
 
@@ -196,7 +196,7 @@ form {
     font-weight: normal;
     display: inline-block;
     vertical-align: top;
-    padding-left: 24px;
+    padding-inline-start: 24px;
     //margin-top: 8px;
 
     &__label {
@@ -206,8 +206,8 @@ form {
 
 .dt-heading {
     padding-top: 16px;
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-inline-start: 16px;
+    padding-inline-end: 16px;
 }
 
 .account-main-content-mt {
@@ -220,13 +220,13 @@ form {
 }
 
 .btn + .btn {
-    margin-left: 4px;
+    margin-inline-start: 4px;
 }
 
 button .v-spinner {
     display: inline-block;
-    margin-left: 16px;
-    margin-right: -8px;
+    margin-inline-start: 16px;
+    margin-inline-end: -8px;
 }
 
 .small-container {
@@ -279,7 +279,7 @@ legend.h2 {
     width: 100%;
 
     & > :last-child {
-        margin-left: auto;
+        margin-inline-start: auto;
     }
 }
 
@@ -295,11 +295,11 @@ legend.h2 {
     padding-bottom: 8px;
 
     > .btn {
-        margin-left: 16px;
+        margin-inline-start: 16px;
         margin-bottom: 16px;
 
         &:first-child {
-            margin-left: 0;
+            margin-inline-start: 0;
         }
     }
 }
@@ -321,11 +321,11 @@ legend.h2 {
 
         td, th {
             &.f-col {
-                padding-left: 0;
+                padding-inline-start: 0;
             }
 
             &.l-col {
-                padding-right: 0;
+                padding-inline-end: 0;
             }
         }
     }
@@ -334,7 +334,7 @@ legend.h2 {
 .validator-website {
     svg {
         //opacity: 0.65;
-        margin-left: 4px;
+        margin-inline-start: 4px;
         margin-top: -2px;
     }
 }
@@ -345,7 +345,7 @@ legend.h2 {
     width: 24px;
     height: 24px;
     overflow: hidden;
-    margin-right: 4px;
+    margin-inline-end: 4px;
 
     img {
         width: auto;
@@ -357,7 +357,7 @@ legend.h2 {
     display: flex;
 
     > .btn:last-child {
-        margin-left: auto;
+        margin-inline-start: auto;
         position: relative;
         top: -4px;
     }
@@ -401,8 +401,8 @@ input.no-style {
     }
 
     .dt-heading {
-        padding-left: 0;
-        padding-right: 0;
+        padding-inline-start: 0;
+        padding-inline-end: 0;
     }
 }
 
@@ -415,7 +415,7 @@ input.no-style {
 @include media-max($bp-medium) {
     .form-buttons {
         .btn {
-            margin-right: 8px;
+            margin-inline-end: 8px;
             margin-bottom: 8px;
 
             /*

@@ -104,7 +104,7 @@
 
         > :last-child {
             color: $light-gray-color;
-            padding-right: 8px;
+            padding-inline-end: 8px;
         }
     }
 
@@ -124,15 +124,15 @@
         align-items: center;
         justify-content: center;
         margin-top: 16px;
-        padding-left: 16px;
-        padding-right: 16px;
+        padding-inline-start: 16px;
+        padding-inline-end: 16px;
 
         .defi-label {
             margin-bottom: 0;
         }
 
         .value {
-            text-align: right;
+            text-align: end;
             padding: 0 8px;
         }
 
@@ -143,6 +143,17 @@
     .se-cont {
         max-width: 600px;
         margin: 0 auto;
+    }
+}
+
+html[dir="rtl"], body[dir="rtl"] {
+    .view-defi-ftrade {
+        .swap-cont {
+            &::after {
+                left: unset;
+                right: 0;
+            }
+        }
     }
 }
 

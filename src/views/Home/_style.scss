@@ -21,6 +21,15 @@
     }
 }
 
+html[dir="rtl"], body[dir="rtl"] {
+    .view-home {
+        &::before {
+            left: unset;
+            right: 0;
+        }
+    }
+}
+
 @include media-max($bp-small) {
     .view-home {
         &::before {

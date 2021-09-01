@@ -41,5 +41,14 @@
             }
         }
     }
+
+    html[dir="rtl"], body[dir="rtl"] {
+        .f-header {
+            .logo {
+                left: unset;
+                right: 16px;
+            }
+        }
+    }
 }
 
