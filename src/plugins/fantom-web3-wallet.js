@@ -1041,7 +1041,7 @@ export class FantomWeb3Wallet {
         } else if (account.isMetamaskAccount) {
             return 'Metamask';
         } else if (account.isCoinbaseAccount) {
-            return 'Coinbase';
+            return 'Coinbase Wallet';
         } else {
             return 'Keystore file';
         }

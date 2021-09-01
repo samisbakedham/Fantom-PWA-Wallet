@@ -57,7 +57,7 @@ export default {
                 },
                 {
                     code: 'coinbase',
-                    name: 'Coinbase',
+                    name: 'Coinbase Wallet',
                     icon: coinbaseWalletIcon,
                     iconOriginal: true,
                     // iconFill: true,
