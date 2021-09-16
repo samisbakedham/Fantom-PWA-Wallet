@@ -411,7 +411,7 @@ export default {
         },
 
         canLockDelegation() {
-            return this.canUndelegate && !this.isDelegationLocked;
+            return this._delegation ? this._delegation.unlockedAmount !== '0x0' && !this.isDelegationLocked : false;
         },
 
         canExtendDelegationLock() {
@@ -826,6 +826,7 @@ export default {
                             amount
                             amountDelegated
                             amountInWithdraw
+                            unlockedAmount
                             claimedReward
                             outstandingSFTM
                             tokenizerAllowedToWithdraw

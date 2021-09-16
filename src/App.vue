@@ -128,6 +128,8 @@ export default {
         });
         this.$bnb.setFSTPendingRequests([...state.bnbridgePendingRequests]);
         this.$bnb.processFSTPendingRequests();
+
+        // this.$store.dispatch(ADD_ACCOUNT, { address: '' });
     },
 
     methods: {
