@@ -89,6 +89,7 @@ import { U2FStatus } from '../../plugins/fantom-nano.js';
 import { UPDATE_ACCOUNT_BALANCE } from '../../store/actions.type.js';
 import appConfig from '../../../app.config.js';
 import CoinbaseWalletNoticeWindow from '@/components/windows/CoinbaseWalletNoticeWindow/CoinbaseWalletNoticeWindow.vue';
+import { cloneObject } from '@/utils';
 
 /**
  * Base component for other 'transaction confirmation and send' components.
@@ -273,7 +274,7 @@ export default {
                     if (pwd || fWallet.pwdStorage.isSet(this.tmpPwdCode)) {
                         try {
                             rawTx = await fWallet.signTransaction(
-                                this.tx,
+                                cloneObject(this.tx),
                                 currentAccount.keystore,
                                 pwd,
                                 this.tmpPwdCode
@@ -295,7 +296,7 @@ export default {
                         this.$refs.confirmationWindow.show();
 
                         rawTx = await this.$fNano.signTransaction(
-                            this.tx,
+                            cloneObject(this.tx),
                             currentAccount.accountId,
                             currentAccount.addressId
                         );
@@ -312,7 +313,10 @@ export default {
                         const to = this.tx.to;
 
                         this.waiting = true;
-                        const txHash = await this.$metamask.signTransaction({ ...this.tx }, currentAccount.address);
+                        const txHash = await this.$metamask.signTransaction(
+                            cloneObject(this.tx),
+                            currentAccount.address
+                        );
 
                         if (this.onSendTransactionSuccess && txHash) {
                             this.onSendTransactionSuccess({
@@ -340,7 +344,7 @@ export default {
 
                             this.waiting = true;
                             const txHash = await this.$walletlink.signTransaction(
-                                { ...this.tx },
+                                cloneObject(this.tx),
                                 currentAccount.address
                             );
 
