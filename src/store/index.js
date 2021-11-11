@@ -40,7 +40,6 @@ import {
     ADD_CONTACT,
     ADD_METAMASK_ACCOUNT,
     ADD_COINBASE_ACCOUNT,
-    ADD_WALLETCONNECT_ACCOUNT,
 } from './actions.type.js';
 import { fWallet } from '../plugins/fantom-web3-wallet.js';
 import { arrayEquals } from '@/utils/array.js';
@@ -578,27 +577,6 @@ export const store = new Vuex.Store({
                     totalBalance: balance.totalValue,
                     pendingRewards: getPendingRewards(balance),
                     isCoinbaseAccount: true,
-                    name: `Wallet ${_context.state.accounts.length + 1}`,
-                };
-
-                _context.commit(APPEND_ACCOUNT, account);
-            }
-        },
-        /**
-         * @param {Object} _context
-         * @param {string} _address
-         */
-        async [ADD_WALLETCONNECT_ACCOUNT](_context, _address) {
-            const address = fWallet.toChecksumAddress(_address);
-
-            if (!_context.getters.getAccountByAddress(address)) {
-                const balance = await fWallet.getBalance(address);
-                const account = {
-                    address,
-                    balance: balance.balance,
-                    totalBalance: balance.totalValue,
-                    pendingRewards: getPendingRewards(balance),
-                    isWalletConnectAccount: true,
                     name: `Wallet ${_context.state.accounts.length + 1}`,
                 };
 

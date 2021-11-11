@@ -1043,8 +1043,6 @@ export class FantomWeb3Wallet {
             return 'Metamask';
         } else if (account.isCoinbaseAccount) {
             return 'Coinbase Wallet';
-        } else if (account.isWalletConnectAccount) {
-            return 'WalletConnect';
         } else {
             return 'Keystore file';
         }

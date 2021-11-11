@@ -29,7 +29,6 @@ import { isAriaAction } from '@/utils/aria.js';
 import metamaskIcon from '../../assets/svg/metamask.svg';
 import ledgerIcon from '../../assets/svg/ledger-logo-icon.svg';
 import coinbaseWalletIcon from '../../assets/svg/coinbase-wallet.svg';
-import walletConnectWalletIcon from '../../assets/svg/walletconnect-circle-blue.svg';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 
 /**
@@ -60,13 +59,6 @@ export default {
                     code: 'coinbase',
                     name: 'Coinbase Wallet',
                     icon: coinbaseWalletIcon,
-                    iconOriginal: true,
-                    // iconFill: true,
-                },
-                {
-                    code: 'walletConnect',
-                    name: 'WalletConnect',
-                    icon: walletConnectWalletIcon,
                     iconOriginal: true,
                     // iconFill: true,
                 },

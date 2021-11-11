@@ -159,7 +159,6 @@ export default {
                 !this.currentAccount.isLedgerAccount &&
                 !this.currentAccount.isMetamaskAccount &&
                 !this.currentAccount.isCoinbaseAccount &&
-                !this.currentAccount.isWalletConnectAccount &&
                 !clientInfo.mobile
             );
         },

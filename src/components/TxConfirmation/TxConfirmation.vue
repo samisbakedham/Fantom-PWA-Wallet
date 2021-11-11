@@ -18,8 +18,7 @@
                     :show-password-field="
                         !currentAccount.isLedgerAccount &&
                         !currentAccount.isMetamaskAccount &&
-                        !currentAccount.isCoinbaseAccount &&
-                        !currentAccount.isWalletConnectAccount
+                        !currentAccount.isCoinbaseAccount
                     "
                     :password-label="passwordLabel"
                     :send-button-label="sendButtonLabel"
@@ -71,26 +70,6 @@
                 </div>
                 <div v-else-if="metamaskAccount.toLowerCase() !== currentAccount.address.toLowerCase()">
                     Please, select account <b>{{ currentAccount.address }}</b> in Metamask.
-                </div>
-            </div>
-        </f-window>
-
-        <f-window
-            v-if="currentAccount.isWalletConnectAccount"
-            ref="walletConnectNoticeWindow"
-            modal
-            title="Notice"
-            class="double-body-padding"
-            style="max-width: 560px;"
-            animation-in="scale-center-enter-active"
-            animation-out="scale-center-leave-active"
-        >
-            <div class="align-center">
-                <div v-if="!$walletConnect.isCorrectChainId()">
-                    Please, select Fantom Opera chain.
-                </div>
-                <div v-else-if="walletConnectAccount.toLowerCase() !== currentAccount.address.toLowerCase()">
-                    Please, select account <b>{{ currentAccount.address }}</b>
                 </div>
             </div>
         </f-window>
@@ -207,11 +186,6 @@ export default {
         ...mapState('metamask', {
             metamaskAccount: 'account',
             metamaskChainId: 'chainId',
-        }),
-
-        ...mapState('walletConnect', {
-            walletConnectAccount: 'account',
-            walletConnectChainId: 'chainId',
         }),
 
         ...mapGetters(['currentAccount']),
@@ -393,43 +367,6 @@ export default {
                             this.waiting = false;
                         }
                     }
-                } else if (currentAccount.isWalletConnectAccount) {
-                    if (!this.areWalletConnectParamsOk()) {
-                        await this.$walletConnect.connect();
-
-                        if (!this.areWalletConnectParamsOk()) {
-                            this.$refs.walletConnectNoticeWindow.show();
-                        }
-                    } else {
-                        try {
-                            const from = currentAccount.address;
-                            const to = this.tx.to;
-
-                            this.waiting = true;
-                            const txHash = await this.$walletConnect.signTransaction(
-                                cloneObject(this.tx),
-                                currentAccount.address
-                            );
-
-                            if (this.onSendTransactionSuccess && txHash) {
-                                this.onSendTransactionSuccess({
-                                    data: {
-                                        sendTransaction: {
-                                            hash: txHash,
-                                            from,
-                                            to,
-                                        },
-                                    },
-                                });
-                            }
-                        } catch (err) {
-                            if (!this.$walletConnect.selectedAddress) {
-                                await this.$walletConnect.connect();
-                            }
-
-                            this.waiting = false;
-                        }
-                    }
                 }
 
                 if (rawTx) {
@@ -458,16 +395,6 @@ export default {
                 $walletlink.selectedAddress &&
                 $walletlink.selectedAddress.toLowerCase() === this.currentAccount.address.toLowerCase() &&
                 $walletlink.isCorrectChainId()
-            );
-        },
-
-        areWalletConnectParamsOk() {
-            const { $walletConnect } = this;
-
-            return (
-                $walletConnect.selectedAddress &&
-                $walletConnect.selectedAddress.toLowerCase() === this.currentAccount.address.toLowerCase() &&
-                $walletConnect.isCorrectChainId()
             );
         },
 

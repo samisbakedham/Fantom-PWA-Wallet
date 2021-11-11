@@ -21,9 +21,8 @@
 import FWindow from '@/components/core/FWindow/FWindow.vue';
 import LedgerAccountsWindow from '@/components/windows/LedgerAccountsWindow/LedgerAccountsWindow.vue';
 import WalletList from '@/components/WalletList/WalletList.vue';
-import { ADD_COINBASE_ACCOUNT, ADD_WALLETCONNECT_ACCOUNT } from '@/store/actions.type.js';
+import { ADD_COINBASE_ACCOUNT } from '@/store/actions.type.js';
 import CoinbaseWalletNoticeWindow from '@/components/windows/CoinbaseWalletNoticeWindow/CoinbaseWalletNoticeWindow.vue';
-import { mapGetters, mapState } from 'vuex';
 
 export default {
     name: 'ConnectWalletWindow',
@@ -34,14 +33,6 @@ export default {
         return {
             showCBWindow: false,
         };
-    },
-
-    computed: {
-        ...mapState('walletConnect', {
-            walletConnectAccount: 'account',
-        }),
-
-        ...mapGetters(['currentAccount']),
     },
 
     methods: {
@@ -90,32 +81,6 @@ export default {
                     } else {
                         this.$router.push({ name: 'account-history', params: { address: accounts[0] } });
                     }
-                } catch (err) {
-                    console.error(err);
-                }
-            } else if (_wallet.code === 'walletConnect') {
-                try {
-                    if (this.currentAccount.address.toLowerCase() === this.walletConnectAccount.toLowerCase()) {
-                        this.$walletConnect.disconnect();
-                    } else {
-                        console.log('---!');
-                        const accounts = await this.$walletConnect.connect();
-                        await this.$store.dispatch(ADD_WALLETCONNECT_ACCOUNT, accounts[0]);
-
-                        console.log('jo!', accounts);
-
-                        this.$router.push({ name: 'account-history', params: { address: accounts[0] } });
-                    }
-
-                    /*if (!this.$walletConnect.isCorrectChainId()) {
-                        this.$refs.win.hide('fade-leave-active');
-                        this.showCBWindow = true;
-                        this.$nextTick(() => {
-                            this.$refs.coinbaseNoticeWindow.show();
-                        });
-                    } else {
-                        this.$router.push({ name: 'account-history', params: { address: accounts[0] } });
-                    }*/
                 } catch (err) {
                     console.error(err);
                 }
