@@ -32,6 +32,7 @@ import { REMOVE_ACCOUNT_BY_ADDRESS } from '../../../store/actions.type.js';
 import { mapGetters } from 'vuex';
 import FMessage from '../../core/FMessage/FMessage.vue';
 import { walletlink } from '@/plugins/walletlink/Walletlink.js';
+import { walletConnect } from '@/plugins/walletconnect/WalletConnect.js';
 
 export default {
     name: 'RemoveAccountWindow',
@@ -87,6 +88,8 @@ export default {
 
             if (isCoinbaseAccount) {
                 walletlink.disconnect();
+            } else if (this.dAccount.isWalletConnectAccount) {
+                walletConnect.disconnect();
             }
         },
 
