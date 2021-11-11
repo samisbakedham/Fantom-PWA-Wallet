@@ -33,7 +33,11 @@
                 <template #suffix><slot name="suffix"></slot></template>
             </f-ellipsis>
         </template>
-        <span v-if="isActiveMetamaskAccount || isActiveCoinbaseWalletAccount" class="account-active"></span>
+
+        <span
+            v-if="isActiveMetamaskAccount || isActiveCoinbaseWalletAccount || isActiveWalletConnectAccount"
+            class="account-active"
+        ></span>
     </span>
 </template>
 
@@ -91,6 +95,10 @@ export default {
             metamaskAccount: 'account',
         }),
 
+        ...mapState('walletConnect', {
+            walletConnectAccount: 'account',
+        }),
+
         addressUrl() {
             const { blockchain } = this;
             const { address } = this.account;
@@ -128,6 +136,12 @@ export default {
             const { address } = this.account;
 
             return address.toLowerCase() === this.$walletlink.selectedAddress;
+        },
+
+        isActiveWalletConnectAccount() {
+            const { address } = this.account;
+
+            return address.toLowerCase() === this.walletConnectAccount.toLowerCase();
         },
     },
 };
