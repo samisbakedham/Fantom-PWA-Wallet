@@ -95,14 +95,14 @@ export default {
                 }
             } else if (_wallet.code === 'walletConnect') {
                 try {
-                    if (this.currentAccount.address.toLowerCase() === this.walletConnectAccount.toLowerCase()) {
+                    if (
+                        this.currentAccount &&
+                        this.currentAccount.address.toLowerCase() === this.walletConnectAccount.toLowerCase()
+                    ) {
                         this.$walletConnect.disconnect();
                     } else {
-                        console.log('---!');
                         const accounts = await this.$walletConnect.connect();
                         await this.$store.dispatch(ADD_WALLETCONNECT_ACCOUNT, accounts[0]);
-
-                        console.log('jo!', accounts);
 
                         this.$router.push({ name: 'account-history', params: { address: accounts[0] } });
                     }
