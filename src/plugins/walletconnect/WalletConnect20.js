@@ -2,7 +2,7 @@ import appConfig from '../../../app.config.js';
 // import Web3 from 'web3';
 import WC from '@walletconnect/client';
 import { store } from '@/store';
-import { SET_WALLETCONNECT_CHAIN_ID } from '@/plugins/walletconnect/store.js';
+import { SET_WALLETCONNECT_ACCOUNT, SET_WALLETCONNECT_CHAIN_ID } from '@/plugins/walletconnect/store.js';
 const OPERA_CHAIN_ID = appConfig.chainId;
 import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal';
 
@@ -52,8 +52,7 @@ export class WalletConnect {
 
             /*if (!this._walletConnect.connected) {
                 await this._walletConnect.createSession({
-                    chainId: appConfig.mainnet.chainId,
-                    rpcUrl: appConfig.mainnet.rpc,
+                    chainId: 250,
                 });
             }*/
 
@@ -77,8 +76,9 @@ export class WalletConnect {
 
                 console.log('disconnect', payload);
 
-                this.selectedAddress = '';
-                this.chainId = '';
+                this._setChainId(0);
+                this._setAccount('');
+                window.location.reload();
             });
 
             if (this._walletConnect.connected) {
@@ -91,17 +91,19 @@ export class WalletConnect {
     }
 
     onSessionUpdate(accounts, chainId) {
-        this.selectedAddress = accounts[0] || '';
+        this._setAccount(accounts[0] || '');
         this._setChainId(chainId);
+
+        console.log('onSessionUpdate', this.selectedAddress, chainId);
     }
 
     async connect() {
         const { accounts, chainId } = await this._walletConnect.connect({
-            chainId: appConfig.mainnet.chainId,
+            chainId: 250,
             rpcUrl: appConfig.mainnet.rpc,
         });
 
-        this.selectedAddress = accounts[0];
+        this._setAccount(accounts[0]);
         this._setChainId(chainId);
 
         console.log('connectint WalletConnect', accounts, chainId);
@@ -148,25 +150,8 @@ export class WalletConnect {
             await this.connect();
         }
 
-        console.log('sign', JSON.stringify(_tx));
-        console.log('sess', this._walletConnect.session);
-
-        // tmp
-        const tmpTx = {
-            from: '0xf0Cff513ED7Ed1C1BD79f64530D595b6b9c77D32',
-            to: '0xf0Cff513ED7Ed1C1BD79f64530D595b6b9c77D32',
-            nonce: '0x00',
-            gasPrice: '0x2098a67800',
-            gasLimit: '0x5208',
-            value: '0x00',
-            data: '0x',
-        };
-
-        console.log(_tx);
-        console.log(tmpTx);
-
-        return await this._walletConnect.signTransaction(tmpTx);
-        // return await this._walletConnect.signTransaction(_tx);
+        // return await this._walletConnect.signTransaction(tmpTx);
+        return await this._walletConnect.sendTransaction(_tx);
     }
 
     /**
@@ -175,6 +160,13 @@ export class WalletConnect {
      */
     _setChainId(_chainId) {
         this.chainId = _chainId;
+        console.log('_setChainId', _chainId);
         store.commit(`walletConnect/${SET_WALLETCONNECT_CHAIN_ID}`, _chainId);
+    }
+
+    _setAccount(account) {
+        this.selectedAddress = account;
+        console.log('_setAccount', this.selectedAddress);
+        store.commit(`walletConnect/${SET_WALLETCONNECT_ACCOUNT}`, this.selectedAddress);
     }
 }

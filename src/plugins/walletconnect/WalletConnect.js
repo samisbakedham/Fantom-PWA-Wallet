@@ -1,9 +1,10 @@
 import appConfig from '../../../app.config.js';
-import Web3 from 'web3';
-import WalletConnectProvider from '@walletconnect/web3-provider';
+// import Web3 from 'web3';
+import WC from '@walletconnect/client';
 import { store } from '@/store';
 import { SET_WALLETCONNECT_ACCOUNT, SET_WALLETCONNECT_CHAIN_ID } from '@/plugins/walletconnect/store.js';
 const OPERA_CHAIN_ID = appConfig.chainId;
+import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal';
 
 /** @type {WalletConnect} */
 export let walletConnect = null;
@@ -42,77 +43,79 @@ export class WalletConnect {
 
     async init() {
         if (!this._initialized && !appConfig.isChromeExtension) {
-            this._provider = new WalletConnectProvider({
-                // infuraId: '27e484dcd9e3efcfd25a83a78777cdf1',
-                rpc: {
-                    250: 'https://rpc.ftm.tools/',
-                },
-                chainId: 250,
+            this._walletConnect = new WC({
+                bridge: 'https://bridge.walletconnect.org',
+                qrcodeModal: WalletConnectQRCodeModal,
             });
+
+            console.log(this._walletConnect);
 
             /*if (!this._walletConnect.connected) {
-                await this._walletConnect.createSession();
+                await this._walletConnect.createSession({
+                    chainId: 250,
+                });
             }*/
 
-            const provider = this._provider;
+            this._walletConnect.on('session_update', (error, payload) => {
+                if (error) {
+                    throw error;
+                }
 
-            this._web3 = new Web3(provider);
+                // Get updated accounts and chainId
+                const { accounts, chainId } = payload.params[0];
 
-            provider.on('chainChanged', (_chainId) => {
-                this._onChainChange(_chainId);
+                console.log('session_update', accounts, chainId);
+
+                this.onSessionUpdate(accounts, chainId);
             });
-            provider.on('accountsChanged', (_accounts) => {
-                this._onAccountsChange(_accounts);
-            });
-            provider.on('disconnect', () => {
+
+            this._walletConnect.on('disconnect', (error, payload) => {
+                if (error) {
+                    throw error;
+                }
+
+                console.log('disconnect', payload);
+
                 this._setChainId(0);
                 this._setAccount('');
                 window.location.reload();
             });
 
-            console.log('!!!');
-
-            this._setChainId(provider.chainId);
-            this._setAccount(await this.getAccounts());
+            if (this._walletConnect.connected) {
+                const { chainId, accounts } = this._walletConnect;
+                this.onSessionUpdate(accounts, chainId);
+            }
         }
 
         this._initialized = true;
     }
 
-    /**
-     * Called on chainId change.
-     *
-     * @param {string} _chainId Hex number.
-     * @private
-     */
-    _onChainChange(_chainId) {
-        this._setChainId(_chainId);
-    }
+    onSessionUpdate(accounts, chainId) {
+        this._setAccount(accounts[0] || '');
+        this._setChainId(chainId);
 
-    /**
-     * Called on account change.
-     *
-     * @param {array} _accounts
-     * @private
-     */
-    _onAccountsChange(_accounts) {
-        this._setAccount(_accounts);
+        console.log('onSessionUpdate', this.selectedAddress, chainId);
     }
 
     async connect() {
-        const accounts = await this._provider.enable();
+        const { accounts, chainId } = await this._walletConnect.connect({
+            chainId: 250,
+            rpcUrl: appConfig.mainnet.rpc,
+        });
 
-        this._setChainId(this._provider.chainId);
-        this._setAccount(accounts);
+        this._setAccount(accounts[0]);
+        this._setChainId(chainId);
+
+        console.log('connectint WalletConnect', accounts, chainId);
 
         return accounts;
     }
 
-    async disconnect() {
+    disconnect() {
         console.log('disconnect walletconnect');
 
-        if (this._provider) {
-            await this._provider.disconnect();
+        if (this._walletConnect) {
+            this._walletConnect.killSession();
         }
     }
 
@@ -126,7 +129,7 @@ export class WalletConnect {
     /**
      * @return {Promise<[]>}
      */
-    async getAccounts() {
+    /*async getAccounts() {
         let accounts = [];
 
         if (this._provider) {
@@ -138,7 +141,7 @@ export class WalletConnect {
         }
 
         return accounts;
-    }
+    }*/
 
     async signTransaction(_tx, _address) {
         _tx.from = _address;
@@ -147,12 +150,8 @@ export class WalletConnect {
             await this.connect();
         }
 
-        console.log('sign', JSON.stringify(_tx));
-
-        return await this._provider.request({
-            method: 'eth_sendTransaction',
-            params: [_tx],
-        });
+        // return await this._walletConnect.signTransaction(tmpTx);
+        return await this._walletConnect.sendTransaction(_tx);
     }
 
     /**
@@ -160,13 +159,13 @@ export class WalletConnect {
      * @private
      */
     _setChainId(_chainId) {
-        console.log('_setChainId', _chainId);
         this.chainId = _chainId;
+        console.log('_setChainId', _chainId);
         store.commit(`walletConnect/${SET_WALLETCONNECT_CHAIN_ID}`, _chainId);
     }
 
-    _setAccount(accounts) {
-        this.selectedAddress = accounts[0] || '';
+    _setAccount(account) {
+        this.selectedAddress = account;
         console.log('_setAccount', this.selectedAddress);
         store.commit(`walletConnect/${SET_WALLETCONNECT_ACCOUNT}`, this.selectedAddress);
     }
