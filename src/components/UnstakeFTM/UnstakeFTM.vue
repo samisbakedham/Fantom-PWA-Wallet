@@ -54,7 +54,8 @@
 
                     <div class="form-buttons align-center">
                         <button type="submit" class="btn large" :class="{ 'orange-btn': orangeBtn }">
-                            Ok, undelegate
+                            <template v-if="!lockExist">Ok, undelegate</template>
+                            <template v-else>Ok, unlock</template>
                         </button>
                     </div>
                 </div>
