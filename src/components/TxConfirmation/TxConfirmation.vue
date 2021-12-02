@@ -303,7 +303,8 @@ export default {
                                 cloneObject(this.tx),
                                 currentAccount.keystore,
                                 pwd,
-                                this.tmpPwdCode
+                                this.tmpPwdCode,
+                                currentAccount.address
                             );
 
                             if (this.setTmpPwd && this.tmpPwdCount > 0) {

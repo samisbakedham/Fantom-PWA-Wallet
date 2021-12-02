@@ -856,7 +856,7 @@ export class FantomWeb3Wallet {
         };
     }
 
-    async signTransaction(_tx, _keystore, _password, _tmpPwdCode) {
+    async signTransaction(_tx, _keystore, _password, _tmpPwdCode, _accountAddress) {
         const { pwdStorage } = this;
         let password = _password;
 
@@ -873,6 +873,10 @@ export class FantomWeb3Wallet {
         const account = this.decryptFromKeystore(_keystore, password);
 
         password = '';
+
+        if (!this.sameAddresses(_accountAddress, account.address)) {
+            throw new Error('Account address and address in keystore file are different');
+        }
 
         if (pwdStorage.isSet(_tmpPwdCode) && !pwdStorage.isTimeoutSet() && pwdO.count === 0) {
             pwdStorage.clear();
