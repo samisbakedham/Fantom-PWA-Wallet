@@ -26,6 +26,7 @@
                     :waiting="waiting"
                     :disabled-submit="disabledSubmit"
                     :gas-limit="dGasLimit"
+                    :gas-info="gasInfo"
                     :tmp-pwd-code="tmpPwdCode"
                     :cancel-button-label="cancelButtonLabel"
                     :show-cancel-button="showCancelButton"
@@ -200,6 +201,7 @@ export default {
             waiting: false,
             disabledSubmit: true,
             dGasLimit: '',
+            gasInfo: {},
         };
     },
 
@@ -243,6 +245,11 @@ export default {
         async init() {
             this.dGasLimit = this.tx.gasLimit;
             this.disabledSubmit = false;
+
+            this.gasInfo = {
+                gasLimit: this.tx.gasLimit,
+                gasPrice: this.tx.gasPrice,
+            };
         },
 
         sendTransaction(_rawTransaction) {
@@ -274,15 +281,25 @@ export default {
         async onFFormSubmit(_event) {
             const { currentAccount } = this;
             const fWallet = this.$fWallet;
-            const pwd = _event.detail.data.pwd;
+            const { data } = _event.detail;
+            const pwd = data.pwd;
             let rawTx = null;
 
-            _event.detail.data.pwd = '';
+            data.pwd = '';
 
             if (currentAccount && this.tx && fWallet.isValidAddress(this.tx.to)) {
                 this.tx.nonce = await fWallet.getTransactionCount(currentAccount.address);
                 this.tx.nonce = `0x${this.tx.nonce.toString(16)}`;
                 this.tx.chainId = appConfig.chainId;
+
+                if (data.gasLimit) {
+                    this.tx.gas = data.gasLimit;
+                    this.tx.gasLimit = data.gasLimit;
+                }
+
+                if (data.gasPrice) {
+                    this.tx.gasPrice = data.gasPrice;
+                }
 
                 if (!this.tx.gas) {
                     this.errorMsg = this.tx._error || 'Transaction Error';
@@ -291,7 +308,7 @@ export default {
 
                 delete this.tx._error;
                 delete this.tx._fee;
-                // console.log('tx', this.tx);
+                // console.log('tx', JSON.stringify(this.tx));
                 // console.log(currentAccount);
 
                 if (currentAccount.keystore) {

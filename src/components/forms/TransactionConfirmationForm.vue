@@ -1,6 +1,6 @@
 <template>
     <div class="check-password-form">
-        <f-form center-form @f-form-submit="$emit('f-form-submit', $event)">
+        <f-form center-form @f-form-submit="onSubmit">
             <fieldset class="">
                 <legend class="not-visible">Confirm Transaction</legend>
 
@@ -32,6 +32,8 @@
                             </f-message>
                             <br />
                         </div>
+
+                        <advanced-tx-functions ref="atxfuncs" :gas-info="gasInfo" />
 
                         <template v-if="!waiting">
                             <button
@@ -77,11 +79,12 @@ import FMessage from '../core/FMessage/FMessage.vue';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 import { mapGetters } from 'vuex';
 import { formatNumberByLocale } from '@/filters.js';
+import AdvancedTxFunctions from '@/components/AdvancedTxFunctions/AdvancedTxFunctions.vue';
 
 export default {
     name: 'TransactionConfirmationForm',
 
-    components: { FMessage, FPasswordField, FForm, PulseLoader },
+    components: { AdvancedTxFunctions, FMessage, FPasswordField, FForm, PulseLoader },
 
     props: {
         showPasswordField: {
@@ -112,6 +115,15 @@ export default {
         gasLimit: {
             type: String,
             default: '',
+        },
+        gasInfo: {
+            type: Object,
+            default() {
+                return {
+                    gasLimit: '',
+                    gasPrice: '',
+                };
+            },
         },
         /** */
         waiting: {
@@ -188,6 +200,15 @@ export default {
 
         onCancelButtonClick() {
             this.$emit('cancel-button-click');
+        },
+
+        onSubmit(event) {
+            event.detail.data = {
+                ...event.detail.data,
+                ...this.$refs.atxfuncs.getGasInfo(),
+            };
+
+            this.$emit('f-form-submit', event);
         },
 
         formatNumberByLocale,

@@ -875,7 +875,9 @@ export class FantomWeb3Wallet {
         password = '';
 
         if (!this.sameAddresses(_accountAddress, account.address)) {
-            throw new Error('Account address and address in keystore file are different');
+            throw new Error(
+                `Account address ${_accountAddress} and address in keystore file ${account.address} are different`
+            );
         }
 
         if (pwdStorage.isSet(_tmpPwdCode) && !pwdStorage.isTimeoutSet() && pwdO.count === 0) {
