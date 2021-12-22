@@ -112,6 +112,7 @@ import { UPDATE_ACCOUNT_BALANCE } from '../../store/actions.type.js';
 import appConfig from '../../../app.config.js';
 import CoinbaseWalletNoticeWindow from '@/components/windows/CoinbaseWalletNoticeWindow/CoinbaseWalletNoticeWindow.vue';
 import { cloneObject } from '@/utils';
+import { SET_TX_FEE } from '@/store/mutations.type.js';
 
 /**
  * Base component for other 'transaction confirmation and send' components.
@@ -299,6 +300,15 @@ export default {
 
                 if (data.gasPrice) {
                     this.tx.gasPrice = data.gasPrice;
+                }
+
+                if (data.gasLimit && data.gasPrice) {
+                    this.$store.commit(
+                        SET_TX_FEE,
+                        fWallet.WEIToFTM(fWallet.getTransactionFee(data.gasPrice, data.gasLimit))
+                    );
+                } else {
+                    this.$store.commit(SET_TX_FEE, this.tx._fee);
                 }
 
                 if (!this.tx.gas) {

@@ -22,3 +22,4 @@ export const APPEND_CONTACT = 'appendContact';
 export const MOVE_CONTACT = 'moveContact';
 export const REMOVE_CONTACT = 'removeContact';
 export const SET_CONTACT = 'setContact';
+export const SET_TX_FEE = 'setTxFee';

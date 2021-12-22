@@ -120,7 +120,7 @@
                     <li>
                         <div class="row no-collapse">
                             <div class="col-3 f-row-label">Max Fee</div>
-                            <div class="col">{{ tx._fee }}</div>
+                            <div class="col">{{ txFee }}</div>
                         </div>
                     </li>
                 </ol>
@@ -179,7 +179,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters(['currentAccount', 'sendDirection', 'getAccountByAddress']),
+        ...mapGetters(['currentAccount', 'sendDirection', 'getAccountByAddress', 'txFee']),
 
         /**
          * @return {string}

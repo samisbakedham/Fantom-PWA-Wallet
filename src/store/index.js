@@ -28,6 +28,7 @@ import {
     SET_FUNISWAP_SLIPPAGE_TOLERANCE,
     SET_RTL_DIR,
     SET_AUTO_DARK_MODE,
+    SET_TX_FEE,
 } from './mutations.type.js';
 import {
     ADD_ACCOUNT,
@@ -120,6 +121,7 @@ export const store = new Vuex.Store({
          * @type {BNBridgeDirection}
          */
         sendDirection: 'OperaToOpera',
+        txFee: 0,
     },
 
     getters: {
@@ -264,6 +266,13 @@ export const store = new Vuex.Store({
 
                 return rContacts;
             };
+        },
+        /**
+         * @param {Object} _state
+         * @return {number}
+         */
+        txFee(_state) {
+            return _state.txFee;
         },
     },
 
@@ -498,6 +507,13 @@ export const store = new Vuex.Store({
 
                 Vue.set(_state.contacts, index, _contactData);
             }
+        },
+        /**
+         * @param {Object} _state
+         * @param {number} _fee
+         */
+        [SET_TX_FEE](_state, _fee) {
+            _state.txFee = parseFloat(_fee);
         },
     },
 
