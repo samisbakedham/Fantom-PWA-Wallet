@@ -18,9 +18,12 @@
                 <h2>{{ dTitle }}</h2>
 
                 <h3 class="break-word">
-                    <a :href="`${explorerUrl}${explorerTransactionPath}/${tx}`" target="_blank">
+                    <a v-if="!error" :href="`${explorerUrl}${explorerTransactionPath}/${tx}`" target="_blank">
                         <f-ellipsis :text="tx" overflow="middle" />
                     </a>
+                    <f-message v-else type="error" role="alert">
+                        {{ error }}
+                    </f-message>
                 </h3>
 
                 <div v-if="transactionSuccess" class="success-icon">
@@ -44,9 +47,10 @@ import appConfig from '../../../app.config.js';
 import FEllipsis from '../core/FEllipsis/FEllipsis.vue';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 import gql from 'graphql-tag';
+import FMessage from '@/components/core/FMessage/FMessage.vue';
 
 export default {
-    components: { FEllipsis, FCard, PulseLoader },
+    components: { FMessage, FEllipsis, FCard, PulseLoader },
 
     props: {
         /** Transaction hash */
@@ -104,6 +108,7 @@ export default {
             loading: true,
             transactionSuccess: true,
             dTitle: this.title,
+            error: '',
         };
     },
 
@@ -130,36 +135,44 @@ export default {
         },
 
         async _verifyTransaction() {
-            const data = await this.$apollo.query({
-                query: gql`
-                    query TransactionByHash($hash: Bytes32!) {
-                        transaction(hash: $hash) {
-                            status
+            try {
+                const data = await this.$apollo.query({
+                    query: gql`
+                        query TransactionByHash($hash: Bytes32!) {
+                            transaction(hash: $hash) {
+                                status
+                            }
                         }
+                    `,
+                    variables: {
+                        hash: this.tx,
+                    },
+                    fetchPolicy: 'network-only',
+                });
+
+                if (data.data.transaction.status === null) {
+                    this.verifyTransaction();
+                } else {
+                    this.transactionSuccess = parseInt(data.data.transaction.status, 16) === 1;
+
+                    if (!this.transactionSuccess) {
+                        this.dTitle = 'Transaction Error';
                     }
-                `,
-                variables: {
-                    hash: this.tx,
-                },
-                fetchPolicy: 'network-only',
-            });
 
-            if (data.data.transaction.status === null) {
-                this.verifyTransaction();
-            } else {
-                this.transactionSuccess = parseInt(data.data.transaction.status, 16) === 1;
+                    this.loading = false;
 
-                if (!this.transactionSuccess) {
-                    this.dTitle = 'Transaction Error';
+                    if (this.autoContinueToAfter > 0) {
+                        this._tId = setTimeout(() => {
+                            this.onContinueBtnClick();
+                        }, this.autoContinueToAfter);
+                    }
                 }
-
+            } catch (error) {
+                console.error(error);
                 this.loading = false;
-
-                if (this.autoContinueToAfter > 0) {
-                    this._tId = setTimeout(() => {
-                        this.onContinueBtnClick();
-                    }, this.autoContinueToAfter);
-                }
+                this.error = error;
+                this.dTitle = 'Error';
+                this.transactionSuccess = false;
             }
         },
 
