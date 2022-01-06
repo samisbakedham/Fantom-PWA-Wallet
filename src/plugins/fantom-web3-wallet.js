@@ -6,6 +6,7 @@ import Accounts from 'web3-eth-accounts';
 import { fFetch } from '@/plugins/ffetch.js';
 import { isArray, isObject } from '@/utils';
 import { toBigNumber, toHex } from '@/utils/big-number.js';
+import { keystoresDB } from '@/utils/keystores-db.js';
 
 const bip39 = require('bip39');
 const Hdkey = require('hdkey');
@@ -870,15 +871,29 @@ export class FantomWeb3Wallet {
             }
         }
 
-        const account = this.decryptFromKeystore(_keystore, password);
-
-        password = '';
+        let account = this.decryptFromKeystore(_keystore, password);
 
         if (!this.sameAddresses(_accountAddress, account.address)) {
-            throw new Error(
-                `Account address ${_accountAddress} and address in keystore file ${account.address} are different`
-            );
+            let throwError = true;
+            const kf = await keystoresDB.getKeystoreFile(this.toChecksumAddress(_accountAddress));
+
+            if (kf) {
+                account = this.decryptFromKeystore(kf.keystore, password);
+                if (this.sameAddresses(_accountAddress, account.address)) {
+                    throwError = false;
+                }
+            }
+
+            if (throwError) {
+                password = '';
+
+                throw new Error(
+                    `Account address ${_accountAddress} and address in keystore file ${account.address} are different`
+                );
+            }
         }
+
+        password = '';
 
         if (pwdStorage.isSet(_tmpPwdCode) && !pwdStorage.isTimeoutSet() && pwdO.count === 0) {
             pwdStorage.clear();

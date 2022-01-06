@@ -46,6 +46,7 @@ import {
 import { fWallet } from '../plugins/fantom-web3-wallet.js';
 import { arrayEquals } from '@/utils/array.js';
 import backingStorage from './storage';
+import { keystoresDB } from '@/utils/keystores-db.js';
 
 Vue.use(Vuex);
 
@@ -535,6 +536,8 @@ export const store = new Vuex.Store({
             };
 
             _context.commit(APPEND_ACCOUNT, account);
+
+            await keystoresDB.addKeystoreFile(address, _keystore);
         },
         /**
          * @param {Object} _context
@@ -723,6 +726,8 @@ export const store = new Vuex.Store({
                     _context.commit(DEACTIVATE_ACTIVE_ACCOUNT);
                     activeAccountRemoved = true;
                 }
+
+                keystoresDB.deleteKeystoreFile(fWallet.toChecksumAddress(_address));
             }
 
             return activeAccountRemoved;
