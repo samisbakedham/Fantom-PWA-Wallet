@@ -1,10 +1,12 @@
 <template>
     <f-card class="dashboard-info-box info-box f-card-double-padding">
+        <h2 class="not-visible">Wallets info</h2>
         <div class="row no-vert-col-padding align-items-center align-center-lg">
             <div class="col-5 col-12-lg align-right__ align-center-lg last-lg"><dashboard-actions-box /></div>
             <div class="col balances">
                 <div class="balance">
                     <h3 class="align-center-lg">
+                        <span class="not-visible">Available balance (Sum)</span>
                         <span>
                             <f-t-m-token-value :value="accountsBalance" no-currency />
                             <span class="ftm"> FTM</span>
@@ -21,6 +23,7 @@
                 </div>
                 <div class="balance total-balance">
                     <h3 class="align-center-lg">
+                        <span class="not-visible">Total balance (Sum)</span>
                         <span>
                             <f-t-m-token-value :value="accountsTotalBalance" no-currency />
                             <span class="ftm"> FTM</span>
