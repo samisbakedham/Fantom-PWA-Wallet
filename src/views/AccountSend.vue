@@ -1,6 +1,6 @@
 <template>
     <div class="view-account-send account-main-content-mt">
-        <h1 class="not-visible">Send</h1>
+        <!--        <h1 class="not-visible">Send</h1>-->
 
         <!-- <keep-alive :exclude="keepAliveExclude"> -->
         <keep-alive>

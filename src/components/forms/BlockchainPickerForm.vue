@@ -1,14 +1,14 @@
 <template>
     <div class="blockchain-picker-form">
         <f-card class="f-card-double-padding">
-            <h2>
+            <h2 data-focus>
                 Send Opera FTM <span class="f-steps"><b>1</b> / 3</span>
             </h2>
 
-            <h3 class="align-center h2">Which blockchain are you sending FTM to?</h3>
+            <h3 :id="labelId" class="align-center h2">Which blockchain are you sending FTM to?</h3>
 
             <div class="bc-picker">
-                <f-form ref="form" center-form @f-form-submit="onFormSubmit">
+                <f-form ref="form" :aria-labelledby="labelId" center-form @f-form-submit="onFormSubmit">
                     <blockchain-picker />
 
                     <div class="align-center form-buttons">
@@ -27,11 +27,23 @@ import FCard from '../core/FCard/FCard.vue';
 import { SET_SEND_DIRECTION } from '../../store/mutations.type.js';
 import FForm from '../core/FForm/FForm.vue';
 import BlockchainPicker from '../BlockchainPicker/BlockchainPicker.vue';
+import { focusElem } from '@/utils/aria.js';
+import { getUniqueId } from '@/utils';
 
 export default {
     name: 'BlockchainPickerForm',
 
     components: { BlockchainPicker, FForm, FCard },
+
+    data() {
+        return {
+            labelId: getUniqueId(),
+        };
+    },
+
+    activated() {
+        focusElem(this.$el);
+    },
 
     methods: {
         onFormSubmit(_event) {

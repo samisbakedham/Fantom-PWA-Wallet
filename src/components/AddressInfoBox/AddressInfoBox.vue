@@ -1,5 +1,5 @@
 <template>
-    <div class="address-info-box" :class="{ 'one-account': accountsLen === 1 }">
+    <header class="address-info-box" :class="{ 'one-account': accountsLen === 1 }">
         <div class="row align-items-center collapse-md">
             <div class="col-8 align-center-md address-col">
                 <button class="no-style pick-account-btn" title="Select Wallet" @click="onPickAccountBtn">
@@ -53,7 +53,7 @@
         >
             <address-actions-box vertical-mode @window-hide="onWindowHide" />
         </f-window>
-    </div>
+    </header>
 </template>
 
 <script>

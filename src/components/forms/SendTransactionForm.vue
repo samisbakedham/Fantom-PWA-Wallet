@@ -3,10 +3,10 @@
         <f-card class="f-card-double-padding">
             <f-form ref="form" center-form @f-form-submit="onFormSubmit">
                 <fieldset class="">
-                    <legend v-if="token.address" class="h2">
+                    <legend v-if="token.address" class="h2" data-focus>
                         Send {{ tokenSymbol }} <span class="f-steps"><b>1</b> / 2</span>
                     </legend>
-                    <legend v-else class="h2">
+                    <legend v-else class="h2" data-focus>
                         <div class="cont-with-back-btn">
                             <span>
                                 Send Opera FTM <span class="f-steps"><b>2</b> / 3</span>
@@ -117,6 +117,7 @@ import AddressField from '../AddressField/AddressField.vue';
 import FTokenValue from '@/components/core/FTokenValue/FTokenValue.vue';
 import appConfig from '../../../app.config.js';
 import Resolution from '@unstoppabledomains/resolution';
+import { focusElem } from '@/utils/aria.js';
 const resolution = new Resolution();
 
 export default {
@@ -264,6 +265,10 @@ export default {
             el.focus();
         }
         */
+    },
+
+    activated() {
+        focusElem(this.$el);
     },
 
     methods: {

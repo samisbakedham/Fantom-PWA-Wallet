@@ -8,7 +8,7 @@
             :on-send-transaction-success="onSendTransactionSuccess"
             @change-component="onChangeComponent"
         >
-            <h2 class="cont-with-back-btn">
+            <h2 class="cont-with-back-btn" data-focus>
                 <span v-if="token.address">
                     Send {{ tokenSymbol }} - Confirmation <span class="f-steps"><b>2</b> / 2</span>
                 </span>
@@ -138,7 +138,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { findFirstFocusableDescendant } from '../../utils/aria.js';
+import { findFirstFocusableDescendant, focusElem } from '../../utils/aria.js';
 import { Web3 } from '../../plugins/fantom-web3-wallet.js';
 import { toFTM } from '../../utils/transactions.js';
 import { formatNumberByLocale } from '../../filters.js';
@@ -255,6 +255,8 @@ export default {
     activated() {
         this.dTxData = this.txData;
         this.setSendToAddress();
+
+        focusElem(this.$el);
     },
 
     methods: {

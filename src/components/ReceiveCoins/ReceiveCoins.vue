@@ -1,10 +1,10 @@
 <template>
     <f-card class="receive-coins f-card-double-padding">
-        <h2 class="align-start">Receive Opera FTM</h2>
+        <h2 class="align-start" data-focus>Receive Opera FTM</h2>
 
-        <h3 class="align-center h2">Which blockchain are you receiving FTM from?</h3>
+        <h3 :id="labelId" class="align-center h2">Which blockchain are you receiving FTM from?</h3>
 
-        <blockchain-picker disable-e-t-h disable-b-n-b @blockchain-pick="onBlockchainPick" />
+        <blockchain-picker disable-e-t-h disable-b-n-b :aria-labelledby="labelId" @blockchain-pick="onBlockchainPick" />
 
         <component
             :is="currentComponent"
@@ -22,6 +22,8 @@ import ReceiveBNB from './ReceiveBNB.vue';
 import ReceiveETH from './ReceiveETH.vue';
 import TransactionCompleting from '../TransactionCompleting/TransactionCompleting.vue';
 import { eventBusMixin } from '../../mixins/event-bus.js';
+import { focusElem } from '@/utils/aria.js';
+import { getUniqueId } from '@/utils';
 
 const DEFAULT_COMPONENT = 'receive-f-t-m';
 
@@ -43,6 +45,7 @@ export default {
     data() {
         return {
             currentComponent: DEFAULT_COMPONENT,
+            labelId: getUniqueId(),
             // keepAliveExclude: 'BlockchainPicker',
         };
     },
@@ -70,6 +73,10 @@ export default {
         this._data_ = null;
 
         this._eventBus.on('account-picked', this.onAccountPicked);
+    },
+
+    mounted() {
+        focusElem(this.$el);
     },
 
     methods: {

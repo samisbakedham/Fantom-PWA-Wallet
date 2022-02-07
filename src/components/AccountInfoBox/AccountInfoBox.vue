@@ -4,12 +4,13 @@
             <div class="col-6 col-12-lg align-center-lg"><account-actions-box /></div>
             <div class="col balances">
                 <div class="balance">
-                    <h3 class="align-center-lg">
+                    <h2 class="align-center-lg h3">
+                        <span class="not-visible">Available balance</span>
                         <span>
                             <f-t-m-token-value :value="accountBalance" convert no-currency />
                             <span class="ftm"> FTM</span>
                         </span>
-                    </h3>
+                    </h2>
                     <div class="currency">
                         <f-t-m-token-value
                             :value="WEIToFTM(accountBalance) * tokenPrice"
@@ -20,12 +21,13 @@
                     <div class="label h3">Available</div>
                 </div>
                 <div class="balance total-balance">
-                    <h3 class="align-center-lg">
+                    <h2 class="align-center-lg h3">
+                        <span class="not-visible">Total balance</span>
                         <span>
                             <f-t-m-token-value :value="accountTotalBalance" convert no-currency />
                             <span class="ftm"> FTM</span>
                         </span>
-                    </h3>
+                    </h2>
                     <div class="currency">
                         <f-t-m-token-value
                             :value="WEIToFTM(accountTotalBalance) * tokenPrice"

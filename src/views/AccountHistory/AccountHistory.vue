@@ -15,6 +15,7 @@
             </template>
 
             <f-tab title-slot="transactions">
+                <h2 class="not-visible">Transaction list - {{ transactionsRecordsCount }} items</h2>
                 <account-transaction-list
                     :key="currentAccount.address"
                     :address="currentAccount.address"
@@ -22,6 +23,7 @@
                 />
             </f-tab>
             <f-tab title-slot="assets">
+                <h2 class="not-visible">Asset list - {{ assetsRecordsCount }} items</h2>
                 <f-card>
                     <wallet-assets-list
                         :tokens="erc20Tokens"

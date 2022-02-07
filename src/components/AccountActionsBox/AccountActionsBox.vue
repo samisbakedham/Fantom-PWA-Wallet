@@ -1,8 +1,8 @@
 <template>
-    <nav class="account-actions-box actions-box">
+    <nav class="account-actions-box actions-box" aria-label="Wallet actions">
         <ul class="no-markers">
             <li>
-                <router-link :to="{ name: 'account-history' }" class="action" title="Home">
+                <router-link :to="{ name: 'account-history' }" class="action" title="Home" aria-label="Wallet info">
                     <span class="btn large same-size round">
                         <icon data="@/assets/svg/wallet.svg" width="20" height="20" :fill="false" aria-hidden="true" />
                     </span>
@@ -10,7 +10,7 @@
                 </router-link>
             </li>
             <li>
-                <router-link :to="{ name: 'account-send' }" class="action" title="Send">
+                <router-link :to="{ name: 'account-send' }" class="action" title="Send" aria-label="Send FTM">
                     <span class="btn large same-size round">
                         <icon data="@/assets/svg/send.svg" width="20" height="20" aria-hidden="true" />
                     </span>
@@ -18,7 +18,7 @@
                 </router-link>
             </li>
             <li>
-                <router-link :to="{ name: 'account-receive' }" class="action" title="Receive">
+                <router-link :to="{ name: 'account-receive' }" class="action" title="Receive" aria-label="Receive FTM">
                     <span class="btn large same-size round">
                         <icon data="@/assets/svg/receive.svg" width="20" height="20" aria-hidden="true" />
                     </span>

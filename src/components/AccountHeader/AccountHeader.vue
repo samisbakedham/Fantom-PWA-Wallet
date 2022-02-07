@@ -1,7 +1,7 @@
 <template>
-    <header class="account-header">
+    <div class="account-header">
         <account-info-box />
-    </header>
+    </div>
 </template>
 
 <script>

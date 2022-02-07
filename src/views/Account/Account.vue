@@ -1,5 +1,9 @@
 <template>
     <div class="view-account">
+        <h1 class="not-visible" data-focus>
+            Wallet <span v-if="currentAccount">{{ currentAccount.name || currentAccount.address }}</span>
+        </h1>
+
         <template v-if="!currentAccount">
             <f-message type="error" with-icon>Bad wallet</f-message>
         </template>
@@ -30,6 +34,7 @@ import AccountHeader from '../../components/AccountHeader/AccountHeader.vue';
 import AddressInfoBox from '../../components/AddressInfoBox/AddressInfoBox.vue';
 import FMessage from '../../components/core/FMessage/FMessage.vue';
 import { eventBusMixin } from '@/mixins/event-bus.js';
+import { focusElem } from '@/utils/aria.js';
 
 export default {
     components: {
@@ -59,6 +64,10 @@ export default {
 
     created() {
         this.setActiveAccount(this.$route.params.address);
+    },
+
+    mounted() {
+        focusElem(this.$el);
     },
 
     methods: {
