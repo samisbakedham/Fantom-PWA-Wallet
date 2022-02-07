@@ -1,9 +1,9 @@
 <template>
-    <nav class="dashboard-actions-box actions-box">
+    <div class="dashboard-actions-box actions-box">
         <ul class="no-markers">
             <li>
                 <span class="action" title="Connect Wallet" @click="onConnectWalletClick">
-                    <button class="btn ledger-accounts-btn large same-size round">
+                    <button class="btn ledger-accounts-btn large same-size round" aria-label="Connect Wallet">
                         <icon data="@/assets/svg/connect.svg" width="20" height="20" aria-hidden="true" />
                     </button>
                     <span class="link-label ledger-accounts-color">Connect Wallet</span>
@@ -11,7 +11,7 @@
             </li>
             <li>
                 <span class="action" title="Create Wallet" @click="onCreateAWalletClick">
-                    <button class="btn create-account-btn large same-size round">
+                    <button class="btn create-account-btn large same-size round" aria-label="Create Wallet">
                         <icon data="@/assets/svg/wallet.svg" width="20" height="20" :fill="false" aria-hidden="true" />
                     </button>
                     <span class="link-label create-account-color">Create Wallet</span>
@@ -19,7 +19,7 @@
             </li>
             <li>
                 <span class="action" title="Restore Wallet" @click="onRestoreWalletClick">
-                    <button class="btn restore-account-btn large same-size round">
+                    <button class="btn restore-account-btn large same-size round" aria-label="Restore Wallet">
                         <icon data="@/assets/svg/key.svg" width="20" height="20" aria-hidden="true" />
                     </button>
                     <span class="link-label restore-account-color">Restore Wallet</span>
@@ -30,7 +30,7 @@
         <create-account-window ref="createAccountWindow" />
         <restore-account-window ref="restoreAccountWindow" />
         <connect-wallet-window ref="connectWalletWindow" />
-    </nav>
+    </div>
 </template>
 
 <script>
