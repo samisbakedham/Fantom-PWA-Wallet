@@ -1,27 +1,29 @@
 <template>
-    <div class="installation-info">
+    <section :aria-labelledby="labelId" class="installation-info">
+        <h2 :id="labelId" class="not-visible">Wallet instalation</h2>
+
         <p class="align-center">
             The Fantom fWallet has been created as a Progressive Web App (PWA) which is easy to launch on all platforms:
         </p>
 
         <div class="inst-buttons">
-            <button class="btn light large" @click="showDesktopInfo">
+            <button class="btn light large" aria-label="Windows installation" @click="showDesktopInfo">
                 <icon data="@/assets/svg/brands/windows.svg" width="20" height="20" aria-hidden="true" />
                 Windows
             </button>
-            <button class="btn light large" @click="showDesktopInfo">
+            <button class="btn light large" aria-label="macOS installation" @click="showDesktopInfo">
                 <icon data="@/assets/svg/brands/apple.svg" width="20" height="20" aria-hidden="true" />
                 macOS
             </button>
-            <button class="btn light large" @click="showDesktopInfo">
+            <button class="btn light large" aria-label="Linux installation" @click="showDesktopInfo">
                 <icon data="@/assets/svg/brands/linux.svg" width="20" height="20" aria-hidden="true" />
                 Linux
             </button>
-            <button class="btn light large" @click="showIOSInfo">
+            <button class="btn light large" aria-label="iOS installation" @click="showIOSInfo">
                 <icon data="@/assets/svg/brands/apple.svg" width="20" height="20" aria-hidden="true" />
                 iOS
             </button>
-            <button class="btn light large" @click="showAndroidInfo">
+            <button class="btn light large" aria-label="Android installation" @click="showAndroidInfo">
                 <icon data="@/assets/svg/brands/android.svg" width="20" height="20" aria-hidden="true" />
                 Android
             </button>
@@ -86,11 +88,12 @@
                 </ul>
             </div>
         </f-window>
-    </div>
+    </section>
 </template>
 
 <script>
 import FWindow from '../core/FWindow/FWindow.vue';
+import { getUniqueId } from '@/utils';
 export default {
     name: 'InstallationInfo',
 
@@ -99,6 +102,7 @@ export default {
     data() {
         return {
             desktopTitle: '',
+            labelId: getUniqueId(),
         };
     },
 

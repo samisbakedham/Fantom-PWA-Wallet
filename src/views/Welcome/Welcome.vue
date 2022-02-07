@@ -6,7 +6,9 @@
         </div>
 
         <div class="view-account-main">
-            <div class="main-buttons v2 collapse-md">
+            <section :aria-labelledby="createId" class="main-buttons v2 collapse-md">
+                <h2 :id="createId" class="not-visible">Connect, create or restore wallet</h2>
+
                 <button class="btn ledger-accounts-btn large w100p" @click="onConnectWalletClick">
                     <icon data="@/assets/svg/connect.svg" width="32" height="32" aria-hidden="true" />
                     Connect Wallet
@@ -22,10 +24,13 @@
                 <!--                <router-link :to="{ name: 'ledger-accounts' }" class="btn ledger-accounts-btn large w100p">
                     Ledger
                 </router-link>-->
-            </div>
+            </section>
 
             <installation-info />
-            <account-list />
+            <section :aria-labelledby="walletsId">
+                <h2 :id="walletsId" class="not-visible">Wallet list</h2>
+                <account-list />
+            </section>
             <connect-wallet-window ref="connectWalletWindow" />
         </div>
     </div>
@@ -35,6 +40,7 @@
 import AccountList from '../../components/AccountList/AccountList.vue';
 import InstallationInfo from '../../components/InstallationInfo/InstallationInfo.vue';
 import ConnectWalletWindow from '@/components/windows/ConnectWalletWindow/ConnectWalletWindow.vue';
+import { getUniqueId } from '@/utils';
 
 // import {WEIToFTM} from "../utils/transactions.js";
 export default {
@@ -44,6 +50,13 @@ export default {
         ConnectWalletWindow,
         InstallationInfo,
         AccountList,
+    },
+
+    data() {
+        return {
+            walletsId: getUniqueId(),
+            createId: getUniqueId(),
+        };
     },
 
     methods: {
