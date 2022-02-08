@@ -1,10 +1,10 @@
 <template>
     <div class="view-defi-fmint">
-        <h1 class="with-back-btn">fMint</h1>
+        <h1 class="with-back-btn" data-focus>fMint</h1>
 
         <h2 class="perex">Manage your collateral and minted synths</h2>
 
-        <div class="grid">
+        <section class="grid" aria-label="fMint info">
             <div>
                 <h2>Collateral</h2>
                 <div class="df-data-item smaller">
@@ -88,9 +88,9 @@
                 You're getting close to your liquidation price. <br />
                 Please rebalance your collateral.
             </f-message>
-        </div>
+        </section>
 
-        <div class="form-buttons">
+        <section class="form-buttons" aria-label="fMint actions">
             <div class="row">
                 <div class="col align-start align-center-md">
                     <router-link :to="{ name: 'defi-lock', params: { token: { ...wftmToken } } }" class="btn large">
@@ -152,61 +152,67 @@
                 Mint/Repay fUSD
             </router-link>
             -->
-        </div>
+        </section>
 
-        <f-tabs>
-            <template #fmint-overview>
-                fMint Overview
-                <span class="f-records-count">({{ fMintOverviewRecordsCount }})</span>
-            </template>
-            <template #collateral-positions>
-                Collateral Positions
-                <span class="f-records-count">({{ collateralPositionsRecordsCount }})</span>
-            </template>
-            <template #synths-positions>
-                Synths Positions
-                <span class="f-records-count">({{ synthsPositionsRecordsCount }})</span>
-            </template>
-            <template #assets>
-                Assets
-                <span class="f-records-count">({{ assetsRecordsCount }})</span>
-            </template>
+        <section aria-label="fMint positions">
+            <f-tabs>
+                <template #fmint-overview>
+                    fMint Overview
+                    <span class="f-records-count">({{ fMintOverviewRecordsCount }})</span>
+                </template>
+                <template #collateral-positions>
+                    Collateral Positions
+                    <span class="f-records-count">({{ collateralPositionsRecordsCount }})</span>
+                </template>
+                <template #synths-positions>
+                    Synths Positions
+                    <span class="f-records-count">({{ synthsPositionsRecordsCount }})</span>
+                </template>
+                <template #assets>
+                    Assets
+                    <span class="f-records-count">({{ assetsRecordsCount }})</span>
+                </template>
 
-            <f-tab title-slot="fmint-overview">
-                <f-mint-overview-list
-                    :tokens="tokens"
-                    deposit-route-name="defi-lock-unlock"
-                    borrow-route-name="defi-mint-repay"
-                    @records-count="onFMintOverviewRecordsCount"
-                />
-            </f-tab>
-            <f-tab title-slot="collateral-positions">
-                <collateral-positions-list
-                    :tokens="tokens"
-                    :f-mint-account="fMintAccount"
-                    deposit-route-name="defi-lock-unlock"
-                    borrow-route-name="defi-mint-repay"
-                    @records-count="onCollateralPositionsRecordsCount"
-                />
-            </f-tab>
-            <f-tab title-slot="synths-positions">
-                <synths-positions-list
-                    :tokens="tokens"
-                    :f-mint-account="fMintAccount"
-                    deposit-route-name="defi-lock-unlock"
-                    borrow-route-name="defi-mint-repay"
-                    @records-count="onSynthsPositionsRecordsCount"
-                />
-            </f-tab>
-            <f-tab title-slot="assets">
-                <assets-list
-                    defi-assets-list
-                    :tokens="tokens"
-                    :f-mint-account="fMintAccount"
-                    @records-count="onAssetsRecordsCount"
-                />
-            </f-tab>
-        </f-tabs>
+                <f-tab title-slot="fmint-overview">
+                    <h2 class="not-visible">fMint Overview - {{ fMintOverviewRecordsCount }} items</h2>
+                    <f-mint-overview-list
+                        :tokens="tokens"
+                        deposit-route-name="defi-lock-unlock"
+                        borrow-route-name="defi-mint-repay"
+                        @records-count="onFMintOverviewRecordsCount"
+                    />
+                </f-tab>
+                <f-tab title-slot="collateral-positions">
+                    <h2 class="not-visible">Collateral Positions - {{ collateralPositionsRecordsCount }} items</h2>
+                    <collateral-positions-list
+                        :tokens="tokens"
+                        :f-mint-account="fMintAccount"
+                        deposit-route-name="defi-lock-unlock"
+                        borrow-route-name="defi-mint-repay"
+                        @records-count="onCollateralPositionsRecordsCount"
+                    />
+                </f-tab>
+                <f-tab title-slot="synths-positions">
+                    <h2 class="not-visible">Synths Positions - {{ synthsPositionsRecordsCount }} items</h2>
+                    <synths-positions-list
+                        :tokens="tokens"
+                        :f-mint-account="fMintAccount"
+                        deposit-route-name="defi-lock-unlock"
+                        borrow-route-name="defi-mint-repay"
+                        @records-count="onSynthsPositionsRecordsCount"
+                    />
+                </f-tab>
+                <f-tab title-slot="assets">
+                    <h2 class="not-visible">Assets- {{ assetsRecordsCount }} items</h2>
+                    <assets-list
+                        defi-assets-list
+                        :tokens="tokens"
+                        :f-mint-account="fMintAccount"
+                        @records-count="onAssetsRecordsCount"
+                    />
+                </f-tab>
+            </f-tabs>
+        </section>
 
         <tx-confirmation-window
             ref="confirmationWindow"
@@ -284,6 +290,7 @@ import DefiFMintPushRewardsConfirmation from '@/views/DefiFMintPushRewardsConfir
 import DefiFMintClaimRewardsConfirmation from '@/views/DefiFMintClaimRewardsConfirmation/DefiFMintClaimRewardsConfirmation.vue';
 import TransactionSuccessMessage from '@/components/TransactionSuccessMessage/TransactionSuccessMessage.vue';
 import { componentViewMixin } from '@/mixins/component-view.js';
+import { focusElem } from '@/utils/aria.js';
 
 export default {
     name: 'DefiFMint',
@@ -481,6 +488,10 @@ export default {
         this._eventBus.on('claim-mint-rewards', this.onClaimMintRewards);
 
         this.init();
+    },
+
+    mounted() {
+        focusElem(this.$el);
     },
 
     methods: {

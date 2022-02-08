@@ -329,7 +329,6 @@ export default {
             decreasedDebt: 0,
             borrowOrRepay: this.borrow || this.repay,
             sliderLabels: ['0%', '25%', '50%', '75%', '100%'],
-            label: 'tmp',
             id: getUniqueId(),
             stepsCount: this.repay ? 2 : 1,
             /** Active step (`<1, stepsCount>`) */
@@ -505,6 +504,10 @@ export default {
             const breakpoint = this.$store.state.breakpoints['large'];
 
             return breakpoint && breakpoint.matches;
+        },
+
+        label() {
+            return this.borrow ? 'Borrow amount' : 'Repay amoun';
         },
     },
 

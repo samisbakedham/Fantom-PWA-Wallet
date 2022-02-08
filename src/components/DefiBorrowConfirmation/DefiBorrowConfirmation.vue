@@ -14,17 +14,17 @@
             class="min-h-100"
             @cancel-button-click="$emit('cancel-button-click', $event)"
         >
-            <h1 v-if="isView" class="with-back-btn">
+            <h1 v-if="isView" class="with-back-btn" data-focus>
+                Confirmation
+                <template v-if="params.steps">({{ params.step }}/{{ params.steps }})</template>
                 <f-back-button
                     v-if="!params.steps || params.step === 1"
                     :route-name="backButtonRoute"
                     :params="{ token }"
                 />
-                Confirmation
-                <template v-if="params.steps">({{ params.step }}/{{ params.steps }})</template>
             </h1>
 
-            <div class="confirmation-info">
+            <div class="confirmation-info" tabindex="0" data-focus>
                 <div v-if="increasedDebt > 0">
                     <defi-minting-message :token="token" :value="increasedDebt" />
                 </div>

@@ -12,12 +12,12 @@
             class="min-h-100"
             @cancel-button-click="$emit('cancel-button-click', $event)"
         >
-            <h1 v-if="isView" class="with-back-btn">
-                <f-back-button :route-name="backButtonRoute" />
+            <h1 v-if="isView" class="with-back-btn" data-focus>
                 Confirmation
+                <f-back-button :route-name="backButtonRoute" />
             </h1>
 
-            <div class="confirmation-info">
+            <div class="confirmation-info" tabindex="0" data-focus>
                 You’re claiming estimated and stashed rewards.
                 <!--
                 <span class="inc-desc-collateral">

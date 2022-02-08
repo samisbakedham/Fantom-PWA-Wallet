@@ -10,8 +10,8 @@
             @change-component="onChangeComponent"
         >
             <h1 v-if="isView" class="with-back-btn" data-focus>
-                <f-back-button :route-name="getBackButtonRoute(compName)" :params="$route.params" />
                 Confirmation
+                <f-back-button :route-name="getBackButtonRoute(compName)" :params="$route.params" />
             </h1>
             <h2 v-else class="cont-with-back-btn" data-focus>
                 <span>
@@ -20,7 +20,7 @@
                 <button type="button" class="btn light" @click="onBackBtnClick">Back</button>
             </h2>
 
-            <div class="confirmation-info">
+            <div class="confirmation-info" tabindex="0" data-focus>
                 You’re minting
                 <f-token-value
                     :value="dAmountDelegated"

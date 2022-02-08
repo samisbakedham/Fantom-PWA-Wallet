@@ -1,8 +1,8 @@
 <template>
     <div class="view-defi-unlock">
-        <h1 class="with-back-btn">
-            <f-back-button :route-name="backButtonRoute" />
+        <h1 class="with-back-btn" data-focus="">
             Unlock Collateral
+            <f-back-button :route-name="backButtonRoute" />
         </h1>
 
         <h2 class="perex">Unlock collateral after you repaid minted synths.</h2>
@@ -22,6 +22,7 @@
 import FBackButton from '@/components/core/FBackButton/FBackButton.vue';
 import DefiDeposit from '@/components/DefiDeposit/DefiDeposit.vue';
 import { getAppParentNode } from '@/app-structure.js';
+import { focusElem } from '@/utils/aria.js';
 
 export default {
     name: 'DefiUnlock',
@@ -51,6 +52,10 @@ export default {
 
             return parentNode ? parentNode.id : '';
         },
+    },
+
+    mounted() {
+        focusElem(this.$el);
     },
 };
 </script>

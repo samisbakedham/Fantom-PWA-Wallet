@@ -58,7 +58,7 @@
 import { getLengthAndUnit, getComputedStyle } from '../../../utils/css.js';
 import { getUniqueId, throttle } from '../../../utils/index.js';
 import FOverlay from '../FOverlay/FOverlay.vue';
-import { focusTrap, isKey, returnFocus, setReceiveFocusFromAttr } from '../../../utils/aria.js';
+import { focusElem, focusTrap, isKey, returnFocus, setReceiveFocusFromAttr } from '../../../utils/aria.js';
 import ResizeObserver from 'resize-observer-polyfill';
 import { helpersMixin } from '../../../mixins/helpers.js';
 import {
@@ -413,16 +413,16 @@ export default {
          * Focus element with `data-focus` attribute or focus `.doc` by default.
          */
         focus() {
-            const focusElem = this.$el.querySelector('[data-focus]');
+            const focusEl = this.$el.querySelector('[data-focus]');
             let inputElem = null;
 
-            if (focusElem) {
+            if (focusEl) {
                 // try to find element with `name` attribute
-                inputElem = focusElem.querySelector('[name]');
+                inputElem = focusEl.querySelector('[name]');
                 if (inputElem) {
                     inputElem.focus();
                 } else {
-                    focusElem.focus();
+                    focusElem(this.$el);
                 }
             } else {
                 this.$nextTick(() => {

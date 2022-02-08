@@ -1,5 +1,5 @@
 <template>
-    <div class="f-message" :class="[classes, type]">
+    <div class="f-message" :class="[classes, type]" tabindex="0">
         <slot name="prefix">
             <template v-if="withIcon">
                 <icon

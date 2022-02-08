@@ -12,7 +12,7 @@
             @window-hide="$emit('window-hide', $event)"
         >
             <template #title>
-                <h2>Confirmation</h2>
+                <h2 data-focus>Confirmation</h2>
                 <f-steps v-if="stepsCount > 0" :labels="stepLabels" :active="activeStep" />
             </template>
             <slot></slot>

@@ -15,7 +15,7 @@
         </template>
         <template v-else>
             <div :class="{ 'center-v': windowMode }">
-                <h2>{{ dTitle }}</h2>
+                <h2 data-focus tabindex="0">{{ dTitle }}</h2>
 
                 <h3 class="break-word">
                     <a v-if="!error" :href="`${explorerUrl}${explorerTransactionPath}/${tx}`" target="_blank">
@@ -48,6 +48,8 @@ import FEllipsis from '../core/FEllipsis/FEllipsis.vue';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 import gql from 'graphql-tag';
 import FMessage from '@/components/core/FMessage/FMessage.vue';
+import { focusElem } from '@/utils/aria.js';
+import { defer } from '@/utils';
 
 export default {
     components: { FMessage, FEllipsis, FCard, PulseLoader },
@@ -110,6 +112,15 @@ export default {
             dTitle: this.title,
             error: '',
         };
+    },
+
+    watch: {
+        loading() {
+            defer(() => {
+                console.log('lllloading change');
+                focusElem(this.$el);
+            });
+        },
     },
 
     mounted() {

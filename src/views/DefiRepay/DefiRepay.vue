@@ -1,8 +1,8 @@
 <template>
     <div class="view-defi-repay">
-        <h1 class="with-back-btn">
-            <f-back-button :route-name="backButtonRoute" />
+        <h1 class="with-back-btn" data-focus>
             Repay Synths
+            <f-back-button :route-name="backButtonRoute" />
         </h1>
 
         <h2 class="perex">
@@ -24,6 +24,7 @@
 import FBackButton from '@/components/core/FBackButton/FBackButton.vue';
 import { getAppParentNode } from '@/app-structure.js';
 import DefiBorrow from '@/components/DefiBorrow/DefiBorrow.vue';
+import { focusElem } from '@/utils/aria.js';
 
 export default {
     name: 'DefiRepay',
@@ -54,6 +55,10 @@ export default {
 
             return parentNode ? parentNode.id : '';
         },
+    },
+
+    mounted() {
+        focusElem(this.$el);
     },
 };
 </script>

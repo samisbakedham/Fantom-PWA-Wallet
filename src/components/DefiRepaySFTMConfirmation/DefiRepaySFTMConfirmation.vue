@@ -11,12 +11,12 @@
             :on-send-transaction-success="onSendTransactionSuccess"
             @change-component="onChangeComponent"
         >
-            <h1 v-if="isView" class="with-back-btn" data-focus="">
-                <f-back-button v-if="d_step === 1" :route-name="getBackButtonRoute(compName)" :params="$route.params" />
+            <h1 v-if="isView" class="with-back-btn" data-focus>
                 Confirmation
                 <span class="f-steps">
                     <b>{{ d_step }}</b> / 2
                 </span>
+                <f-back-button v-if="d_step === 1" :route-name="getBackButtonRoute(compName)" :params="$route.params" />
             </h1>
             <h2 v-else class="cont-with-back-btn" data-focus>
                 <span>
@@ -29,7 +29,7 @@
                 <span v-else></span>
             </h2>
 
-            <div class="confirmation-info">
+            <div class="confirmation-info" tabindex="0" data-focus>
                 <template v-if="d_step === 1"
                     >You’re allowing {{ parseFloat(dOutstandingSFTM).toFixed(2) }} sFTM</template
                 >

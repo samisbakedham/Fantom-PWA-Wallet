@@ -329,7 +329,7 @@ export default {
             decreasedCollateral: 0,
             depositOrWithdraw: this.deposit || this.withdraw,
             sliderLabels: ['0%', '25%', '50%', '75%', '100%'],
-            label: 'tmp',
+            label: 'Amount of collateral',
             id: getUniqueId(),
             stepsCount: 2,
             /** Active step (`<1, stepsCount>`) */
