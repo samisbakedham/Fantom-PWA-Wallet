@@ -1,7 +1,7 @@
 <template>
     <span class="f-back-button" @click="onClick">
         <slot>
-            <button class="btn light large same-size round" title="Back">
+            <button class="btn light large same-size round" title="Back" aria-label="Go to previous page">
                 <icon data="@/assets/svg/arrow-left.svg" aria-hidden="true" class="rtl-mirror" />
             </button>
         </slot>

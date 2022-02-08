@@ -1,11 +1,13 @@
 <template>
     <div class="delegation-lock">
         <f-card class="f-card-double-padding f-data-layout">
-            <h2 class="align-start cont-with-back-btn">
+            <h2 class="align-start cont-with-back-btn" data-focus>
                 <span>
                     Lock Delegation <span v-if="canLockDelegation" class="f-steps"><b>1</b> / 2</span>
                 </span>
-                <button type="button" class="btn light" @click="onPreviousBtnClick">Back</button>
+                <button type="button" class="btn light" aria-label="Go to previous page" @click="onPreviousBtnClick">
+                    Back
+                </button>
             </h2>
 
             <div class="delegation-lock-body">
@@ -112,6 +114,7 @@ import FSlider from '@/components/core/FSlider/FSlider.vue';
 import { formatDate, timestampToDate } from '@/filters.js';
 import FPlaceholder from '@/components/core/FPlaceholder/FPlaceholder.vue';
 import appConfig from '../../../app.config.js';
+import { focusElem } from '@/utils/aria.js';
 
 /** Day in seconds. */
 const dayS = 86400;
@@ -260,6 +263,7 @@ export default {
     },
 
     mounted() {
+        focusElem(this.$el);
         // this.sliderLabels = [`${this.minLockDays} days`, `${this.maxLockDays} days`];
     },
 

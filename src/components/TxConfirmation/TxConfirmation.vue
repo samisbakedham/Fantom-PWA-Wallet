@@ -113,6 +113,7 @@ import appConfig from '../../../app.config.js';
 import CoinbaseWalletNoticeWindow from '@/components/windows/CoinbaseWalletNoticeWindow/CoinbaseWalletNoticeWindow.vue';
 import { cloneObject } from '@/utils';
 import { SET_TX_FEE } from '@/store/mutations.type.js';
+import { focusElem } from '@/utils/aria.js';
 
 /**
  * Base component for other 'transaction confirmation and send' components.
@@ -240,6 +241,10 @@ export default {
         tx() {
             this.init();
         },
+    },
+
+    mounted() {
+        focusElem(this.$el);
     },
 
     methods: {

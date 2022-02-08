@@ -9,11 +9,11 @@
             :on-send-transaction-success="onSendTransactionSuccess"
             @change-component="onChangeComponent"
         >
-            <h1 v-if="isView" class="with-back-btn">
+            <h1 v-if="isView" class="with-back-btn" data-focus>
                 <f-back-button :route-name="getBackButtonRoute(compName)" :params="$route.params" />
                 Confirmation
             </h1>
-            <h2 v-else class="cont-with-back-btn">
+            <h2 v-else class="cont-with-back-btn" data-focus>
                 <span>
                     Mint sFTM - Confirmation
                 </span>

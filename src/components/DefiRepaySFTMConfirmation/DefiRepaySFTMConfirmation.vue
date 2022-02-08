@@ -11,14 +11,14 @@
             :on-send-transaction-success="onSendTransactionSuccess"
             @change-component="onChangeComponent"
         >
-            <h1 v-if="isView" class="with-back-btn">
+            <h1 v-if="isView" class="with-back-btn" data-focus="">
                 <f-back-button v-if="d_step === 1" :route-name="getBackButtonRoute(compName)" :params="$route.params" />
                 Confirmation
                 <span class="f-steps">
                     <b>{{ d_step }}</b> / 2
                 </span>
             </h1>
-            <h2 v-else class="cont-with-back-btn">
+            <h2 v-else class="cont-with-back-btn" data-focus>
                 <span>
                     Repay sFTM - Confirmation
                     <span class="f-steps">

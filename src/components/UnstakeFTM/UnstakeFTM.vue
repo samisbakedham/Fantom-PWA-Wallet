@@ -2,12 +2,19 @@
     <div class="unstake-ftm">
         <f-card class="f-card-double-padding f-data-layout">
             <f-form ref="form" center-form @f-form-submit="onFormSubmit">
-                <legend class="h2">
+                <legend class="h2" data-focus>
                     <div class="cont-with-back-btn">
                         <span>
                             Undelegate FTM <span class="f-steps"><b>1</b> / {{ lockExist ? '3' : '2' }}</span>
                         </span>
-                        <button type="button" class="btn light" @click="onPreviousBtnClick">Back</button>
+                        <button
+                            type="button"
+                            class="btn light"
+                            aria-label="Go to previous page"
+                            @click="onPreviousBtnClick"
+                        >
+                            Back
+                        </button>
                     </div>
                 </legend>
 
@@ -72,6 +79,7 @@ import FMessage from '../core/FMessage/FMessage.vue';
 import { WEIToFTM } from '../../utils/transactions.js';
 import gql from 'graphql-tag';
 import { bFromWei, toBigNumber, toHex } from '@/utils/big-number.js';
+import { focusElem } from '@/utils/aria.js';
 export default {
     name: 'UnstakeFTM',
 
@@ -170,6 +178,10 @@ export default {
         }
 
         this.setMaxUndelegation();
+    },
+
+    mounted() {
+        focusElem(this.$el);
     },
 
     methods: {

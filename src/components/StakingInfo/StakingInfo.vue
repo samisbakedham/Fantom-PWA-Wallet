@@ -1,14 +1,14 @@
 <template>
     <div ref="doc" class="stake-ftm" tabindex="0">
-        <f-card class="f-card-double-padding f-data-layout">
-            <h2 class="cont-with-back-btn">
+        <f-card class="f-card-double-padding f-data-layout" tag="section" :aria-labelledby="infoId">
+            <h2 :id="infoId" class="cont-with-back-btn" aria-label="Staking info" data-focus>
                 <span>Staking</span>
                 <template v-if="stakerId">
                     <a
                         href="#"
                         class="btn light break-word"
                         style="max-width: 100%;"
-                        aria-label="Go to previous form"
+                        aria-label="Go to previous page"
                         @click.prevent="onPreviousBtnClick"
                     >
                         Back
@@ -250,8 +250,13 @@
             </div>
         </f-card>
 
-        <f-card v-if="withdrawRequests.length" class="f-card-double-padding account-main-content-mt">
-            <h2>Undelegation History</h2>
+        <f-card
+            v-if="withdrawRequests.length"
+            class="f-card-double-padding account-main-content-mt"
+            tag="section"
+            :aria-labelledby="undelegationId"
+        >
+            <h2 :id="undelegationId">Undelegation History</h2>
 
             <f-message
                 v-if="outstandingSFTM > 0"
@@ -285,6 +290,7 @@ import gql from 'graphql-tag';
 import { SFC_CLAIM_MAX_EPOCHS } from '@/plugins/fantom-web3-wallet.js';
 import dayjs from 'dayjs';
 import FTMTokenValue from '@/components/core/FTMTokenValue/FTMTokenValue.vue';
+import { getUniqueId } from '@/utils';
 
 export default {
     name: 'StakingInfo',
@@ -314,6 +320,8 @@ export default {
             claimMaxEpochs: SFC_CLAIM_MAX_EPOCHS,
             /** @type {DefiToken} */
             sftmToken: {},
+            infoId: getUniqueId(),
+            undelegationId: getUniqueId(),
         };
     },
 

@@ -54,6 +54,7 @@ import {
     SET_ACTIVE_ACCOUNT_ADDRESS,
     SET_ACTIVE_ACCOUNT_BY_ADDRESS,
 } from '@/store/mutations.type.js';
+import { focusElem } from '@/utils/aria.js';
 
 export default {
     name: 'DelegationsInfo',
@@ -70,6 +71,10 @@ export default {
 
     computed: {
         ...mapGetters(['currentAccount']),
+    },
+
+    mounted() {
+        focusElem(null, '[data-focus="staking"]');
     },
 
     methods: {

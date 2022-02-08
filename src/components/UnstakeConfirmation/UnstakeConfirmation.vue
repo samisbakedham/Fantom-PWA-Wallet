@@ -9,7 +9,7 @@
             :tmp-pwd-code="tmpPwdCode"
             @change-component="onChangeComponent"
         >
-            <h2 class="cont-with-back-btn">
+            <h2 class="cont-with-back-btn" data-focus>
                 <span>
                     Undelegate FTM - Confirmation
                     <span class="f-steps">
@@ -17,7 +17,9 @@
                         <template v-else><b>3</b> / 3</template>
                     </span>
                 </span>
-                <button type="button" class="btn light" @click="onBackBtnClick">Back</button>
+                <button type="button" class="btn light" aria-label="Go to previous page" @click="onBackBtnClick">
+                    Back
+                </button>
             </h2>
 
             <div class="transaction-info">

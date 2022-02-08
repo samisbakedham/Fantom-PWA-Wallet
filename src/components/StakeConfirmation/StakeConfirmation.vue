@@ -8,7 +8,7 @@
             :on-send-transaction-success="onSendTransactionSuccess"
             @change-component="onChangeComponent"
         >
-            <h2 class="cont-with-back-btn">
+            <h2 class="cont-with-back-btn" data-focus>
                 <span>
                     Delegate FTM - Confirmation <span class="f-steps"><b>2</b> / 2</span>
                 </span>

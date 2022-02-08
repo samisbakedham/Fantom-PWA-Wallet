@@ -8,11 +8,13 @@
             :on-send-transaction-success="onSendTransactionSuccess"
             @change-component="onChangeComponent"
         >
-            <h2 class="cont-with-back-btn">
+            <h2 class="cont-with-back-btn" data-focus>
                 <span>
                     Lock Delegation - Confirmation <span class="f-steps"><b>2</b> / 2</span>
                 </span>
-                <button type="button" class="btn light" @click="onBackBtnClick">Back</button>
+                <button type="button" class="btn light" aria-label="Go to previous page" @click="onBackBtnClick">
+                    Back
+                </button>
             </h2>
 
             <div class="transaction-info">

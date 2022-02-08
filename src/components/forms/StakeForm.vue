@@ -3,7 +3,7 @@
         <f-card class="f-card-double-padding">
             <f-form ref="stakeForm" center-form @f-form-submit="onFormSubmit">
                 <fieldset class="">
-                    <legend class="h2">
+                    <legend class="h2" data-focus>
                         <div class="cont-with-back-btn">
                             <span
                                 >Delegate FTM <span class="f-steps"><b>1</b> / 2</span></span
@@ -12,7 +12,7 @@
                                 href="#"
                                 class="btn light break-word"
                                 style="max-width: 100%;"
-                                aria-label="Go to previous form"
+                                aria-label="Go to previous page"
                                 @click.prevent="onPreviousBtnClick"
                             >
                                 Back
@@ -96,7 +96,7 @@ import FMessage from '../core/FMessage/FMessage.vue';
 import FInput from '../core/FInput/FInput.vue';
 import ValidatorPickerWindow from '../windows/ValidatorPickerWindow.vue';
 import { mapGetters } from 'vuex';
-import { isAriaAction } from '../../utils/aria.js';
+import { focusElem, isAriaAction } from '../../utils/aria.js';
 import sfcUtils from 'fantom-ledgerjs/src/sfc-utils.js';
 import { GAS_LIMITS } from '../../plugins/fantom-web3-wallet.js';
 
@@ -209,6 +209,8 @@ export default {
                 this.validator = `${this.validatorInfo.name}, ${parseInt(this.validatorInfo.id, 16)}`;
             });
         }
+
+        focusElem(this.$el);
     },
 
     methods: {

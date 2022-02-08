@@ -1,5 +1,7 @@
 <template>
     <div class="view-staking">
+        <h1 class="not-visible" data-focus="staking">Staking</h1>
+
         <template v-if="!currentAccount">
             <f-message type="error" with-icon>Bad wallet</f-message>
         </template>
@@ -25,6 +27,7 @@ import {
 } from '@/store/mutations.type.js';
 import AccountStake from '@/views/AccountStake.vue';
 import { eventBusMixin } from '@/mixins/event-bus.js';
+import { focusElem } from '@/utils/aria.js';
 
 export default {
     name: 'Staking',
@@ -50,6 +53,10 @@ export default {
 
     created() {
         this.setActiveAccount(this.$route.params.address);
+    },
+
+    mounted() {
+        focusElem(this.$el);
     },
 
     methods: {

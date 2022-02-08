@@ -9,10 +9,12 @@
             :on-send-transaction-success="onSendTransactionSuccess"
             @change-component="onChangeComponent"
         >
-            <h2 class="cont-with-back-btn">
+            <h2 class="cont-with-back-btn" data-focus>
                 <span v-if="reStake">Claim & Restake</span>
                 <span v-else>Claim Rewards</span>
-                <button type="button" class="btn light" @click="onBackBtnClick">Back</button>
+                <button type="button" class="btn light" aria-label="Go to previous page" @click="onBackBtnClick">
+                    Back
+                </button>
             </h2>
 
             <div class="transaction-info">
