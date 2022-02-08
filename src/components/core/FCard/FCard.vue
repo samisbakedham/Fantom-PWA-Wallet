@@ -1,5 +1,5 @@
 <template>
-    <div class="f-card" :class="cssClass">
+    <component :is="tag" class="f-card" :class="cssClass">
         <slot name="title">
             <h2 v-if="title" class="title">
                 <template v-if="routeUrl">
@@ -14,7 +14,7 @@
             </h2>
         </slot>
         <slot></slot>
-    </div>
+    </component>
 </template>
 
 <script>
@@ -51,6 +51,11 @@ export default {
         zoomHover: {
             type: Boolean,
             default: false,
+        },
+        /** Tag name of the root element */
+        tag: {
+            type: String,
+            default: 'div',
         },
     },
 
