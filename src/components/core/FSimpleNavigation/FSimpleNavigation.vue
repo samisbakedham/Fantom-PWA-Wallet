@@ -1,6 +1,6 @@
 <template>
     <div class="f-simple-navigation" :class="{ 'f-simple-navigation--vertical': vertical }">
-        <component :is="navTag">
+        <component :is="navTag" :aria-label="ariaLabel || null">
             <slot>
                 <ul v-if="cItems" class="no-markers">
                     <li v-for="item in cItems" :key="item.id">
@@ -86,6 +86,10 @@ export default {
         highlightRouteByAppStructure: {
             type: Boolean,
             default: false,
+        },
+        ariaLabel: {
+            type: String,
+            default: '',
         },
     },
 

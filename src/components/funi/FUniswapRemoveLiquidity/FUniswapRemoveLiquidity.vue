@@ -1,8 +1,8 @@
 <template>
-    <div class="funiswap-remove-liquidity funiswap">
-        <h1 class="with-back-btn">
-            <f-back-button :route-name="backButtonRoute" />
+    <section class="funiswap-remove-liquidity funiswap" :aria-labelledby="labelId">
+        <h1 :id="labelId" class="with-back-btn" data-focus>
             Remove Liquidity
+            <f-back-button :route-name="backButtonRoute" />
         </h1>
         <br />
 
@@ -77,7 +77,13 @@
             </div>
 
             <div class="funiswap__submit-cont">
-                <button ref="submitBut" class="btn large" :disabled="submitDisabled" @click="onSubmit">
+                <button
+                    ref="submitBut"
+                    class="btn large"
+                    :disabled="submitDisabled"
+                    :aria-label="submitBtnAriaLabel"
+                    @click="onSubmit"
+                >
                     {{ submitLabel }}
                 </button>
             </div>
@@ -86,7 +92,7 @@
         <div class="funiswap__bottom-box">
             <f-uniswap-pair-liquidity-info :pair="dPair" :from-token="fromToken" :to-token="toToken" />
         </div>
-    </div>
+    </section>
 </template>
 
 <script>
@@ -101,6 +107,7 @@ import { pollingMixin } from '@/mixins/polling.js';
 import { TokenPairs } from '@/utils/token-pairs.js';
 import FBackButton from '@/components/core/FBackButton/FBackButton.vue';
 import { getAppParentNode } from '@/app-structure.js';
+import { focusElem } from '@/utils/aria.js';
 
 export default {
     name: 'FUniswapRemoveLiquidity',
@@ -133,6 +140,7 @@ export default {
             addDecimals: 0,
             currLiquidity: '0',
             submitLabel: 'Remove',
+            labelId: getUniqueId(),
         };
     },
 
@@ -235,6 +243,19 @@ export default {
 
             return parentNode ? parentNode.id : '';
         },
+
+        submitBtnAriaLabel() {
+            const { fromTokenLiquidityFormatted } = this;
+            let label = '';
+
+            if (fromTokenLiquidityFormatted > 0) {
+                label = `Remove ${fromTokenLiquidityFormatted.toFixed(2)} ${
+                    this.fromToken.symbol
+                } and ${this.toTokenLiquidityFormatted.toFixed(2)} ${this.toToken.symbol}`;
+            }
+
+            return label;
+        },
     },
 
     watch: {
@@ -265,6 +286,10 @@ export default {
             },
             4000
         );
+    },
+
+    mounted() {
+        focusElem(this.$el);
     },
 
     methods: {

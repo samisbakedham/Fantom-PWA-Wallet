@@ -1,6 +1,6 @@
 <template>
-    <div class="funiswappairdetail">
-        <h1 class="with-back-btn">
+    <section class="funiswappairdetail" :aria-labelledby="labelId">
+        <h1 :id="labelId" class="with-back-btn" data-focus>
             <f-back-button :route-name="backButtonRoute" />
             <span class="funiswappairdetail_title">
                 <f-uniswap-pair-symbol v-if="pair.pairAddress" :pair="pair" />
@@ -210,7 +210,7 @@
         <f-card>
             <f-uniswap-transaction-list :pair="pair" />
         </f-card>
-    </div>
+    </section>
 </template>
 
 <script>
@@ -235,6 +235,8 @@ import { WeiToFtm } from '@/utils/transactions.js';
 import FUniswapTransactionList from '@/components/data-tables/funi/FUniswapTransactionList/FUniswapTransactionList.vue';
 import dayjs from 'dayjs';
 import FPriceDiff from '@/components/core/FPriceDiff/FPriceDiff.vue';
+import { focusElem } from '@/utils/aria.js';
+import { getUniqueId } from '@/utils';
 
 export default {
     name: 'FUniswapPairDetail',
@@ -292,6 +294,7 @@ export default {
             liquidityProviderFee: appConfig.settings.fUniswapLiquidityProviderFee,
             explorerUrl: appConfig.explorerUrl,
             explorerTransactionPath: appConfig.explorerTransactionPath,
+            labelId: getUniqueId(),
         };
     },
 
@@ -359,6 +362,10 @@ export default {
 
     created() {
         this.init();
+    },
+
+    mounted() {
+        focusElem(this.$el);
     },
 
     methods: {

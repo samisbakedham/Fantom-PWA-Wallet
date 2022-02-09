@@ -1,6 +1,6 @@
 <template>
     <div class="funiswap-menu">
-        <f-simple-navigation :items="navigation"></f-simple-navigation>
+        <f-simple-navigation :items="navigation" aria-label="fUni navigation"></f-simple-navigation>
     </div>
 </template>
 

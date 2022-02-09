@@ -11,17 +11,17 @@
             :on-send-transaction-success="onSendTransactionSuccess"
             @change-component="onChangeComponent"
         >
-            <h1 class="with-back-btn">
+            <h1 class="with-back-btn" data-focus>
+                Confirm Remove Liquidity
+                <template v-if="params.steps">({{ params.step }}/{{ params.steps }})</template>
                 <f-back-button
                     v-if="!params.steps || params.step === 1"
                     :route-name="backButtonRoute"
                     :params="{ fromToken: params.fromToken, toToken: params.toToken }"
                 />
-                Confirm Remove Liquidity
-                <template v-if="params.steps">({{ params.step }}/{{ params.steps }})</template>
             </h1>
 
-            <div class="confirmation-info">
+            <div class="confirmation-info" tabindex="0" data-focus>
                 <template v-if="params.step === 1">
                     You’re allowing
                     <span class="price">

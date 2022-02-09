@@ -1,6 +1,8 @@
 <template>
     <div class="funiswap-swap funiswap">
-        <f-card>
+        <f-card tag="section" :aria-labelledby="labelId">
+            <h2 :id="labelId" class="not-visible">Swap</h2>
+
             <div class="funiswap__box">
                 <div class="funiswap__token__balance">
                     <span>
@@ -29,11 +31,18 @@
                             autocomplete="off"
                             placeholder="0"
                             class="text-input no-style"
+                            aria-label="To amount"
                             @input="onFromInput"
                             @keydown="onInputKeydown"
                         />
                     </span>
-                    <button class="btn small secondary max-amount" @click="onMaxAmountClick">Max</button>
+                    <button
+                        class="btn small secondary max-amount"
+                        aria-label="Set maximum token balance"
+                        @click="onMaxAmountClick"
+                    >
+                        Max
+                    </button>
                     <f-select-button
                         collapsed
                         aria-label="pick a token"
@@ -79,6 +88,7 @@
                             autocomplete="off"
                             placeholder="0"
                             class="text-input no-style"
+                            aria-label="From amount"
                             @input="onToInput"
                             @keydown="onInputKeydown"
                         />
@@ -88,6 +98,7 @@
                         collapsed
                         aria-label="pick a token"
                         class="bigger-arrow"
+                        data-focus="to_token_picker"
                         @click.native="onToTokenSelectorClick"
                     >
                         <f-crypto-symbol :token="toToken" img-width="24px" img-height="auto" />
@@ -113,7 +124,11 @@
                             </f-placeholder>
                         </div>
                         <div class="swap-price">
-                            <button class="btn light same-size round" @click="swapPerPrice">
+                            <button
+                                class="btn light same-size round"
+                                aria-label="Swap price info"
+                                @click="swapPerPrice"
+                            >
                                 <icon data="@/assets/svg/exchange-alt.svg" />
                             </button>
                         </div>
@@ -126,7 +141,13 @@
             </template>
 
             <div class="funiswap__submit-cont">
-                <button ref="submitBut" class="btn large" :disabled="submitBtnDisabled" @click="onSubmit">
+                <button
+                    ref="submitBut"
+                    class="btn large"
+                    :disabled="submitBtnDisabled"
+                    :aria-label="submitBtnAriaLabel"
+                    @click="onSubmit"
+                >
                     {{ submitLabel }}
                 </button>
             </div>
@@ -177,6 +198,8 @@
             </div>
         </transition>
 
+        <f-message type="error" alert class="not-visible">{{ alertMessage }}</f-message>
+
         <erc20-token-picker-window
             ref="pickFromTokenWindow"
             :tokens="tokenPickerTokens"
@@ -204,12 +227,15 @@ import FPlaceholder from '@/components/core/FPlaceholder/FPlaceholder.vue';
 import { TokenPairs } from '@/utils/token-pairs.js';
 import Erc20TokenPickerWindow from '@/components/windows/Erc20TokenPickerWindow/Erc20TokenPickerWindow.vue';
 import appConfig from '../../../../app.config.js';
+import FMessage from '@/components/core/FMessage/FMessage.vue';
+import { focusElem } from '@/utils/aria.js';
 // import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 
 export default {
     name: 'FUniswapSwap',
 
     components: {
+        FMessage,
         Erc20TokenPickerWindow,
         FPlaceholder,
         FInfo,
@@ -252,6 +278,7 @@ export default {
             pairs: [],
             tokenPickerTokens: [],
             addDecimals: 0,
+            labelId: getUniqueId(),
         };
     },
 
@@ -339,6 +366,22 @@ export default {
             const { dPair } = this;
 
             return dPair && dPair.pairAddress && dPair.totalSupply !== '0x0';
+        },
+
+        submitBtnAriaLabel() {
+            let label = '';
+
+            if (!this.submitBtnDisabled) {
+                label = `Swap ${this.fromValue_.toFixed(2)} ${this.fromToken.symbol} to ${this.toValue_.toFixed(2)} ${
+                    this.toToken.symbol
+                }`;
+            }
+
+            return label;
+        },
+
+        alertMessage() {
+            return this.submitLabel !== 'Swap' ? this.submitLabel : '';
         },
     },
 
@@ -893,6 +936,10 @@ export default {
                 // this.fromValueChanged();
                 this.resetInputValues();
                 this.updateSubmitLabel();
+
+                this.$nextTick(() => {
+                    focusElem(this.$el, '[data-focus="to_token_picker"]');
+                });
             }
         },
 

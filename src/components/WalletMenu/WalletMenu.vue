@@ -23,7 +23,7 @@
                         <span class="wallet-label">fWallet</span>
                     </router-link>
                 </div>
-                <f-simple-navigation :items="navigation" />
+                <f-simple-navigation :items="navigation" aria-label="main navigation" />
             </div>
             <div class="footer">
                 <social-media-links />
@@ -34,7 +34,7 @@
         </div>
 
         <div v-if="useBottomMenu" class="bottom-menu">
-            <f-simple-navigation :items="navigation" icon-size="26" />
+            <f-simple-navigation :items="navigation" icon-size="26" aria-label="main navigation" />
         </div>
     </div>
 </template>

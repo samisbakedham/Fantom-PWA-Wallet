@@ -7,7 +7,7 @@
             <address-info-box />
 
             <main class="main">
-                <h1>fUNI</h1>
+                <h1 data-focus>fUNI</h1>
                 <f-uniswap-menu />
                 <router-view></router-view>
             </main>
@@ -27,6 +27,7 @@ import {
 import { eventBusMixin } from '@/mixins/event-bus.js';
 import { appStructureTree } from '@/app-structure.js';
 import FUniswapMenu from '@/components/funi/FUniswapMenu/FUniswapMenu.vue';
+import { focusElem } from '@/utils/aria.js';
 
 export default {
     name: 'FUniswap',
@@ -58,6 +59,10 @@ export default {
 
     created() {
         this.setActiveAccount(this.$route.params.address);
+    },
+
+    mounted() {
+        focusElem(this.$el);
     },
 
     methods: {

@@ -1,7 +1,9 @@
 <template>
     <div class="funiswap-pair-liquidity-info">
+        <h2 class="not-visible">Pair liquidity info</h2>
+
         <template v-if="pair.pairAddress">
-            <h4>Your position</h4>
+            <h3 class="h4">Your position</h3>
             <div class="row no-vert-col-padding no-collapse">
                 <div class="col defi-label funiswap-pair-liquidity-info__position">
                     <f-crypto-symbol :token="fromToken" img-width="18px" img-height="auto" />
@@ -52,7 +54,7 @@
             </div>
 
             <br />
-            <h4>Pool total</h4>
+            <h3 class="h4">Pool total</h3>
             <div class="row no-vert-col-padding no-collapse">
                 <div class="col defi-label">{{ $defi.getTokenSymbol(fromToken) }}</div>
                 <div class="col align-end">{{ totalFromTokenLiquidity }}</div>
