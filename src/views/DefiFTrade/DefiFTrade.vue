@@ -1,6 +1,6 @@
 <template>
     <div class="view-defi-ftrade">
-        <h1 class="with-back-btn">Swap</h1>
+        <h1 class="with-back-btn" data-focus>Swap</h1>
 
         <div class="grid">
             <div class="from-col">
@@ -8,6 +8,7 @@
                 <f-select-button @click.native="onFromTokenSelectorClick">
                     <f-placeholder :content-loaded="!!fromToken.symbol" block :replacement-num-chars="20">
                         <div class="sb-content">
+                            <span class="not-visible">From</span>
                             <f-crypto-symbol :token="fromToken" />
                             <span>
                                 <f-token-value
@@ -33,6 +34,7 @@
                             step="any"
                             min="0"
                             :max="maxFromInputValue"
+                            :aria-label="`Amount of ${fromToken.symbol}`"
                             class="text-input no-style"
                             @change="onFromInputChange"
                             @input="onFromInputInput"
@@ -51,6 +53,7 @@
                 <f-select-button @click.native="onToTokenSelectorClick">
                     <f-placeholder :content-loaded="!!toToken.symbol" block :replacement-num-chars="20">
                         <div class="sb-content">
+                            <span class="not-visible">To</span>
                             <f-crypto-symbol :token="toToken" />
                             <span>
                                 <f-token-value
@@ -76,6 +79,7 @@
                             step="any"
                             min="0"
                             :max="maxToInputValue"
+                            :aria-label="`Amount of ${toToken.symbol}`"
                             class="text-input no-style"
                             @change="onToInputChange"
                             @input="onToInputInput"
@@ -137,7 +141,7 @@
                     </f-placeholder>
                 </div>
                 <div class="swap-price">
-                    <button class="btn light same-size round" @click="swapPrice">
+                    <button class="btn light same-size round" aria-label="Swap price info" @click="swapPrice">
                         <icon data="@/assets/svg/exchange-alt.svg" />
                     </button>
                 </div>
@@ -172,6 +176,7 @@ import { formatNumberByLocale } from '../../filters.js';
 import FTokenValue from '@/components/core/FTokenValue/FTokenValue.vue';
 import FAutoResizeInput from '@/components/core/FAutoResizeInput/FAutoResizeInput.vue';
 import FPlaceholder from '@/components/core/FPlaceholder/FPlaceholder.vue';
+import { focusElem } from '@/utils/aria.js';
 
 export default {
     name: 'DefiFTrade',
@@ -328,6 +333,8 @@ export default {
     mounted() {
         this.$refs.fromSign.style.visibility = 'hidden';
         this.$refs.toSign.style.visibility = 'hidden';
+
+        focusElem(this.$el);
     },
 
     methods: {
