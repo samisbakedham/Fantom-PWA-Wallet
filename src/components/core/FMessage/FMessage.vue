@@ -1,5 +1,5 @@
 <template>
-    <div class="f-message" :class="[classes, type]" tabindex="0">
+    <div class="f-message" :class="[classes, type]" tabindex="0" :role="alert ? 'alert' : null">
         <slot name="prefix">
             <template v-if="withIcon">
                 <icon
@@ -52,6 +52,11 @@ export default {
         },
         /** Use icon with message. */
         withIcon: {
+            type: Boolean,
+            default: false,
+        },
+        /** Signals that message is an alert message (has role="alert" attribute) */
+        alert: {
             type: Boolean,
             default: false,
         },
