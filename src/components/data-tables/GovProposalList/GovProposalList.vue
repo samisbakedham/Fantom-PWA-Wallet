@@ -1,6 +1,6 @@
 <template>
-    <div class="gov-proposal-list">
-        <h2 v-if="!windowMode" class="dt-heading">
+    <section class="gov-proposal-list" :aria-labelledby="labelId">
+        <h2 v-if="!windowMode" :id="labelId" class="dt-heading">
             Proposals <span class="f-records-count">({{ totalCount }})</span>
         </h2>
         <f-card class="account-transaction-list-dt" :off="windowMode">
@@ -16,6 +16,7 @@
                     action-on-row
                     f-card-off
                     class="f-data-table-body-bg-color"
+                    caption="Proposals"
                     @fetch-more="fetchMore"
                     @row-action="onRowAction"
                 >
@@ -115,7 +116,7 @@
                 <div class="query-error">{{ proposalsError }}</div>
             </template>
         </f-card>
-    </div>
+    </section>
 </template>
 
 <script>
@@ -123,7 +124,7 @@ import FCard from '../../core/FCard/FCard.vue';
 import { formatDate, formatHexToInt, formatNumberByLocale, timestampToDate } from '../../../filters.js';
 import FDataTable from '../../core/FDataTable/FDataTable.vue';
 import { mapGetters } from 'vuex';
-import { cloneObject, defer } from '@/utils';
+import { cloneObject, defer, getUniqueId } from '@/utils';
 import gql from 'graphql-tag';
 import Vue from 'vue';
 import FColoredNumberRange from '@/components/core/FColoredNumberRange/FColoredNumberRange.vue';
@@ -247,6 +248,7 @@ export default {
             explorerUrl: appConfig.explorerUrl,
             /** Stop loading data */
             stopLoading: false,
+            labelId: getUniqueId(),
         };
     },
 

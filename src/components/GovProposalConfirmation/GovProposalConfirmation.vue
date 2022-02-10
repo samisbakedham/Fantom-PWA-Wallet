@@ -9,9 +9,9 @@
             :on-send-transaction-success="onSendTransactionSuccess"
             @change-component="onChangeComponent"
         >
-            <h1 class="with-back-btn">
-                <f-back-button :route-name="getBackButtonRoute(compName)" :params="$route.params" />
+            <h1 class="with-back-btn" data-focus>
                 Confirmation
+                <f-back-button :route-name="getBackButtonRoute(compName)" :params="$route.params" />
             </h1>
 
             <div class="confirmation-info__">

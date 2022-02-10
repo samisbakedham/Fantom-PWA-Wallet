@@ -1,9 +1,9 @@
 <template>
     <div class="gov-proposal-detail">
         <template v-if="hasCorrectParams">
-            <h1 v-if="isView" class="with-back-btn">
-                <f-back-button :route-name="getBackButtonRoute('gov-proposal-detail')" />
+            <h1 v-if="isView" class="with-back-btn" data-focus>
                 {{ d_proposal.name }}
+                <f-back-button :route-name="getBackButtonRoute('gov-proposal-detail')" />
             </h1>
 
             <div class="gov-proposal-detail__contract perex">
@@ -159,25 +159,25 @@
 
                 <div class="row gov-proposal-detail__dates">
                     <div class="col df-data-item">
-                        <div class="label">Voting Starts</div>
+                        <h5 class="label">Voting Starts</h5>
                         <div class="date">
                             {{ formatDate(timestampToDate(d_proposal.votingStarts), true, true) }}
                         </div>
                     </div>
                     <div class="col df-data-item">
-                        <div class="label">Voting May End</div>
+                        <h5 class="label">Voting May End</h5>
                         <div class="date">
                             {{ formatDate(timestampToDate(d_proposal.votingMayEnd), true, true) }}
                         </div>
                     </div>
                     <div class="col df-data-item">
-                        <div class="label">Voting Ends</div>
+                        <h5 class="label">Voting Ends</h5>
                         <div class="date">
                             {{ formatDate(timestampToDate(d_proposal.votingMustEnd), true, true) }}
                         </div>
                     </div>
                     <div v-if="d_proposal.state" class="col df-data-item">
-                        <div class="label">State</div>
+                        <h5 class="label">State</h5>
                         <div class="date">
                             {{ $governance.getProposalStatus(d_proposal.state.status) }}
                         </div>
@@ -213,6 +213,7 @@ import appConfig from '../../../app.config.js';
 import { fFetch } from '@/plugins/ffetch.js';
 import { WEIToFTM } from '@/utils/transactions.js';
 import FPlaceholder from '@/components/core/FPlaceholder/FPlaceholder.vue';
+import { focusElem } from '@/utils/aria.js';
 
 export default {
     name: 'GovProposalDetail',
@@ -363,6 +364,10 @@ export default {
         this._eventBus.on('account-picked', this.onAccountPicked);
 
         this.init();
+    },
+
+    mounted() {
+        focusElem(this.$el);
     },
 
     methods: {

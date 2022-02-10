@@ -16,6 +16,7 @@
                 :columns="columns"
                 :items="options"
                 f-card-off
+                caption="Total Votes"
                 class="gov-voting-info__table f-data-table-body-bg-color"
             >
                 <template v-slot:column-agreementRatio="{ value, column }">
