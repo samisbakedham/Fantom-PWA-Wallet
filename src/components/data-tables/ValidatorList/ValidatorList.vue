@@ -9,6 +9,7 @@
                 first-m-v-column-width="6"
                 fixed-header
                 f-card-off
+                caption="Validators"
                 class="f-data-table-body-bg-color"
             >
                 <template v-slot:column-logo="{ value, item, column }">

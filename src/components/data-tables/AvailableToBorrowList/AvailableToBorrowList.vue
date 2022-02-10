@@ -6,6 +6,7 @@
             action-on-row
             first-m-v-column-width="6"
             f-card-off
+            caption="Available to borrow"
             class="f-data-table-body-bg-color"
             @row-action="onRowAction"
         >

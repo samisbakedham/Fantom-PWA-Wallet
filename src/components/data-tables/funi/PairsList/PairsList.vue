@@ -7,6 +7,7 @@
             :columns="columns"
             :items="items"
             :mobile-view="mobileView"
+            caption="Pools"
             class="f-data-table-body-bg-color"
         >
             <template v-slot:column-pair="{ value, item, column }">

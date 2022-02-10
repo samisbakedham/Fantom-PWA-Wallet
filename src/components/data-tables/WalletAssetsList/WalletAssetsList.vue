@@ -5,6 +5,7 @@
             :columns="columns"
             :items="items"
             first-m-v-column-width="6"
+            caption="Asset list"
             class="f-data-table-body-bg-color"
         >
             <template v-slot:column-asset="{ value, item, column }">

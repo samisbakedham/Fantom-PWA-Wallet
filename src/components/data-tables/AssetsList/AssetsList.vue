@@ -6,6 +6,7 @@
             first-m-v-column-width="6"
             f-card-off
             class="f-data-table-body-bg-color"
+            caption="Asset list"
             :class="{ 'f-data-table-body-bg-color': defiAssetsList }"
         >
             <template v-slot:column-asset="{ value, item, column }">

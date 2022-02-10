@@ -9,6 +9,7 @@
                 sticky0
                 f-card-off
                 no-f-l-padding
+                caption="Withdraw Requests"
                 class="f-data-table-body-bg-color"
             >
                 <template v-slot:column-amount="{ value, item, column }">

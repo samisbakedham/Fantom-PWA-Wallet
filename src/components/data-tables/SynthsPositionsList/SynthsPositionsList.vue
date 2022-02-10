@@ -6,6 +6,7 @@
             :action-on-row="actionOnRow"
             first-m-v-column-width="6"
             f-card-off
+            caption="Synths Positions"
             class="f-data-table-body-bg-color"
         >
             <template v-slot:column-asset="{ value, item, column }">

@@ -17,6 +17,7 @@
                 infinite-scroll
                 f-card-off
                 action-on-row
+                caption="Wallet Delegations"
                 class="f-data-table-body-bg-color"
                 @row-action="$emit('row-action', $event)"
                 @fetch-more="fetchMore"

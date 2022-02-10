@@ -18,6 +18,7 @@
             infinite-scroll
             f-card-off
             no-f-l-padding
+            caption="Transactions"
             class="f-data-table-body-bg-color"
             @fetch-more="fetchMore"
         >

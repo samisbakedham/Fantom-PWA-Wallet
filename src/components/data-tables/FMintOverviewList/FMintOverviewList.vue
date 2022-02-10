@@ -9,6 +9,7 @@
             :no-f-l-padding="noFLPadding"
             first-m-v-column-width="6"
             f-card-off
+            caption="fMint Overview"
             class="f-data-table-body-bg-color"
             @row-action="onRowAction"
         >

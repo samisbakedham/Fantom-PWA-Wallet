@@ -17,6 +17,7 @@
                 infinite-scroll
                 fixed-header
                 f-card-off
+                :caption="`Transaction list - ${formatHexToInt(totalCount)} items`"
                 class="f-data-table-body-bg-color"
                 @fetch-more="fetchMore"
             >
@@ -343,6 +344,7 @@ export default {
 
         WEIToFTM,
         timestampToDate,
+        formatHexToInt,
     },
 };
 </script>

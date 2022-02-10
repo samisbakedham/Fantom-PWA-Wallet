@@ -7,6 +7,7 @@
             first-m-v-column-width="6"
             f-card-off
             class="f-data-table-body-bg-color"
+            caption="Deposit to Liquidity"
             @row-action="onRowAction"
         >
             <template v-slot:column-asset="{ value, item, column }">

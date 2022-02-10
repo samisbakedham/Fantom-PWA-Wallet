@@ -16,6 +16,7 @@
                 first-m-v-column-width="5"
                 f-card-off
                 action-on-row
+                caption="All Delegations"
                 class="f-data-table-body-bg-color"
                 @row-action="$emit('row-action', $event)"
             >
