@@ -18,6 +18,11 @@
                 @keyup="onTabletKeyup"
             >
                 <table v-if="!cMobileView">
+                    <caption v-if="caption" :class="{ 'not-visible': captionHidden }">
+                        {{
+                            caption
+                        }}
+                    </caption>
                     <slot name="header">
                         <thead>
                             <tr @click="onHeaderClick">
@@ -308,6 +313,18 @@ export default {
         actionOnRow: {
             type: Boolean,
             default: false,
+        },
+
+        /** Table's caption */
+        caption: {
+            type: String,
+            default: '',
+        },
+
+        /** Table's caption is hidden */
+        captionHidden: {
+            type: Boolean,
+            default: true,
         },
 
         ...FPagination.props,
