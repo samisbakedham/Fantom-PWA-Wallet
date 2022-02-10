@@ -29,6 +29,7 @@
                                 <a
                                     :href="`${explorerUrl}address/${item.proposal.contract}`"
                                     target="_blank"
+                                    rel="noopener"
                                     class="break-word"
                                 >
                                     {{ item.proposal.contract | formatHash }}
@@ -41,6 +42,7 @@
                             <a
                                 :href="`${explorerUrl}address/${item.proposal.contract}`"
                                 target="_blank"
+                                rel="noopener"
                                 class="break-word"
                             >
                                 {{ item.proposal.contract | formatHash }}

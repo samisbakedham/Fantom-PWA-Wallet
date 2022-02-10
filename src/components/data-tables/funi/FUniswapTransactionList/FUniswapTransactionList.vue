@@ -50,13 +50,21 @@
                 <div v-if="column" class="row no-collapse no-vert-col-padding">
                     <div class="col-6 f-row-label">{{ column.label }}</div>
                     <div class="col break-word">
-                        <a :href="`${explorerUrl}${explorerTransactionPath}/${value.transactionHash}`" target="_blank">
+                        <a
+                            :href="`${explorerUrl}${explorerTransactionPath}/${value.transactionHash}`"
+                            rel="noopener"
+                            target="_blank"
+                        >
                             {{ formatActionText(value) }}
                         </a>
                     </div>
                 </div>
                 <template v-else>
-                    <a :href="`${explorerUrl}${explorerTransactionPath}/${value.transactionHash}`" target="_blank">
+                    <a
+                        :href="`${explorerUrl}${explorerTransactionPath}/${value.transactionHash}`"
+                        rel="noopener"
+                        target="_blank"
+                    >
                         {{ formatActionText(value) }}
                     </a>
                 </template>

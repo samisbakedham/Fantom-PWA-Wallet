@@ -7,7 +7,12 @@
             </h1>
 
             <div class="gov-proposal-detail__contract perex">
-                <a :href="`${explorerUrl}address/${d_proposal.contract}`" target="_blank" class="break-word">
+                <a
+                    :href="`${explorerUrl}address/${d_proposal.contract}`"
+                    rel="noopener"
+                    target="_blank"
+                    class="break-word"
+                >
                     {{ d_proposal.contract | formatHash }}
                 </a>
             </div>

@@ -37,6 +37,7 @@
                             <a
                                 :href="`${explorerUrl}validator/${item.stakerAddress}`"
                                 target="_blank"
+                                rel="noopener"
                                 class="break-word"
                             >
                                 {{ value }}
@@ -45,7 +46,7 @@
                                 v-if="(item.stakerInfo ? item.stakerInfo.website || item.stakerInfo.contact : '')"
                                 :href="(item.stakerInfo ? item.stakerInfo.website || item.stakerInfo.contact : '')"
                                 target="_blank"
-                                rel="nofollow"
+                                rel="noopener"
                                 class="validator-website"
                             >
                                 <icon data="@/assets/svg/external-link-alt.svg"></icon>
@@ -53,14 +54,19 @@
                         </div>
                     </div>
                     <template v-else>
-                        <a :href="`${explorerUrl}validator/${item.stakerAddress}`" target="_blank" class="break-word">
+                        <a
+                            :href="`${explorerUrl}validator/${item.stakerAddress}`"
+                            rel="noopener"
+                            target="_blank"
+                            class="break-word"
+                        >
                             {{ value }}
                         </a>
                         <a
                             v-if="(item.stakerInfo ? item.stakerInfo.website || item.stakerInfo.contact : '')"
                             :href="(item.stakerInfo ? item.stakerInfo.website || item.stakerInfo.contact : '')"
                             target="_blank"
-                            rel="nofollow"
+                            rel="noopener"
                             class="validator-website"
                         >
                             <icon data="@/assets/svg/external-link-alt.svg"></icon>

@@ -18,7 +18,12 @@
                 <h2 data-focus tabindex="0">{{ dTitle }}</h2>
 
                 <h3 class="break-word">
-                    <a v-if="!error" :href="`${explorerUrl}${explorerTransactionPath}/${tx}`" target="_blank">
+                    <a
+                        v-if="!error"
+                        :href="`${explorerUrl}${explorerTransactionPath}/${tx}`"
+                        rel="noopener"
+                        target="_blank"
+                    >
                         <f-ellipsis :text="tx" overflow="middle" />
                     </a>
                     <f-message v-else type="error" role="alert">

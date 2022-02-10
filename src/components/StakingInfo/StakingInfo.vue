@@ -70,6 +70,7 @@
                                 <a
                                     v-if="stakerInfo"
                                     :href="`${explorerUrl}validator/${stakerInfo.stakerAddress}`"
+                                    rel="noopener"
                                     target="_blank"
                                 >
                                     {{ stakerInfo.stakerInfo.name }}

@@ -40,6 +40,7 @@
                             <a
                                 :href="`${explorerUrl}${explorerTransactionPath}/${item.transaction.hash}`"
                                 target="_blank"
+                                rel="noopener"
                                 class="break-word"
                             >
                                 {{ value }}
@@ -50,6 +51,7 @@
                         <a
                             :href="`${explorerUrl}${explorerTransactionPath}/${item.transaction.hash}`"
                             target="_blank"
+                            rel="noopener"
                             class="break-word"
                         >
                             {{ value }}
@@ -61,13 +63,13 @@
                     <div v-if="column" class="row no-collapse no-vert-col-padding">
                         <div class="col-5 f-row-label">{{ column.label }}</div>
                         <div class="col-7">
-                            <a :href="`${explorerUrl}address/${value}`" target="_blank">
+                            <a :href="`${explorerUrl}address/${value}`" rel="noopener" target="_blank">
                                 <f-ellipsis :text="value || ''" overflow="middle" />
                             </a>
                         </div>
                     </div>
                     <template v-else>
-                        <a :href="`${explorerUrl}address/${value}`" target="_blank">
+                        <a :href="`${explorerUrl}address/${value}`" rel="noopener" target="_blank">
                             <f-ellipsis :text="value || ''" overflow="middle" />
                         </a>
                     </template>

@@ -169,7 +169,12 @@
             <div class="funiswappairdetail_info_item">
                 <h3 class="funiswappairdetail_subsubtitle">Pair Address</h3>
                 <div>
-                    <a :href="`${explorerUrl}address/${pair.pairAddress}`" target="_blank" class="break-word">
+                    <a
+                        :href="`${explorerUrl}address/${pair.pairAddress}`"
+                        rel="noopener"
+                        target="_blank"
+                        class="break-word"
+                    >
                         <f-ellipsis :text="pair.pairAddress" overflow="middle" />
                     </a>
                     <f-copy-button

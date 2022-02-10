@@ -3,13 +3,13 @@
         <f-card class="f-card-double-padding">
             <div class="small-container">
                 <p>
-                    <a href="https://fantom.foundation/how-to-use-fantom-wallet/" target="_blank">
+                    <a href="https://fantom.foundation/how-to-use-fantom-wallet/" rel="noopener" target="_blank">
                         How to use Fantom fWallet
                     </a>
                 </p>
 
                 <p>
-                    <a href="https://explorer.fantom.network/" target="_blank">
+                    <a href="https://explorer.fantom.network/" rel="noopener" target="_blank">
                         Fantom Explorer
                     </a>
                 </p>
