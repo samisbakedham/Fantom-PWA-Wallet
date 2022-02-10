@@ -20,7 +20,7 @@ export const FANTOM_CHAIN_ID = 0xfa;
 
 export const GAS_LIMITS = {
     default: '0xabe0',
-    max: '0x90F560', // 9500000
+    max: '0x7A120', // 500000
 };
 
 const MIN_GAS_PRICE = 1500000000;
