@@ -26,7 +26,7 @@
                     >
                         <f-ellipsis :text="tx" overflow="middle" />
                     </a>
-                    <f-message v-else type="error" role="alert">
+                    <f-message v-else type="error" alert>
                         {{ error }}
                     </f-message>
                 </h3>

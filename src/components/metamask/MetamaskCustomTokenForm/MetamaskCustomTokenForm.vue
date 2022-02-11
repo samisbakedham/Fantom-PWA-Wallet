@@ -10,7 +10,7 @@
                 :validator="checkAddress"
             >
                 <template #bottom="sProps">
-                    <f-message v-show="sProps.showErrorMessage" type="error" role="alert" with-icon>
+                    <f-message v-show="sProps.showErrorMessage" type="error" alert with-icon>
                         Invalid Address
                     </f-message>
                 </template>
@@ -24,7 +24,7 @@
                 :validator="checkSymbol"
             >
                 <template #bottom="sProps">
-                    <f-message v-show="sProps.showErrorMessage" type="error" role="alert" with-icon>
+                    <f-message v-show="sProps.showErrorMessage" type="error" alert with-icon>
                         Symbol must be 11 characters or fewer
                     </f-message>
                 </template>

@@ -15,7 +15,7 @@
                         validate-on-input
                     >
                         <template #bottom="sProps">
-                            <f-message v-show="sProps.showErrorMessage" type="error" role="alert" with-icon>
+                            <f-message v-show="sProps.showErrorMessage" type="error" alert with-icon>
                                 Type a password
                             </f-message>
                         </template>
@@ -23,7 +23,7 @@
 
                     <div class="align-center form-buttons">
                         <div v-if="errorMessage">
-                            <f-message type="error" with-icon>{{ errorMessage }}</f-message>
+                            <f-message type="error" alert with-icon>{{ errorMessage }}</f-message>
                             <br />
                         </div>
                         <div v-if="notEnoughFTM">

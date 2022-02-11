@@ -53,7 +53,7 @@
                             </div>
                         </template>
                         <template #bottom="sProps">
-                            <f-message v-show="sProps.showErrorMessage" type="error" role="alert" with-icon>
+                            <f-message v-show="sProps.showErrorMessage" type="error" alert with-icon>
                                 {{ amountErrMsg }}
                             </f-message>
                         </template>

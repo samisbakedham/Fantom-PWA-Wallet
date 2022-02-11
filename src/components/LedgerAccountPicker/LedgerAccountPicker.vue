@@ -28,11 +28,11 @@
             <pulse-loader color="#1969ff"></pulse-loader>
         </div>
         <!--
-        <f-message v-if="$asyncComputed.accounts.error" type="error" with-icon>
+        <f-message v-if="$asyncComputed.accounts.error" type="error" alert with-icon>
             An error
         </f-message>
         -->
-        <f-message v-if="tmpError" type="error" with-icon>
+        <f-message v-if="tmpError" type="error" alert with-icon>
             {{ tmpError }}
         </f-message>
     </div>

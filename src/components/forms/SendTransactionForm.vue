@@ -46,7 +46,7 @@
                                 </div>
                             </template>
                             <template #bottom="sProps">
-                                <f-message v-show="sProps.showErrorMessage" type="error" role="alert" with-icon>
+                                <f-message v-show="sProps.showErrorMessage" type="error" alert with-icon>
                                     {{ amountErrMsg }}
                                 </f-message>
                             </template>
@@ -61,7 +61,7 @@
                             :validate-on-input="sendDirection === 'OperaToOpera'"
                         >
                             <template #bottom="sProps">
-                                <f-message v-show="sProps.showErrorMessage" type="error" role="alert" with-icon>
+                                <f-message v-show="sProps.showErrorMessage" type="error" alert with-icon>
                                     {{ sendToErrorMsg }}
                                 </f-message>
                                 <div v-if="resolvedAddress">Domain resolved to {{ resolvedAddress }}</div>

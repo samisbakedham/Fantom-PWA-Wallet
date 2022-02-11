@@ -45,7 +45,7 @@
                 v-if="dAccountInfo.stakerId"
                 v-show="cantRestake"
                 type="error"
-                role="alert"
+                alert
                 with-icon
                 style="margin-bottom: 16px;"
             >

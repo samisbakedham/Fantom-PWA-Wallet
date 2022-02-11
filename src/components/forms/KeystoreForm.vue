@@ -22,7 +22,7 @@
                         </f-message>
                         <br />
 
-                        <f-message v-if="dKeystoreErrorMsg" type="error" with-icon>
+                        <f-message v-if="dKeystoreErrorMsg" type="error" alert with-icon>
                             {{ dKeystoreErrorMsg }}
                         </f-message>
                         <br />
@@ -37,7 +37,7 @@
                             :validator="checkPassword"
                         >
                             <template #bottom="sProps">
-                                <f-message v-show="sProps.showErrorMessage" type="error" role="alert" with-icon>
+                                <f-message v-show="sProps.showErrorMessage" type="error" alert with-icon>
                                     Type a password
                                 </f-message>
                             </template>

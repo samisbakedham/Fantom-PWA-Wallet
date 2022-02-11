@@ -52,7 +52,7 @@
                         :validator="checkName"
                     >
                         <template #bottom="sProps">
-                            <f-message v-show="sProps.showErrorMessage" type="error" role="alert" with-icon>
+                            <f-message v-show="sProps.showErrorMessage" type="error" alert with-icon>
                                 This field cannot be blank
                             </f-message>
                         </template>
@@ -72,7 +72,7 @@
                         :validator="checkOrder"
                     >
                         <template #bottom="sProps">
-                            <f-message v-show="sProps.showErrorMessage" type="error" role="alert" with-icon>
+                            <f-message v-show="sProps.showErrorMessage" type="error" alert with-icon>
                                 Value must be between 1 and {{ accounts.length }}
                             </f-message>
                         </template>

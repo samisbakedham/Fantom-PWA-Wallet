@@ -5,7 +5,7 @@
         </h1>
 
         <template v-if="!currentAccount">
-            <f-message type="error" with-icon>Bad wallet</f-message>
+            <f-message type="error" alert with-icon>Bad wallet</f-message>
         </template>
         <template v-else>
             <address-info-box />

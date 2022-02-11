@@ -84,7 +84,7 @@
                 </div>
                 -->
             </div>
-            <f-message v-if="closeToLiquidation" type="error" role="alert" class="big">
+            <f-message v-if="closeToLiquidation" type="error" alert class="big">
                 You're getting close to your liquidation price. <br />
                 Please rebalance your collateral.
             </f-message>
