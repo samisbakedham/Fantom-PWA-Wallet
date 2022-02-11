@@ -3,6 +3,7 @@
         <div
             v-if="isVisible"
             :id="id"
+            ref="window"
             class="f-window"
             :class="cssClass"
             :style="style"
@@ -10,10 +11,11 @@
             :aria-modal="modal"
             :aria-labelledby="_ids.title"
             :aria-describedby="_ids.body"
+            tabindex="-1"
             @keyup="onKeyup"
             @keydown="onKeydown"
         >
-            <div ref="doc" role="document" tabindex="-1" class="doc">
+            <div role="document" class="doc">
                 <header v-if="withHeader">
                     <div :id="_ids.title" class="title">
                         <!-- @slot Default to `title` prop -->
@@ -426,7 +428,7 @@ export default {
                 }
             } else {
                 this.$nextTick(() => {
-                    this.$refs.doc.focus();
+                    this.$refs.window.focus();
                 });
             }
         },
