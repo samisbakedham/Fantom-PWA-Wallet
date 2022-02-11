@@ -1,6 +1,6 @@
 <template>
     <div class="account-success-message">
-        <h2 class="align-center">You're all set!</h2>
+        <h2 class="align-center" data-focus>You're all set!</h2>
         <p>{{ cMsgT }}</p>
         <router-link
             :to="{
@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import { focusElem } from '@/utils/aria.js';
+
 export default {
     components: {},
 
@@ -37,6 +39,10 @@ export default {
                 ? 'You have successfully restored your wallet.'
                 : 'You have successfully created your wallet.';
         },
+    },
+
+    mounted() {
+        focusElem(this.$el);
     },
 };
 </script>

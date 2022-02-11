@@ -16,7 +16,7 @@
                             rows="10"
                         />
 
-                        <f-message v-if="dErrorMsg" type="error" with-icon>{{ dErrorMsg }}</f-message>
+                        <f-message v-if="dErrorMsg" type="error" alert with-icon>{{ dErrorMsg }}</f-message>
                     </div>
 
                     <div class="footer">

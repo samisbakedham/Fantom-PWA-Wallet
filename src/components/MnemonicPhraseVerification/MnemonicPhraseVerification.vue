@@ -1,6 +1,6 @@
 <template>
     <div class="mnemonic-phrase mnemonic-phrase-verification">
-        <h2>Verification</h2>
+        <h2 data-focus>Verification</h2>
 
         <p>
             Please select the words in the correct order to verify your mnemonic phrase.
@@ -15,7 +15,7 @@
             </li>
         </ul>
 
-        <f-message v-if="dErrorMsg" type="error" with-icon>{{ dErrorMsg }}</f-message>
+        <f-message v-if="dErrorMsg" type="error" alert with-icon>{{ dErrorMsg }}</f-message>
 
         <ul
             v-if="dShuffledMnemonic.length"
@@ -38,6 +38,7 @@
 // import { shuffle } from '../../utils/array.js';
 import { ADD_ACCOUNT } from '../../store/actions.type.js';
 import FMessage from '../core/FMessage/FMessage.vue';
+import { focusElem } from '@/utils/aria.js';
 
 export default {
     components: { FMessage },
@@ -73,6 +74,10 @@ export default {
 
     created() {
         this._pickedWordsCount = 0;
+    },
+
+    mounted() {
+        focusElem(this.$el);
     },
 
     methods: {

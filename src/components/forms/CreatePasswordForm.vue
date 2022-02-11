@@ -2,7 +2,7 @@
     <div class="keystore-password-form">
         <f-form @f-form-submit="onFormSubmit" @f-form-change="onFormChange" @f-form-input="onFormInput">
             <fieldset class="">
-                <legend class="h2">
+                <legend class="h2" data-focus>
                     <template v-if="downloadKeystoreFile">
                         Create a keystore file and password
                     </template>
@@ -91,6 +91,7 @@ import FCheckbox from '../core/FCheckbox/FCheckbox.vue';
 import FMessage from '../core/FMessage/FMessage.vue';
 import FPasswordField from '../core/FPasswordField/FPasswordField.vue';
 import { clientInfo } from '../../utils/client-info.js';
+import { focusElem } from '@/utils/aria.js';
 
 export default {
     components: {
@@ -129,12 +130,9 @@ export default {
         },
     },
 
-    /*mounted() {
-        const el = findFirstFocusableDescendant(this.$el);
-        if (el) {
-            el.focus();
-        }
-    },*/
+    mounted() {
+        focusElem(this.$el);
+    },
 
     methods: {
         checkPrimaryPassword(_value) {

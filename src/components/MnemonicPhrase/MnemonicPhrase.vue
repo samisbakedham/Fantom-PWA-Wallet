@@ -1,6 +1,6 @@
 <template>
     <div class="mnemonic-phrase" tabindex="-1">
-        <h2>Your mnemonic phrase</h2>
+        <h2 data-focus>Your mnemonic phrase</h2>
 
         <f-message type="info" with-icon>
             Please backup the text below on paper and keep it somewhere secret and safe.
@@ -21,6 +21,7 @@
 
 <script>
 import FMessage from '../core/FMessage/FMessage.vue';
+import { focusElem } from '@/utils/aria.js';
 export default {
     components: { FMessage },
 
@@ -44,13 +45,9 @@ export default {
         };
     },
 
-    /*
     mounted() {
-        setTimeout(() => {
-            this.$el.focus();
-        }, 10);
+        focusElem(this.$el);
     },
-    */
 
     methods: {
         onSubmitButClick() {
