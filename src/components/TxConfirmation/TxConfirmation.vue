@@ -30,6 +30,7 @@
                     :tmp-pwd-code="tmpPwdCode"
                     :cancel-button-label="cancelButtonLabel"
                     :show-cancel-button="showCancelButton"
+                    :max-fee="tx ? tx._fee : -1"
                     @f-form-submit="onFFormSubmit"
                     @cancel-button-click="$emit('cancel-button-click', $event)"
                 />

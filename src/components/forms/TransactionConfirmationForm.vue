@@ -33,6 +33,8 @@
                             <br />
                         </div>
 
+                        <p class="max-fee" tabindex="0">Max Fee: {{ dMaxFee }} FTM</p>
+
                         <advanced-tx-functions ref="atxfuncs" :gas-info="gasInfo" />
 
                         <template v-if="!waiting">
@@ -140,12 +142,17 @@ export default {
             type: String,
             default: '',
         },
+        maxFee: {
+            type: String,
+            default: '',
+        },
     },
 
     data() {
         return {
             gasPrice: '',
             showPwdField: true,
+            dMaxFee: this.maxFee,
         };
     },
 
@@ -166,6 +173,14 @@ export default {
             // console.log('price', price);
 
             return price <= 0;
+        },
+    },
+
+    watch: {
+        maxFee(value) {
+            if (value) {
+                this.dMaxFee = value;
+            }
         },
     },
 
@@ -215,3 +230,12 @@ export default {
     },
 };
 </script>
+<style lang="scss">
+@import '../../assets/scss/vars';
+
+.max-fee {
+    color: $light-gray-color;
+    padding-bottom: 8px;
+    text-align: start;
+}
+</style>
