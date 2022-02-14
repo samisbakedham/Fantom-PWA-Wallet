@@ -69,6 +69,16 @@ export const routes = [
                 path: '',
                 component: Welcome,
             },
+            {
+                name: 'create-account',
+                path: '/account/create',
+                redirect: { name: 'not-found' },
+            },
+            {
+                name: 'restore-account',
+                path: '/account/restore',
+                redirect: { name: 'not-found' },
+            },
             /*{
                 name: 'create-account',
                 path: '/account/create',
