@@ -1,14 +1,14 @@
 import NotFound from './views/NotFound/NotFound.vue';
 import Home from './views/Home/Home.vue';
 import Welcome from './views/Welcome/Welcome.vue';
-import CreateAccount from './views/CreateAccount/CreateAccount.vue';
+// import CreateAccount from './views/CreateAccount/CreateAccount.vue';
 // import RestoreAccount from './views/RestoreAccount/RestoreAccount.vue';
 import Account from './views/Account/Account.vue';
 import Dashboard from './views/Dashboard/Dashboard.vue';
 import AccountSend from './views/AccountSend.vue';
 import AccountReceive from './views/AccountReceive.vue';
 // import AccountStake from './views/AccountStake.vue';
-import LedgerAccounts from './views/LedgerAccounts/LedgerAccounts.vue';
+// import LedgerAccounts from './views/LedgerAccounts/LedgerAccounts.vue';
 import AccountHistory from './views/AccountHistory/AccountHistory.vue';
 import Settings from './views/Settings/Settings.vue';
 import Wallet from './views/Wallet/Wallet.vue';
@@ -69,21 +69,21 @@ export const routes = [
                 path: '',
                 component: Welcome,
             },
-            {
+            /*{
                 name: 'create-account',
                 path: '/account/create',
                 component: CreateAccount,
             },
-            /*{
+            {
                 name: 'restore-account',
                 path: '/account/restore',
                 component: RestoreAccount,
-            },*/
+            },
             {
                 name: 'ledger-accounts',
                 path: '/ledger-accounts',
                 component: LedgerAccounts,
-            },
+            },*/
         ],
     },
     {
