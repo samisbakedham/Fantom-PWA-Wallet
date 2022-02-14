@@ -1,11 +1,5 @@
 <template>
     <f-card class="account-transaction-list-dt" :off="windowMode">
-        <!--
-        <h2 v-if="!windowMode" class="dt-heading">
-            Transactions <span class="f-records-count">({{ totalCount | formatHexToInt }})</span>
-        </h2>
-        -->
-
         <template v-if="!dAccountByAddressError">
             <f-data-table
                 :columns="dColumns"
@@ -106,6 +100,18 @@
                         </template>
                     </template>
                 </template>
+
+                <template v-slot:column-items="{ value }">
+                    <div v-for="item in value" :key="item.trxIndex">
+                        <!-- Transfer 5 wFTM (ERC-20) From 0x.... To 0x... -->
+                        {{ item.type }}
+                        {{ item.amount }}
+                        {{ item.tokenSymbol || 'tokens' }}
+                        ({{ item.tokenType }})
+                        From {{ item.sender }}
+                        To {{ item.recipient }}
+                    </div>
+                </template>
             </f-data-table>
         </template>
 
@@ -183,6 +189,18 @@ export default {
                                     block {
                                         number
                                         timestamp
+                                    }
+                                    tokenTransactions {
+                                        trxIndex
+                                        tokenAddress
+                                        tokenName
+                                        tokenSymbol
+                                        tokenType
+                                        tokenId
+                                        type
+                                        sender
+                                        recipient
+                                        amount
                                     }
                                 }
                             }
@@ -282,6 +300,11 @@ export default {
                     },
                     width: '150px',
                     cssClass: 'align-end',
+                },
+                {
+                    name: 'items',
+                    label: 'Items',
+                    itemProp: 'transaction.tokenTransactions',
                 },
             ],
         };
