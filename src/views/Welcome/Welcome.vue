@@ -17,10 +17,10 @@
                     <icon data="@/assets/svg/wallet.svg" width="32" height="32" :fill="false" aria-hidden="true" />
                     Create Wallet
                 </router-link>
-                <router-link :to="{ name: 'restore-account' }" class="btn restore-account-btn large w100p">
+                <!--                <router-link :to="{ name: 'restore-account' }" class="btn restore-account-btn large w100p">
                     <icon data="@/assets/svg/key.svg" width="32" height="32" aria-hidden="true" />
                     Restore Wallet
-                </router-link>
+                </router-link>-->
                 <!--                <router-link :to="{ name: 'ledger-accounts' }" class="btn ledger-accounts-btn large w100p">
                     Ledger
                 </router-link>-->

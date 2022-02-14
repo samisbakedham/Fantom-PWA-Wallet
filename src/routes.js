@@ -2,7 +2,7 @@ import NotFound from './views/NotFound/NotFound.vue';
 import Home from './views/Home/Home.vue';
 import Welcome from './views/Welcome/Welcome.vue';
 import CreateAccount from './views/CreateAccount/CreateAccount.vue';
-import RestoreAccount from './views/RestoreAccount/RestoreAccount.vue';
+// import RestoreAccount from './views/RestoreAccount/RestoreAccount.vue';
 import Account from './views/Account/Account.vue';
 import Dashboard from './views/Dashboard/Dashboard.vue';
 import AccountSend from './views/AccountSend.vue';
@@ -74,11 +74,11 @@ export const routes = [
                 path: '/account/create',
                 component: CreateAccount,
             },
-            {
+            /*{
                 name: 'restore-account',
                 path: '/account/restore',
                 component: RestoreAccount,
-            },
+            },*/
             {
                 name: 'ledger-accounts',
                 path: '/ledger-accounts',
