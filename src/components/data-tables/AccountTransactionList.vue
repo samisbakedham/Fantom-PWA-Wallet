@@ -113,13 +113,13 @@
                             <td :colspan="visibleColumnsNum">
                                 <div class="tokentxs">
                                     <div
-                                        v-for="tx in item.transaction.tokenTransactions"
-                                        :key="`${item.id}_${tx.trxIndex}`"
+                                        v-for="(tx, index) in item.transaction.tokenTransactions"
+                                        :key="`${item.id}_${index}`"
                                     >
                                         <!-- Transfer 5 wFTM (ERC-20) From 0x.... To 0x... -->
                                         <span>{{ tx.type }}</span>
                                         <f-token-value
-                                            :token="{ symbol: tx.tokenSymbol || 'tokens', decimals: 18 }"
+                                            :token="{ symbol: tx.tokenSymbol || 'tokens', decimals: tx.tokenDecimals }"
                                             :value="tx.amount"
                                             convert-value
                                             :use-placeholder="false"
@@ -144,11 +144,11 @@
                     <template v-else>
                         <details v-if="item.transaction.tokenTransactions.length > 0" class="tokentxs">
                             <summary>Details</summary>
-                            <div v-for="tx in item.transaction.tokenTransactions" :key="`${item.id}_${tx.trxIndex}`">
+                            <div v-for="(tx, index) in item.transaction.tokenTransactions" :key="`${item.id}_${index}`">
                                 <!-- Transfer 5 wFTM (ERC-20) From 0x.... To 0x... -->
                                 <span>{{ tx.type }}</span>
                                 <f-token-value
-                                    :token="{ symbol: tx.tokenSymbol || 'tokens', decimals: 18 }"
+                                    :token="{ symbol: tx.tokenSymbol || 'tokens', decimals: tx.tokenDecimals }"
                                     :value="tx.amount"
                                     convert-value
                                     :use-placeholder="false"
@@ -252,6 +252,7 @@ export default {
                                         tokenSymbol
                                         tokenType
                                         tokenId
+                                        tokenDecimals
                                         type
                                         sender
                                         recipient
