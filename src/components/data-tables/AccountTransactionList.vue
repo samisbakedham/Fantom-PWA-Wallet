@@ -112,31 +112,10 @@
                         >
                             <td :colspan="visibleColumnsNum">
                                 <div class="tokentxs">
-                                    <div
-                                        v-for="(tx, index) in item.transaction.tokenTransactions"
-                                        :key="`${item.id}_${index}`"
-                                    >
-                                        <!-- Transfer 5 wFTM (ERC-20) From 0x.... To 0x... -->
-                                        <span>{{ tx.type }}</span>
-                                        <f-token-value
-                                            :token="{ symbol: tx.tokenSymbol || 'tokens', decimals: tx.tokenDecimals }"
-                                            :value="tx.amount"
-                                            convert-value
-                                            :use-placeholder="false"
-                                        />
-                                        <span>({{ tx.tokenType }}) From</span>
-                                        <a :href="`${explorerUrl}address/${tx.sender}`" rel="noopener" target="_blank">
-                                            <f-ellipsis :text="tx.sender || ''" overflow="middle" />
-                                        </a>
-                                        <span>To</span>
-                                        <a
-                                            :href="`${explorerUrl}address/${tx.recipient}`"
-                                            rel="noopener"
-                                            target="_blank"
-                                        >
-                                            <f-ellipsis :text="tx.recipient || ''" overflow="middle" />
-                                        </a>
-                                    </div>
+                                    <token-transactions-list
+                                        :token-transactions="item.transaction.tokenTransactions"
+                                        :address="address"
+                                    />
                                 </div>
                             </td>
                         </tr>
@@ -144,24 +123,10 @@
                     <template v-else>
                         <details v-if="item.transaction.tokenTransactions.length > 0" class="tokentxs">
                             <summary>Details</summary>
-                            <div v-for="(tx, index) in item.transaction.tokenTransactions" :key="`${item.id}_${index}`">
-                                <!-- Transfer 5 wFTM (ERC-20) From 0x.... To 0x... -->
-                                <span>{{ tx.type }}</span>
-                                <f-token-value
-                                    :token="{ symbol: tx.tokenSymbol || 'tokens', decimals: tx.tokenDecimals }"
-                                    :value="tx.amount"
-                                    convert-value
-                                    :use-placeholder="false"
-                                />
-                                <span>({{ tx.tokenType }}) From</span>
-                                <a :href="`${explorerUrl}address/${tx.sender}`" rel="noopener" target="_blank">
-                                    <f-ellipsis :text="tx.sender || ''" overflow="middle" />
-                                </a>
-                                <span>To</span>
-                                <a :href="`${explorerUrl}address/${tx.recipient}`" rel="noopener" target="_blank">
-                                    <f-ellipsis :text="tx.recipient || ''" overflow="middle" />
-                                </a>
-                            </div>
+                            <token-transactions-list
+                                :token-transactions="item.transaction.tokenTransactions"
+                                :address="address"
+                            />
                         </details>
                     </template>
                 </template>
@@ -185,11 +150,11 @@ import FCard from '../core/FCard/FCard.vue';
 import appConfig from '../../../app.config.js';
 import FEllipsis from '../core/FEllipsis/FEllipsis.vue';
 import FTransactionStatus from '../core/FTransactionStatus/FTransactionStatus.vue';
-import FTokenValue from '@/components/core/FTokenValue/FTokenValue.vue';
+import TokenTransactionsList from './TokenTransactionsList';
 
 export default {
     components: {
-        FTokenValue,
+        TokenTransactionsList,
         FTransactionStatus,
         FEllipsis,
         FCard,
@@ -437,29 +402,13 @@ export default {
 
 .tokentxs {
     margin-top: -12px;
-
-    > div {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        flex-wrap: wrap;
-        gap: 6px;
-
-        a {
-            max-width: 200px;
-        }
-    }
-
-    .f-token-value {
-        font-weight: bold;
-    }
 }
 
 .mobile-item {
     .tokentxs {
         margin-top: 0;
 
-        > div {
+        .token-transaction-item {
             line-height: 0.8;
             margin-bottom: 16px;
 
