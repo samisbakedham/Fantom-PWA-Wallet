@@ -39,28 +39,39 @@
                     </slot>
                     <slot>
                         <tbody v-if="cItems.length">
-                            <tr
-                                v-for="item in cItems"
-                                :key="item.id"
-                                :style="item.css ? obj2css(item.css) : ''"
-                                :data-dt-item-id="actionOnRow ? item.id : undefined"
-                                :tabindex="actionOnRow ? 0 : -1"
-                            >
-                                <td
-                                    v-for="(col, index) in columns"
-                                    v-show="!col.hidden"
-                                    :key="col.name"
-                                    :class="getColumnClass(index, col)"
+                            <template v-for="item in cItems">
+                                <tr
+                                    :key="item.id"
+                                    :style="item.css ? obj2css(item.css) : ''"
+                                    :data-dt-item-id="actionOnRow ? item.id : undefined"
+                                    :tabindex="actionOnRow ? 0 : -1"
                                 >
-                                    <slot
-                                        :name="`column-${col.name}`"
-                                        :value="getItemPropValue(item, col)"
-                                        :item="item"
+                                    <td
+                                        v-for="(col, index) in columns"
+                                        v-show="!col.hidden"
+                                        :key="col.name"
+                                        :class="getColumnClass(index, col)"
                                     >
-                                        {{ getItemPropValue(item, col) }}
-                                    </slot>
-                                </td>
-                            </tr>
+                                        <slot
+                                            :name="`column-${col.name}`"
+                                            :value="getItemPropValue(item, col)"
+                                            :item="item"
+                                        >
+                                            {{ getItemPropValue(item, col) }}
+                                        </slot>
+                                    </td>
+                                </tr>
+                                <slot
+                                    name="subrow"
+                                    :style="item.css ? obj2css(item.css) : ''"
+                                    :dtItemId="actionOnRow ? item.id : undefined"
+                                    :tabindex="actionOnRow ? 0 : -1"
+                                    :item="item"
+                                    :columns="columns"
+                                    :visibleColumnsNum="dVisibleColumnsNum"
+                                    :mobileView="false"
+                                ></slot>
+                            </template>
                         </tbody>
                         <tbody v-else-if="!loading">
                             <tr>
@@ -95,30 +106,47 @@
 
                 <div v-else class="mobile-view f-data-layout normal-padding">
                     <div v-if="cItems.length">
-                        <div
-                            v-for="item in cItems"
-                            :key="item.id"
-                            :style="item.css ? obj2css(item.css) : ''"
-                            :data-dt-item-id="actionOnRow ? item.id : undefined"
-                            :tabindex="actionOnRow ? 0 : -1"
-                            class="mobile-item"
-                        >
-                            <div v-for="(col, index) in columns" :key="col.name" :class="getColumnClass(index, col)">
-                                <template v-if="!col.hidden">
-                                    <slot
-                                        :name="`column-${col.name}`"
-                                        :value="getItemPropValue(item, col)"
-                                        :item="item"
-                                        :column="col"
-                                    >
-                                        <div class="row no-collapse no-vert-col-padding">
-                                            <div :class="`col-${firstMVColumnWidth} f-row-label`">{{ col.label }}</div>
-                                            <div class="col break-word">{{ getItemPropValue(item, col) }}</div>
-                                        </div>
-                                    </slot>
-                                </template>
+                        <template v-for="item in cItems">
+                            <div
+                                :key="item.id"
+                                :style="item.css ? obj2css(item.css) : ''"
+                                :data-dt-item-id="actionOnRow ? item.id : undefined"
+                                :tabindex="actionOnRow ? 0 : -1"
+                                class="mobile-item"
+                            >
+                                <div
+                                    v-for="(col, index) in columns"
+                                    :key="col.name"
+                                    :class="getColumnClass(index, col)"
+                                >
+                                    <template v-if="!col.hidden">
+                                        <slot
+                                            :name="`column-${col.name}`"
+                                            :value="getItemPropValue(item, col)"
+                                            :item="item"
+                                            :column="col"
+                                        >
+                                            <div class="row no-collapse no-vert-col-padding">
+                                                <div :class="`col-${firstMVColumnWidth} f-row-label`">
+                                                    {{ col.label }}
+                                                </div>
+                                                <div class="col break-word">{{ getItemPropValue(item, col) }}</div>
+                                            </div>
+                                        </slot>
+                                    </template>
+                                </div>
+                                <slot
+                                    name="subrow"
+                                    :style="item.css ? obj2css(item.css) : ''"
+                                    :dtItemId="actionOnRow ? item.id : undefined"
+                                    :tabindex="actionOnRow ? 0 : -1"
+                                    :item="item"
+                                    :columns="columns"
+                                    :visibleColumnsNum="dVisibleColumnsNum"
+                                    :mobileView="true"
+                                ></slot>
                             </div>
-                        </div>
+                        </template>
                     </div>
                     <div v-else-if="!loading">
                         <div class="no-items">{{ $t('no_items') }}</div>

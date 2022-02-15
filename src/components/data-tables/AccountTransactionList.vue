@@ -101,16 +101,69 @@
                     </template>
                 </template>
 
-                <template v-slot:column-items="{ value }">
-                    <div v-for="item in value" :key="item.trxIndex">
-                        <!-- Transfer 5 wFTM (ERC-20) From 0x.... To 0x... -->
-                        {{ item.type }}
-                        {{ item.amount }}
-                        {{ item.tokenSymbol || 'tokens' }}
-                        ({{ item.tokenType }})
-                        From {{ item.sender }}
-                        To {{ item.recipient }}
-                    </div>
+                <template #subrow="{ item, columns, visibleColumnsNum, style, tabindex, dtItemId, mobileView }">
+                    <template v-if="!mobileView">
+                        <tr
+                            v-if="item.transaction.tokenTransactions.length > 0"
+                            :style="style"
+                            :tabindex="tabindex"
+                            :data-dt-item-id="dtItemId"
+                            class="subrow"
+                        >
+                            <td :colspan="visibleColumnsNum">
+                                <div class="tokentxs">
+                                    <div
+                                        v-for="tx in item.transaction.tokenTransactions"
+                                        :key="`${item.id}_${tx.trxIndex}`"
+                                    >
+                                        <!-- Transfer 5 wFTM (ERC-20) From 0x.... To 0x... -->
+                                        <span>{{ tx.type }}</span>
+                                        <f-token-value
+                                            :token="{ symbol: tx.tokenSymbol || 'tokens', decimals: 18 }"
+                                            :value="tx.amount"
+                                            convert-value
+                                            :use-placeholder="false"
+                                        />
+                                        <span>({{ tx.tokenType }}) From</span>
+                                        <a :href="`${explorerUrl}address/${tx.sender}`" rel="noopener" target="_blank">
+                                            <f-ellipsis :text="tx.sender || ''" overflow="middle" />
+                                        </a>
+                                        <span>To</span>
+                                        <a
+                                            :href="`${explorerUrl}address/${tx.recipient}`"
+                                            rel="noopener"
+                                            target="_blank"
+                                        >
+                                            <f-ellipsis :text="tx.recipient || ''" overflow="middle" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </template>
+                    <template v-else>
+                        <details v-if="item.transaction.tokenTransactions.length > 0" class="tokentxs">
+                            <summary>Details</summary>
+                            <div v-for="tx in item.transaction.tokenTransactions" :key="`${item.id}_${tx.trxIndex}`">
+                                <!-- Transfer 5 wFTM (ERC-20) From 0x.... To 0x... -->
+                                <span>{{ tx.type }}</span>
+                                <f-token-value
+                                    :token="{ symbol: tx.tokenSymbol || 'tokens', decimals: 18 }"
+                                    :value="tx.amount"
+                                    convert-value
+                                    :use-placeholder="false"
+                                />
+                                <span>({{ tx.tokenType }}) From</span>
+                                <a :href="`${explorerUrl}address/${tx.sender}`" rel="noopener" target="_blank">
+                                    <f-ellipsis :text="tx.sender || ''" overflow="middle" />
+                                </a>
+                                <span>To</span>
+                                <a :href="`${explorerUrl}address/${tx.recipient}`" rel="noopener" target="_blank">
+                                    <f-ellipsis :text="tx.recipient || ''" overflow="middle" />
+                                </a>
+                            </div>
+                        </details>
+                    </template>
                 </template>
             </f-data-table>
         </template>
@@ -132,9 +185,11 @@ import FCard from '../core/FCard/FCard.vue';
 import appConfig from '../../../app.config.js';
 import FEllipsis from '../core/FEllipsis/FEllipsis.vue';
 import FTransactionStatus from '../core/FTransactionStatus/FTransactionStatus.vue';
+import FTokenValue from '@/components/core/FTokenValue/FTokenValue.vue';
 
 export default {
     components: {
+        FTokenValue,
         FTransactionStatus,
         FEllipsis,
         FCard,
@@ -301,11 +356,6 @@ export default {
                     width: '150px',
                     cssClass: 'align-end',
                 },
-                {
-                    name: 'items',
-                    label: 'Items',
-                    itemProp: 'transaction.tokenTransactions',
-                },
             ],
         };
     },
@@ -373,3 +423,49 @@ export default {
     },
 };
 </script>
+
+<style lang="scss">
+.subrow {
+    height: auto !important;
+
+    td {
+        padding-top: 0;
+        vertical-align: top !important;
+    }
+}
+
+.tokentxs {
+    margin-top: -12px;
+
+    > div {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 6px;
+
+        a {
+            max-width: 200px;
+        }
+    }
+
+    .f-token-value {
+        font-weight: bold;
+    }
+}
+
+.mobile-item {
+    .tokentxs {
+        margin-top: 0;
+
+        > div {
+            line-height: 0.8;
+            margin-bottom: 16px;
+
+            a {
+                max-width: 120px;
+            }
+        }
+    }
+}
+</style>
