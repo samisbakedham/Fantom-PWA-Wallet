@@ -22,6 +22,7 @@ import { Walletlink } from '@/plugins/walletlink/Walletlink.js';
 import { WalletConnect } from '@/plugins/walletconnect/WalletConnect.js';
 import { Governance } from '@/plugins/governance/governance.js';
 import 'focus-visible';
+import './global-components.js';
 
 import './wallet.types.js';
 

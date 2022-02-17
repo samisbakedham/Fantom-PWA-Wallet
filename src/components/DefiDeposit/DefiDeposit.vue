@@ -213,17 +213,9 @@
             ref="confirmationWindow"
             body-min-height="350px"
             :steps-count="stepsCount"
-            :active-step="activeStep"
-        >
-            <f-view-transition :views-structure="viewsStructure" :app-node-id="currentAppNodeId" class="min-h-100">
-                <component
-                    :is="currentComponent"
-                    v-bind="currentComponentProperties"
-                    @change-component="onChangeComponent"
-                    @cancel-button-click="onCancelButtonClick"
-                ></component>
-            </f-view-transition>
-        </tx-confirmation-window>
+            :active-step="1"
+            @cancel-button-click="onCancelButtonClick"
+        />
     </div>
 </template>
 
@@ -239,19 +231,12 @@ import FCryptoSymbol from '../core/FCryptoSymbol/FCryptoSymbol.vue';
 import DefiTokenPickerWindow from '../windows/DefiTokenPickerWindow/DefiTokenPickerWindow.vue';
 import FTokenValue from '@/components/core/FTokenValue/FTokenValue.vue';
 import RatioInfo from '@/components/RatioInfo/RatioInfo.vue';
-import { componentViewMixin } from '@/mixins/component-view.js';
 import TxConfirmationWindow from '@/components/windows/TxConfirmationWindow/TxConfirmationWindow.vue';
-import DefiDepositConfirmation from '@/components/DefiDepositConfirmation/DefiDepositConfirmation.vue';
-import TransactionSuccessMessage from '@/components/TransactionSuccessMessage/TransactionSuccessMessage.vue';
-import FViewTransition from '@/components/core/FViewTransition/FViewTransition.vue';
 
 export default {
     name: 'DefiDeposit',
 
     components: {
-        FViewTransition,
-        TransactionSuccessMessage,
-        DefiDepositConfirmation,
         TxConfirmationWindow,
         RatioInfo,
         FTokenValue,
@@ -262,7 +247,7 @@ export default {
         FMessage,
     },
 
-    mixins: [eventBusMixin, componentViewMixin],
+    mixins: [eventBusMixin],
 
     props: {
         /** @type {DefiToken} */
@@ -332,9 +317,7 @@ export default {
             label: 'Amount of collateral',
             id: getUniqueId(),
             stepsCount: 2,
-            /** Active step (`<1, stepsCount>`) */
-            activeStep: 1,
-            viewsStructureRootNode: 'defi-home',
+            // viewsStructureRootNode: 'defi-home',
         };
     },
 
@@ -672,7 +655,7 @@ export default {
                 collateralHex: tokenBalance.balance,
                 token: { ...this.dToken },
                 steps: this.stepsCount,
-                step: this.activeStep,
+                step: this.$refs.confirmationWindow.activeStep,
             };
 
             if (this.deposit) {
@@ -682,7 +665,7 @@ export default {
             }
 
             if (!this.submitDisabled) {
-                this.changeComponent('defi-deposit-confirmation', {
+                this.$refs.confirmationWindow.changeComponent('defi-deposit-confirmation', {
                     params,
                     compName: 'defi-lock-unlock',
                     token: params.token,
@@ -730,31 +713,8 @@ export default {
 
         onCancelButtonClick() {
             this.currCollateral = '0';
-            this.activeStep = 1;
-            // toto by melo byt onwindowclose
-            this.currentComponent = '';
-            this.currentAppNodeId = '';
 
             this.init(true);
-
-            this.$refs.confirmationWindow.hide();
-            this.currentComponent = '';
-        },
-
-        /**
-         * @param {Object} _data
-         */
-        onChangeComponent(_data) {
-            const { data } = _data;
-
-            if (data && data.params && data.params.step) {
-                this.activeStep = data.params.step;
-            } else if (data && data.continueTo === 'hide-window') {
-                // last transaction success/reject message
-                this.activeStep = 1000;
-            }
-
-            componentViewMixin.methods.onChangeComponent.call(this, _data);
         },
 
         formatNumberByLocale,

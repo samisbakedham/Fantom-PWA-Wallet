@@ -13,9 +13,18 @@
         >
             <template #title>
                 <h2 data-focus>Confirmation</h2>
-                <f-steps v-if="stepsCount > 0" :labels="stepLabels" :active="activeStep" />
+                <f-steps v-if="stepsCount > 0" :labels="stepLabels" :active="dActiveStep" />
             </template>
-            <slot></slot>
+            <slot>
+                <f-view-transition :views-structure="viewsStructure" :app-node-id="currentAppNodeId" class="min-h-100">
+                    <component
+                        :is="currentComponent"
+                        v-bind="currentComponentProperties"
+                        @change-component="onChangeComponent"
+                        @cancel-button-click="onCancelButtonClick"
+                    ></component>
+                </f-view-transition>
+            </slot>
         </f-window>
     </div>
 </template>
@@ -23,11 +32,16 @@
 <script>
 import FWindow from '@/components/core/FWindow/FWindow.vue';
 import FSteps from '@/components/core/FSteps/FSteps.vue';
+import { componentViewMixin } from '@/mixins/component-view.js';
+import FViewTransition from '@/components/core/FViewTransition/FViewTransition.vue';
+import TransactionSuccessMessage from '@/components/TransactionSuccessMessage/TransactionSuccessMessage.vue';
 
 export default {
     name: 'TxConfirmationWindow',
 
-    components: { FSteps, FWindow },
+    components: { FViewTransition, FSteps, FWindow, TransactionSuccessMessage },
+
+    mixins: [componentViewMixin],
 
     props: {
         /** Minimal height of window's body. */
@@ -45,11 +59,17 @@ export default {
             type: Number,
             default: 1,
         },
+        structureRootNode: {
+            type: String,
+            default: '',
+        },
     },
 
     data() {
         return {
             currentComponent: '',
+            viewsStructureRootNode: this.structureRootNode,
+            dActiveStep: this.activeStep,
         };
     },
 
@@ -77,6 +97,31 @@ export default {
 
         hide() {
             this.$refs.win.hide();
+        },
+
+        onCancelButtonClick() {
+            this.$refs.win.hide();
+            this.currentAppNodeId = '';
+            this.currentComponent = '';
+            this.dActiveStep = 1;
+
+            this.$emit('cancel-button-click');
+        },
+
+        /**
+         * @param {Object} _data
+         */
+        onChangeComponent(_data) {
+            const { data } = _data;
+
+            if (data && data.params && data.params.step) {
+                this.dActiveStep = data.params.step;
+            } else if (data && data.continueTo === 'hide-window') {
+                // last transaction success/reject message
+                this.dActiveStep = 1000;
+            }
+
+            componentViewMixin.methods.onChangeComponent.call(this, _data);
         },
     },
 };
