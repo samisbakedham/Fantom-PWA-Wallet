@@ -143,7 +143,7 @@ export default {
             default: '',
         },
         maxFee: {
-            type: String,
+            type: [String, Number],
             default: '',
         },
     },

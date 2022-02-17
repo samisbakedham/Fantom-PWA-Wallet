@@ -205,17 +205,9 @@
             ref="confirmationWindow"
             body-min-height="350px"
             :steps-count="stepsCount"
-            :active-step="activeStep"
-        >
-            <f-view-transition :views-structure="viewsStructure" :app-node-id="currentAppNodeId" class="min-h-100">
-                <component
-                    :is="currentComponent"
-                    v-bind="currentComponentProperties"
-                    @change-component="onChangeComponent"
-                    @cancel-button-click="onCancelButtonClick"
-                ></component>
-            </f-view-transition>
-        </tx-confirmation-window>
+            :active-step="1"
+            @cancel-button-click="onCancelButtonClick"
+        />
     </div>
 </template>
 
@@ -230,14 +222,9 @@ import FCryptoSymbol from '../core/FCryptoSymbol/FCryptoSymbol.vue';
 import FSelectButton from '../core/FSelectButton/FSelectButton.vue';
 import { eventBusMixin } from '../../mixins/event-bus.js';
 import FTokenValue from '@/components/core/FTokenValue/FTokenValue.vue';
-import FPlaceholder from '@/components/core/FPlaceholder/FPlaceholder.vue';
 import RatioInfo from '@/components/RatioInfo/RatioInfo.vue';
 import DefiMintingMessage from '@/components/DefiMintingMessage/DefiMintingMessage.vue';
 import TxConfirmationWindow from '@/components/windows/TxConfirmationWindow/TxConfirmationWindow.vue';
-import FViewTransition from '@/components/core/FViewTransition/FViewTransition.vue';
-import DefiBorrowConfirmation from '@/components/DefiBorrowConfirmation/DefiBorrowConfirmation.vue';
-import TransactionSuccessMessage from '@/components/TransactionSuccessMessage/TransactionSuccessMessage.vue';
-import { componentViewMixin } from '@/mixins/component-view.js';
 
 /**
  * Common component for defi mint and repay.
@@ -246,22 +233,18 @@ export default {
     name: 'DefiBorrow',
 
     components: {
-        FViewTransition,
         TxConfirmationWindow,
         DefiMintingMessage,
         RatioInfo,
-        FPlaceholder,
         FTokenValue,
         FSelectButton,
         FCryptoSymbol,
         DefiTokenPickerWindow,
         FMessage,
         FSlider,
-        DefiBorrowConfirmation,
-        TransactionSuccessMessage,
     },
 
-    mixins: [eventBusMixin, componentViewMixin],
+    mixins: [eventBusMixin],
 
     props: {
         /** @type {DefiToken} */
@@ -331,8 +314,6 @@ export default {
             sliderLabels: ['0%', '25%', '50%', '75%', '100%'],
             id: getUniqueId(),
             stepsCount: this.repay ? 2 : 1,
-            /** Active step (`<1, stepsCount>`) */
-            activeStep: 1,
             viewsStructureRootNode: 'defi-home',
         };
     },
@@ -628,7 +609,7 @@ export default {
 
             if ((this.borrowOrRepay && this.repay) || this.decreasedDebt > 0) {
                 params.steps = this.stepsCount;
-                params.step = this.activeStep;
+                params.step = this.$refs.confirmationWindow.activeStep;
             }
 
             if (this.borrow) {
@@ -638,7 +619,7 @@ export default {
             }
 
             if (!this.submitDisabled) {
-                this.changeComponent('defi-borrow-confirmation', {
+                this.$refs.confirmationWindow.changeComponent('defi-borrow-confirmation', {
                     params,
                     compName: 'defi-mint-repay',
                     token: params.token,
@@ -686,30 +667,8 @@ export default {
 
         onCancelButtonClick() {
             this.currDebt = '0';
-            this.activeStep = 1;
-            this.currentComponent = '';
-            this.currentAppNodeId = '';
 
             this.init(true);
-
-            this.$refs.confirmationWindow.hide();
-            this.currentComponent = '';
-        },
-
-        /**
-         * @param {Object} _data
-         */
-        onChangeComponent(_data) {
-            const { data } = _data;
-
-            if (data && data.params && data.params.step) {
-                this.activeStep = data.params.step;
-            } else if (data && data.continueTo === 'hide-window') {
-                // last transaction success/reject message
-                this.activeStep = 1000;
-            }
-
-            componentViewMixin.methods.onChangeComponent.call(this, _data);
         },
 
         formatNumberByLocale,
