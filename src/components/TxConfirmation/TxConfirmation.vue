@@ -257,6 +257,10 @@ export default {
                 gasLimit: this.tx.gasLimit,
                 gasPrice: this.tx.gasPrice,
             };
+
+            if (!this.tx.gas) {
+                this.errorMsg = this.tx._error || 'Transaction Error';
+            }
         },
 
         sendTransaction(_rawTransaction) {
