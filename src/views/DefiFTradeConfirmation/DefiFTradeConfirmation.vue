@@ -7,9 +7,15 @@
             :send-button-label="sendButtonLabel"
             :password-label="passwordLabel"
             :on-send-transaction-success="onSendTransactionSuccess"
+            :set-tmp-pwd="params.step === 1"
+            :tmp-pwd-code="tmpPwdCode"
+            :show-cancel-button="true"
+            :window-mode="!isView"
+            class="min-h-100"
+            @cancel-button-click="$emit('cancel-button-click', $event)"
             @change-component="onChangeComponent"
         >
-            <h1 class="with-back-btn" data-focus>
+            <h1 v-if="isView" class="with-back-btn" data-focus>
                 Confirmation
                 <template v-if="params.steps">({{ params.step }}/{{ params.steps }})</template>
                 <f-back-button
@@ -79,6 +85,7 @@ import wftmUtils from 'fantom-ledgerjs/src/wftm-utils.js';
 import erc20Utils from 'fantom-ledgerjs/src/erc20-utils.js';
 import appConfig from '../../../app.config.js';
 import FTokenValue from '@/components/core/FTokenValue/FTokenValue.vue';
+import { getUniqueId } from '@/utils';
 
 /**
  * Common component for DefiBorrowFUSDConfirmation a DefiManageBorrowConfirmation
@@ -94,6 +101,17 @@ export default {
             type: String,
             default: '',
         },
+        props: {
+            type: Object,
+            default() {
+                return {};
+            },
+        },
+        /** Identifies if component is view (has route). */
+        isView: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {
@@ -102,6 +120,7 @@ export default {
             priceDecimals: 6,
             tx: {},
             amountFTM: 0,
+            tmpPwdCode: '',
         };
     },
 
@@ -114,7 +133,11 @@ export default {
         params() {
             const { $route } = this;
 
-            return $route && $route.params ? $route.params : {};
+            if (this.isView) {
+                return $route && $route.params ? $route.params : {};
+            }
+
+            return this.props;
         },
 
         hasCorrectParams() {
@@ -203,6 +226,8 @@ export default {
                 return;
             }
 
+            this.tmpPwdCode = params.tmpPwdCode || getUniqueId();
+
             if (!contractAddress) {
                 contractAddress = this.$defi.contracts.fMint;
             }
@@ -279,7 +304,7 @@ export default {
 
             if (this.params.step === 1) {
                 params.continueTo = `${this.compName}-confirmation2`;
-                params.continueToParams = { ...this.params, step: 2 };
+                params.continueToParams = { ...this.params, step: 2, isView: this.isView, tmpPwdCode: this.tmpPwdCode };
                 params.autoContinueToAfter = appConfig.settings.autoContinueToAfter;
                 params.continueButtonLabel = 'Next Step';
                 params.title = `${this.params.step}/${this.params.steps}  ${params.title}`;
@@ -291,10 +316,27 @@ export default {
                 };
             }
 
-            this.$router.replace({
-                name: transactionSuccessComp,
-                params,
-            });
+            if (this.isView) {
+                this.$router.replace({
+                    name: transactionSuccessComp,
+                    params,
+                });
+            } else {
+                if (this.params.step === 1) {
+                    params.continueToParams = {
+                        props: { ...params.continueToParams },
+                    };
+                    params.title = `Success`;
+                } else if (this.params.step === 2 || !this.params.step) {
+                    params.continueTo = 'hide-window';
+                    params.continueButtonLabel = 'Close';
+                }
+
+                this.$emit('change-component', {
+                    to: transactionSuccessComp,
+                    data: { ...params, cardOff: true, windowMode: true },
+                });
+            }
         },
 
         /**
@@ -304,6 +346,10 @@ export default {
          */
         onChangeComponent(_data) {
             let transactionRejectComp = `${this.compName}-transaction-reject-message`;
+
+            if (!this.isView) {
+                return;
+            }
 
             if (_data.to === 'transaction-reject-message') {
                 if (this.params.step === 2) {

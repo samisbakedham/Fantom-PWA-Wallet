@@ -161,6 +161,14 @@
             @defi-token-picked="onFromTokenPicked"
         />
         <defi-token-picker-window ref="pickToTokenWindow" :tokens="toTokens" @defi-token-picked="onToTokenPicked" />
+
+        <tx-confirmation-window
+            ref="confirmationWindow"
+            body-min-height="350px"
+            :steps-count="stepsCount"
+            :active-step="1"
+            @cancel-button-click="onCancelButtonClick"
+        />
     </div>
 </template>
 
@@ -177,11 +185,13 @@ import FTokenValue from '@/components/core/FTokenValue/FTokenValue.vue';
 import FAutoResizeInput from '@/components/core/FAutoResizeInput/FAutoResizeInput.vue';
 import FPlaceholder from '@/components/core/FPlaceholder/FPlaceholder.vue';
 import { focusElem } from '@/utils/aria.js';
+import TxConfirmationWindow from '@/components/windows/TxConfirmationWindow/TxConfirmationWindow.vue';
 
 export default {
     name: 'DefiFTrade',
 
     components: {
+        TxConfirmationWindow,
         FPlaceholder,
         FAutoResizeInput,
         FTokenValue,
@@ -213,6 +223,7 @@ export default {
             /** @type {DefiToken[]} */
             tokens: [],
             sliderLabels: ['0%', '25%', '50%', '75%', '100%'],
+            stepsCount: 1,
             id: getUniqueId(),
         };
     },
@@ -623,24 +634,36 @@ export default {
                 max: this.maxFromInputValue === this.fromValue,
             };
 
-            /*
-            if (ftmTokens.indexOf(fromToken.symbol) === -1 && ftmTokens.indexOf(toToken.symbol) === -1) {
-                params.steps = 2;
-                params.step = 1;
+            if (fromToken.canWrapFTM && toToken.symbol === 'FTM') {
+                this.stepsCount = 2;
+                params.steps = this.stepsCount;
+                params.step = this.$refs.confirmationWindow.activeStep;
             }
-            */
 
             if (!this.submitDisabled) {
-                this.$router.push({
+                this.$refs.confirmationWindow.changeComponent('defi-f-trade-confirmation', {
+                    props: { ...params },
+                });
+                this.$refs.confirmationWindow.show();
+
+                /*this.$router.push({
                     name: 'defi-ftrade-confirmation',
                     params,
-                });
+                });*/
             }
         },
 
         onAccountPicked() {
             this.init();
             this.resetInputValues();
+        },
+
+        onCancelButtonClick(cancelBtnClicked) {
+            if (!cancelBtnClicked) {
+                this.fromValue = 0;
+                this.toValue = 0;
+                this.init();
+            }
         },
     },
 };

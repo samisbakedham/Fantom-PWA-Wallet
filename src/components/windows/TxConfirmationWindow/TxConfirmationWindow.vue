@@ -70,6 +70,7 @@ export default {
             currentComponent: '',
             viewsStructureRootNode: this.structureRootNode,
             dActiveStep: this.activeStep,
+            cancelBtnClicked: true,
         };
     },
 
@@ -105,7 +106,9 @@ export default {
             this.currentComponent = '';
             this.dActiveStep = 1;
 
-            this.$emit('cancel-button-click');
+            this.$emit('cancel-button-click', this.cancelBtnClicked);
+
+            this.cancelBtnClicked = true;
         },
 
         /**
@@ -119,6 +122,7 @@ export default {
             } else if (data && data.continueTo === 'hide-window') {
                 // last transaction success/reject message
                 this.dActiveStep = 1000;
+                this.cancelBtnClicked = false;
             }
 
             componentViewMixin.methods.onChangeComponent.call(this, _data);

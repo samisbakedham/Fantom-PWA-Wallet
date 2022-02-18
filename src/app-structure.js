@@ -156,20 +156,29 @@ const appStructure = [
                 _c: [
                     {
                         id: 'defi-ftrade-confirmation',
+                        component: 'defi-f-trade-confirmation',
                         _c: [
                             {
                                 id: 'defi-ftrade-transaction-success-message',
+                                component: 'transaction-success-message',
                                 _c: [
                                     {
                                         id: 'defi-ftrade-confirmation2',
+                                        component: 'defi-f-trade-confirmation',
                                         _c: [
-                                            { id: 'defi-ftrade-transaction-success-message2' },
-                                            { id: 'defi-ftrade-transaction-reject-message2' },
+                                            {
+                                                id: 'defi-ftrade-transaction-success-message2',
+                                                component: 'transaction-success-message',
+                                            },
+                                            {
+                                                id: 'defi-ftrade-transaction-reject-message2',
+                                                component: 'transaction-reject-message',
+                                            },
                                         ],
                                     },
                                 ],
                             },
-                            { id: 'defi-ftrade-transaction-reject-message' },
+                            { id: 'defi-ftrade-transaction-reject-message', component: 'transaction-reject-message' },
                         ],
                     },
                 ],
