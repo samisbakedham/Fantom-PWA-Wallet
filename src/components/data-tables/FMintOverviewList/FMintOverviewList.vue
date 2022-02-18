@@ -203,7 +203,7 @@
                                 </router-link>
                             </template>
                         </template>
-                        <template v-if="canClaimRewards(item.rewards)">
+                        <!--                        <template v-if="canClaimRewards(item.rewards)">
                             ,<a
                                 v-if="canClaimRewards"
                                 href="#"
@@ -212,7 +212,7 @@
                             >
                                 Claim
                             </a>
-                        </template>
+                        </template>-->
                     </div>
                 </div>
                 <template v-else>
@@ -264,7 +264,7 @@
                             </router-link>
                         </template>
                     </template>
-                    <template v-if="canClaimRewards(item.rewards)">
+                    <!--                    <template v-if="canClaimRewards(item.rewards)">
                         <br />
                         <a
                             v-if="canClaimRewards"
@@ -274,7 +274,7 @@
                         >
                             Claim
                         </a>
-                    </template>
+                    </template>-->
                 </template>
             </template>
         </f-data-table>

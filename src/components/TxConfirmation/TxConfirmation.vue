@@ -258,8 +258,8 @@ export default {
                 gasPrice: this.tx.gasPrice,
             };
 
-            if (!this.tx.gas) {
-                this.errorMsg = this.tx._error || 'Transaction Error';
+            if (!this.tx.gas && this.tx._error) {
+                this.errorMsg = this.tx._error;
             }
         },
 

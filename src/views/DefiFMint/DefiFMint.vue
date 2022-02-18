@@ -217,18 +217,10 @@
         <tx-confirmation-window
             ref="confirmationWindow"
             body-min-height="350px"
-            :steps-count="stepsCount"
-            :active-step="activeStep"
-        >
-            <f-view-transition :views-structure="viewsStructure" :app-node-id="currentAppNodeId" class="min-h-100">
-                <component
-                    :is="currentComponent"
-                    v-bind="currentComponentProperties"
-                    @change-component="onChangeComponent"
-                    @cancel-button-click="onCancelButtonClick"
-                ></component>
-            </f-view-transition>
-        </tx-confirmation-window>
+            :steps-count="1"
+            :active-step="1"
+            @cancel-button-click="onCancelButtonClick"
+        />
 
         <!--
         <defi-menu v-else>
@@ -285,18 +277,12 @@ import CollateralPositionsList from '@/components/data-tables/CollateralPosition
 import SynthsPositionsList from '@/components/data-tables/SynthsPositionsList/SynthsPositionsList.vue';
 import AssetsList from '@/components/data-tables/AssetsList/AssetsList.vue';
 import TxConfirmationWindow from '@/components/windows/TxConfirmationWindow/TxConfirmationWindow.vue';
-import FViewTransition from '@/components/core/FViewTransition/FViewTransition.vue';
-import DefiFMintPushRewardsConfirmation from '@/views/DefiFMintPushRewardsConfirmation/DefiFMintPushRewardsConfirmation.vue';
-import DefiFMintClaimRewardsConfirmation from '@/views/DefiFMintClaimRewardsConfirmation/DefiFMintClaimRewardsConfirmation.vue';
-import TransactionSuccessMessage from '@/components/TransactionSuccessMessage/TransactionSuccessMessage.vue';
-import { componentViewMixin } from '@/mixins/component-view.js';
 import { focusElem } from '@/utils/aria.js';
 
 export default {
     name: 'DefiFMint',
 
     components: {
-        FViewTransition,
         TxConfirmationWindow,
         AssetsList,
         SynthsPositionsList,
@@ -309,12 +295,9 @@ export default {
         FPlaceholder,
         FTokenValue,
         FMessage,
-        DefiFMintPushRewardsConfirmation,
-        DefiFMintClaimRewardsConfirmation,
-        TransactionSuccessMessage,
     },
 
-    mixins: [eventBusMixin, componentViewMixin],
+    mixins: [eventBusMixin],
 
     data() {
         return {
@@ -341,10 +324,6 @@ export default {
             synthsPositionsRecordsCount: 0,
             assetsRecordsCount: 0,
             id: getUniqueId(),
-            stepsCount: 1,
-            /** Active step (`<1, stepsCount>`) */
-            activeStep: 1,
-            viewsStructureRootNode: 'defi-home',
         };
     },
 
@@ -551,14 +530,16 @@ export default {
 
         onClaimMintRewards(_data) {
             if (this.canClaimRewards) {
-                this.changeComponent('defi-f-mint-claim-rewards-confirmation', { params: _data });
+                this.$refs.confirmationWindow.changeComponent('defi-f-mint-claim-rewards-confirmation', {
+                    params: _data,
+                });
                 this.$refs.confirmationWindow.show();
             }
         },
 
         onClaimRewardsBtnClick() {
             if (this.canClaimRewards) {
-                this.changeComponent('defi-f-mint-claim-rewards-confirmation', {
+                this.$refs.confirmationWindow.changeComponent('defi-f-mint-claim-rewards-confirmation', {
                     params: { pendingRewards: this.pendingRewardsWFTM, token: { ...this.wftmToken } },
                 });
                 this.$refs.confirmationWindow.show();
@@ -567,7 +548,7 @@ export default {
 
         onPushRewardsBtnClick() {
             if (this.canPushRewards) {
-                this.changeComponent('defi-f-mint-push-rewards-confirmation', {
+                this.$refs.confirmationWindow.changeComponent('defi-f-mint-push-rewards-confirmation', {
                     params: { token: { ...this.wftmToken } },
                 });
                 this.$refs.confirmationWindow.show();
@@ -575,35 +556,7 @@ export default {
         },
 
         onCancelButtonClick() {
-            // this.currCollateral = '0';
-
-            this.activeStep = 1;
-            this.currentComponent = '';
-            this.currentAppNodeId = '';
-
-            // this.init();
-            // this.$router.go();
-
-            this.$refs.confirmationWindow.hide();
-            this.currentComponent = '';
-
             this.$emit('reload-view');
-        },
-
-        /**
-         * @param {Object} _data
-         */
-        onChangeComponent(_data) {
-            const { data } = _data;
-
-            if (data && data.params && data.params.step) {
-                this.activeStep = data.params.step;
-            } else if (data && data.continueTo === 'hide-window') {
-                // last transaction success/reject message
-                this.activeStep = 1000;
-            }
-
-            componentViewMixin.methods.onChangeComponent.call(this, _data);
         },
     },
 };

@@ -314,7 +314,6 @@ export default {
             sliderLabels: ['0%', '25%', '50%', '75%', '100%'],
             id: getUniqueId(),
             stepsCount: this.repay ? 2 : 1,
-            viewsStructureRootNode: 'defi-home',
         };
     },
 
