@@ -5,9 +5,13 @@ import DefiBorrowConfirmation from '@/components/DefiBorrowConfirmation/DefiBorr
 import DefiFMintPushRewardsConfirmation from '@/views/DefiFMintPushRewardsConfirmation/DefiFMintPushRewardsConfirmation.vue';
 import DefiFMintClaimRewardsConfirmation from '@/views/DefiFMintClaimRewardsConfirmation/DefiFMintClaimRewardsConfirmation.vue';
 import DefiFTradeConfirmation from '@/views/DefiFTradeConfirmation/DefiFTradeConfirmation.vue';
+import GovProposalConfirmation from '@/components/GovProposalConfirmation/GovProposalConfirmation.vue';
+import GovCancelVoteConfirmation from '@/components/GovCancelVoteConfirmation/GovCancelVoteConfirmation.vue';
 
 Vue.component('DefiDepositConfirmation', DefiDepositConfirmation);
 Vue.component('DefiBorrowConfirmation', DefiBorrowConfirmation);
 Vue.component('DefiFMintPushRewardsConfirmation', DefiFMintPushRewardsConfirmation);
 Vue.component('DefiFMintClaimRewardsConfirmation', DefiFMintClaimRewardsConfirmation);
 Vue.component('DefiFTradeConfirmation', DefiFTradeConfirmation);
+Vue.component('GovProposalConfirmation', GovProposalConfirmation);
+Vue.component('GovCancelVoteConfirmation', GovCancelVoteConfirmation);

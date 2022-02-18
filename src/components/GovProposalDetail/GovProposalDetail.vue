@@ -188,6 +188,14 @@
                         </div>
                     </div>
                 </div>
+
+                <tx-confirmation-window
+                    ref="confirmationWindow"
+                    body-min-height="350px"
+                    :steps-count="1"
+                    :active-step="1"
+                    @cancel-button-click="onCancelButtonClick"
+                />
             </template>
 
             <div v-if="proposalError" class="query-error">{{ proposalError }}</div>
@@ -219,11 +227,23 @@ import { fFetch } from '@/plugins/ffetch.js';
 import { WEIToFTM } from '@/utils/transactions.js';
 import FPlaceholder from '@/components/core/FPlaceholder/FPlaceholder.vue';
 import { focusElem } from '@/utils/aria.js';
+import TxConfirmationWindow from '@/components/windows/TxConfirmationWindow/TxConfirmationWindow.vue';
 
 export default {
     name: 'GovProposalDetail',
 
-    components: { FPlaceholder, FInfo, GovVotingInfo, FCard, FMessage, FForm, FSlider, FBackButton, PulseLoader },
+    components: {
+        TxConfirmationWindow,
+        FPlaceholder,
+        FInfo,
+        GovVotingInfo,
+        FCard,
+        FMessage,
+        FForm,
+        FSlider,
+        FBackButton,
+        PulseLoader,
+    },
 
     mixins: [viewHelpersMixin, eventBusMixin],
 
@@ -640,7 +660,23 @@ export default {
                 if (optionIdxs.length > 0) {
                     validator = this.items[formIndex];
 
-                    this.$router.push({
+                    const params = {
+                        proposalId: this.d_proposalId,
+                        governanceId: this.d_governanceId,
+                        validator: validator && validator.validator ? cloneObject(validator.validator) : {},
+                        proposal: cloneObject(this.d_proposal),
+                        // votes: optionIdxs.map((_idx) => opinionScales[_idx]),
+                        // votes: optionIdxs.map((_idx) => $fWallet.toWei(_idx)),
+                        votes: optionIdxs.map((_idx) => `0x${_idx.toString(16)}`),
+                    };
+
+                    this.$refs.confirmationWindow.changeComponent('gov-proposal-confirmation', {
+                        ...params,
+                        props: { ...params },
+                    });
+                    this.$refs.confirmationWindow.show();
+
+                    /*this.$router.push({
                         name: 'gov-proposal-confirmation',
                         params: {
                             proposalId: this.d_proposalId,
@@ -651,7 +687,7 @@ export default {
                             // votes: optionIdxs.map((_idx) => $fWallet.toWei(_idx)),
                             votes: optionIdxs.map((_idx) => `0x${_idx.toString(16)}`),
                         },
-                    });
+                    });*/
                 }
             }
         },
@@ -664,7 +700,20 @@ export default {
                 validator = this.items[formIndex];
 
                 if (validator && validator.validator) {
-                    this.$router.push({
+                    const params = {
+                        proposalId: this.d_proposalId,
+                        governanceId: this.d_governanceId,
+                        validator: cloneObject(validator.validator),
+                        proposal: cloneObject(this.d_proposal),
+                    };
+
+                    this.$refs.confirmationWindow.changeComponent('gov-cancel-vote-confirmation', {
+                        ...params,
+                        props: { ...params },
+                    });
+                    this.$refs.confirmationWindow.show();
+
+                    /*this.$router.push({
                         name: 'gov-cancel-vote-confirmation',
                         params: {
                             proposalId: this.d_proposalId,
@@ -672,13 +721,19 @@ export default {
                             validator: cloneObject(validator.validator),
                             proposal: cloneObject(this.d_proposal),
                         },
-                    });
+                    });*/
                 }
             }
         },
 
         onAccountPicked() {
             this.init();
+        },
+
+        onCancelButtonClick(cancelBtnClicked) {
+            if (!cancelBtnClicked) {
+                this.init();
+            }
         },
 
         timestampToDate,

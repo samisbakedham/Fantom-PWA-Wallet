@@ -370,23 +370,29 @@ const appStructure = [
                                 _c: [
                                     {
                                         id: 'gov-proposal-confirmation',
+                                        component: 'gov-proposal-confirmation',
                                         _c: [
                                             {
                                                 id: 'gov-proposal-transaction-success-message',
+                                                component: 'transaction-success-message',
                                             },
                                             {
                                                 id: 'gov-proposal-transaction-reject-message',
+                                                component: 'transaction-reject-message',
                                             },
                                         ],
                                     },
                                     {
                                         id: 'gov-cancel-vote-confirmation',
+                                        component: 'gov-cancel-vote-confirmation',
                                         _c: [
                                             {
                                                 id: 'gov-cancel-vote-transaction-success-message',
+                                                component: 'transaction-success-message',
                                             },
                                             {
                                                 id: 'gov-cancel-vote-transaction-reject-message',
+                                                component: 'transaction-reject-message',
                                             },
                                         ],
                                     },

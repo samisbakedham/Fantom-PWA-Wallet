@@ -7,12 +7,19 @@
             send-button-label="Submit"
             password-label="Please enter your wallet password to cancel vote"
             :on-send-transaction-success="onSendTransactionSuccess"
+            :show-cancel-button="!isView"
+            :window-mode="!isView"
+            class="min-h-100"
+            @cancel-button-click="$emit('cancel-button-click', $event)"
             @change-component="onChangeComponent"
         >
-            <h1 class="with-back-btn" data-focus>
+            <h1 v-if="isView" class="with-back-btn" data-focus>
                 Cancel Vote Confirmation
                 <f-back-button :route-name="getBackButtonRoute(compName)" :params="$route.params" />
             </h1>
+            <h2>
+                Cancel Vote
+            </h2>
 
             <div class="confirmation-info__">
                 <div v-if="d_validator.stakerAddress" class="gov-proposal-detail__validator-info align-center">
@@ -77,10 +84,16 @@ export default {
                 return {};
             },
         },
+        props: {
+            type: Object,
+            default() {
+                return {};
+            },
+        },
         /** Identifies if component is view (has route). */
         isView: {
             type: Boolean,
-            default: true,
+            default: false,
         },
     },
 
@@ -104,7 +117,11 @@ export default {
         params() {
             const { $route } = this;
 
-            return $route && $route.params ? $route.params : {};
+            if (this.isView) {
+                return $route && $route.params ? $route.params : {};
+            }
+
+            return this.props;
         },
 
         hasCorrectParams() {
@@ -145,17 +162,28 @@ export default {
         },
 
         onSendTransactionSuccess(_data) {
+            const transactionSuccessComp = 'gov-cancel-vote-transaction-success-message';
             const params = {
                 tx: _data.data.sendTransaction.hash,
                 title: 'Success',
                 continueTo: this.getBackButtonRoute(this.compName),
-                continueToParams: this.$route.params,
+                continueToParams: this.isView ? this.$route.params : { isView: this.isView },
             };
 
-            this.$router.replace({
-                name: `gov-cancel-vote-transaction-success-message`,
-                params,
-            });
+            if (this.isView) {
+                this.$router.replace({
+                    name: transactionSuccessComp,
+                    params,
+                });
+            } else {
+                params.continueTo = 'hide-window';
+                params.continueButtonLabel = 'Close';
+
+                this.$emit('change-component', {
+                    to: transactionSuccessComp,
+                    data: { ...params, cardOff: true, windowMode: true },
+                });
+            }
         },
 
         /**
@@ -164,6 +192,10 @@ export default {
          * @param {object} _data
          */
         onChangeComponent(_data) {
+            if (!this.isView) {
+                return;
+            }
+
             if (_data.to === 'transaction-reject-message') {
                 this.$router.replace({
                     name: 'gov-cancel-vote-transaction-reject-message',

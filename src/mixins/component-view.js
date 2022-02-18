@@ -50,7 +50,12 @@ export const componentViewMixin = {
                     this._viewsStructure = new Tree(this.viewsStructure);
                 }
 
-                const appNode = this._viewsStructure.getBy(compName, 'id');
+                let appNode = this._viewsStructure.getBy(compName, 'id');
+
+                if (!appNode) {
+                    appNode = this._viewsStructure.getBy(compName, 'component');
+                }
+
                 if (appNode && appNode.component) {
                     compName = appNode.component;
                     this.currentAppNodeId = appNode.id;
