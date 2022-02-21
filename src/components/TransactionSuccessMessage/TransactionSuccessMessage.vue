@@ -177,6 +177,10 @@ export default {
 
                     this.loading = false;
 
+                    if (this.continueTo === 'hide-window') {
+                        this.$emit('step', 1000);
+                    }
+
                     if (this.autoContinueToAfter > 0) {
                         this._tId = setTimeout(() => {
                             this.onContinueBtnClick();
@@ -192,17 +196,39 @@ export default {
             }
         },
 
+        getParams(obj) {
+            let params = null;
+
+            if (obj) {
+                if (obj.params) {
+                    params = obj.params;
+                } else if (obj.props) {
+                    params = obj.props;
+                }
+            }
+
+            return params;
+        },
+
         onContinueBtnClick() {
+            const { continueToParams } = this;
+
             if (this.continueTo === 'account-history' || this.continueToIsRoute) {
-                this.$router.replace({ name: this.continueTo, params: this.continueToParams });
+                this.$router.replace({ name: this.continueTo, params: continueToParams });
             } else if (this.continueTo === 'hide-window') {
                 this.$emit('cancel-button-click');
             } else {
                 this.$emit('change-component', {
                     to: this.continueTo,
                     from: 'transaction-success-message',
-                    data: this.continueToParams,
+                    data: continueToParams,
                 });
+            }
+
+            const params = this.getParams(continueToParams);
+
+            if (params && params.step) {
+                this.$emit('step', params.step);
             }
         },
     },

@@ -22,6 +22,7 @@
                         v-bind="currentComponentProperties"
                         @change-component="onChangeComponent"
                         @cancel-button-click="onCancelButtonClick"
+                        @step="onStep"
                     ></component>
                 </f-view-transition>
             </slot>
@@ -116,23 +117,16 @@ export default {
          */
         onChangeComponent(_data) {
             const { data } = _data;
-            let params = null;
 
-            if (data && data.params) {
-                params = data.params;
-            } else if (data && data.continueToParams && data.continueToParams.props) {
-                params = data.continueToParams.props;
-            }
-
-            if (params && params.step) {
-                this.dActiveStep = params.step;
-            } else if (data && data.continueTo === 'hide-window') {
-                // last transaction success/reject message
-                this.dActiveStep = 1000;
+            if (data && data.continueTo === 'hide-window') {
                 this.cancelBtnClicked = false;
             }
 
             componentViewMixin.methods.onChangeComponent.call(this, _data);
+        },
+
+        onStep(step) {
+            this.dActiveStep = step;
         },
     },
 };
