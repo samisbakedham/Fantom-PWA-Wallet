@@ -92,6 +92,14 @@
         <div class="funiswap__bottom-box">
             <f-uniswap-pair-liquidity-info :pair="dPair" :from-token="fromToken" :to-token="toToken" />
         </div>
+
+        <tx-confirmation-window
+            ref="confirmationWindow"
+            body-min-height="350px"
+            :steps-count="2"
+            :active-step="1"
+            @cancel-button-click="onCancelButtonClick"
+        />
     </section>
 </template>
 
@@ -108,11 +116,20 @@ import { TokenPairs } from '@/utils/token-pairs.js';
 import FBackButton from '@/components/core/FBackButton/FBackButton.vue';
 import { getAppParentNode } from '@/app-structure.js';
 import { focusElem } from '@/utils/aria.js';
+import TxConfirmationWindow from '@/components/windows/TxConfirmationWindow/TxConfirmationWindow.vue';
 
 export default {
     name: 'FUniswapRemoveLiquidity',
 
-    components: { FBackButton, FUniswapPairLiquidityInfo, FCryptoSymbol, FSlider, FTokenValue, FCard },
+    components: {
+        TxConfirmationWindow,
+        FBackButton,
+        FUniswapPairLiquidityInfo,
+        FCryptoSymbol,
+        FSlider,
+        FTokenValue,
+        FCard,
+    },
 
     mixins: [pollingMixin],
 
@@ -436,19 +453,31 @@ export default {
                 currLiquidity: parseFloat(this.currLiquidity),
                 // share: this.share * (parseFloat(this.currLiquidity) / 100),
                 steps: 2,
-                step: 1,
+                step: this.$refs.confirmationWindow.activeStep,
             };
 
             if (!this.submitDisabled) {
-                this.$router.push({
+                this.$refs.confirmationWindow.changeComponent('funiswap-remove-liquidity-confirmation', {
+                    props: { ...params },
+                });
+                this.$refs.confirmationWindow.show();
+
+                /*this.$router.push({
                     name: 'funiswap-remove-liquidity-confirmation',
                     params,
-                });
+                });*/
             }
         },
 
         onAccountPicked() {
             this.init();
+        },
+
+        onCancelButtonClick(cancelBtnClicked) {
+            if (!cancelBtnClicked) {
+                this.init();
+                this.currLiquidity = '0';
+            }
         },
     },
 };

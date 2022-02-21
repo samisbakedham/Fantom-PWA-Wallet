@@ -9,10 +9,14 @@
             :tmp-pwd-count="params.step === 1 ? 2 : 0"
             :send-button-label="sendButtonLabel"
             :password-label="passwordLabel"
+            :show-cancel-button="!isView"
+            :window-mode="!isView"
+            class="min-h-100"
             :on-send-transaction-success="onSendTransactionSuccess"
+            @cancel-button-click="$emit('cancel-button-click', $event)"
             @change-component="onChangeComponent"
         >
-            <h1 class="with-back-btn" data-focus>
+            <h1 v-if="isView" class="with-back-btn" data-focus>
                 Confirm Supply
                 <template v-if="params.steps">({{ params.step }}/{{ params.steps }})</template>
                 <f-back-button
@@ -108,6 +112,17 @@ export default {
             type: String,
             default: '',
         },
+        props: {
+            type: Object,
+            default() {
+                return {};
+            },
+        },
+        /** Identifies if component is view (has route). */
+        isView: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {
@@ -129,7 +144,11 @@ export default {
         params() {
             const { $route } = this;
 
-            return $route && $route.params ? $route.params : {};
+            if (this.isView) {
+                return $route && $route.params ? $route.params : {};
+            }
+
+            return this.props;
         },
 
         hasCorrectParams() {
@@ -318,10 +337,27 @@ export default {
                 };
             }
 
-            this.$router.replace({
-                name: transactionSuccessComp,
-                params,
-            });
+            if (this.isView) {
+                this.$router.replace({
+                    name: transactionSuccessComp,
+                    params,
+                });
+            } else {
+                if (this.params.step === 1 || this.params.step === 2) {
+                    params.continueToParams = {
+                        props: { ...params.continueToParams },
+                    };
+                    params.title = `Success`;
+                } else if (this.params.step === 3 || !this.params.step) {
+                    params.continueTo = 'hide-window';
+                    params.continueButtonLabel = 'Close';
+                }
+
+                this.$emit('change-component', {
+                    to: transactionSuccessComp,
+                    data: { ...params, cardOff: true, windowMode: true },
+                });
+            }
         },
 
         /**
@@ -330,6 +366,10 @@ export default {
          * @param {object} _data
          */
         onChangeComponent(_data) {
+            if (!this.isView) {
+                return;
+            }
+
             let transactionRejectComp = `${this.confirmationCompName}-transaction-reject-message`;
 
             if (_data.to === 'transaction-reject-message') {

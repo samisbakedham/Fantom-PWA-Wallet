@@ -210,6 +210,14 @@
             :tokens="tokenPickerTokens"
             @erc20-token-picked="onToTokenPicked"
         />
+
+        <tx-confirmation-window
+            ref="confirmationWindow"
+            body-min-height="350px"
+            :steps-count="2"
+            :active-step="1"
+            @cancel-button-click="onCancelButtonClick"
+        />
     </div>
 </template>
 
@@ -229,12 +237,14 @@ import Erc20TokenPickerWindow from '@/components/windows/Erc20TokenPickerWindow/
 import appConfig from '../../../../app.config.js';
 import FMessage from '@/components/core/FMessage/FMessage.vue';
 import { focusElem } from '@/utils/aria.js';
+import TxConfirmationWindow from '@/components/windows/TxConfirmationWindow/TxConfirmationWindow.vue';
 // import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 
 export default {
     name: 'FUniswapSwap',
 
     components: {
+        TxConfirmationWindow,
         FMessage,
         Erc20TokenPickerWindow,
         FPlaceholder,
@@ -978,23 +988,34 @@ export default {
                 toToken: { ...toToken },
                 slippageTolerance: this.fUniswapSlippageTolerance,
                 steps: 2,
-                step: 1,
+                step: this.$refs.confirmationWindow.activeStep,
                 minimumReceived: this.minimumReceived,
                 maximumSold: this.maximumSold,
                 max: this.maxFromInputValue === this.fromValue,
             };
 
             if (!this.submitDisabled) {
-                this.$router.push({
+                this.$refs.confirmationWindow.changeComponent('funiswap-swap-confirmation', {
+                    props: { ...params },
+                });
+                this.$refs.confirmationWindow.show();
+
+                /*this.$router.push({
                     name: 'funiswap-swap-confirmation',
                     params,
-                });
+                });*/
             }
         },
 
         onAccountPicked() {
             this.init(true);
             this.resetInputValues();
+        },
+
+        onCancelButtonClick(cancelBtnClicked) {
+            if (!cancelBtnClicked) {
+                this.init(true);
+            }
         },
     },
 };

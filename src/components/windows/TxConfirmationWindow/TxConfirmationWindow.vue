@@ -116,9 +116,16 @@ export default {
          */
         onChangeComponent(_data) {
             const { data } = _data;
+            let params = null;
 
-            if (data && data.params && data.params.step) {
-                this.dActiveStep = data.params.step;
+            if (data && data.params) {
+                params = data.params;
+            } else if (data && data.continueToParams && data.continueToParams.props) {
+                params = data.continueToParams.props;
+            }
+
+            if (params && params.step) {
+                this.dActiveStep = params.step;
             } else if (data && data.continueTo === 'hide-window') {
                 // last transaction success/reject message
                 this.dActiveStep = 1000;

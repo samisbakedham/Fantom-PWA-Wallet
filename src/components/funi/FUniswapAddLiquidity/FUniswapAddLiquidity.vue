@@ -180,6 +180,14 @@
             :tokens="tokenPickerTokens"
             @erc20-token-picked="onToTokenPicked"
         />
+
+        <tx-confirmation-window
+            ref="confirmationWindow"
+            body-min-height="350px"
+            :steps-count="3"
+            :active-step="1"
+            @cancel-button-click="onCancelButtonClick"
+        />
     </section>
 </template>
 
@@ -199,11 +207,13 @@ import { getAppParentNode } from '@/app-structure.js';
 import appConfig from '../../../../app.config.js';
 import { focusElem } from '@/utils/aria.js';
 import FMessage from '@/components/core/FMessage/FMessage.vue';
+import TxConfirmationWindow from '@/components/windows/TxConfirmationWindow/TxConfirmationWindow.vue';
 
 export default {
     name: 'FUniswapAddLiquidity',
 
     components: {
+        TxConfirmationWindow,
         FMessage,
         FBackButton,
         Erc20TokenPickerWindow,
@@ -374,7 +384,10 @@ export default {
                 if (_value.address && this.toToken.address) {
                     const dPair = await this.getUniswapPair();
 
-                    if (dPair.pairAddress !== this.dPair.pairAddress) {
+                    if (
+                        dPair.pairAddress !== this.dPair.pairAddress ||
+                        dPair.reservesTimeStamp !== this.dPair.reservesTimeStamp
+                    ) {
                         this.dPair = dPair;
                         this.setTokenPrices();
                     }
@@ -402,7 +415,10 @@ export default {
                 if (_value.address && this.fromToken.address) {
                     const dPair = await this.getUniswapPair();
 
-                    if (dPair.pairAddress !== this.dPair.pairAddress) {
+                    if (
+                        dPair.pairAddress !== this.dPair.pairAddress ||
+                        dPair.reservesTimeStamp !== this.dPair.reservesTimeStamp
+                    ) {
                         this.dPair = dPair;
                         this.setTokenPrices();
                     }
@@ -938,21 +954,37 @@ export default {
                 toToken: { ...toToken },
                 slippageTolerance: this.fUniswapSlippageTolerance,
                 steps: 3,
-                step: 1,
+                step: this.$refs.confirmationWindow.activeStep,
                 max: this.maxFromInputValue === this.fromValue,
             };
 
             if (!this.submitDisabled) {
-                this.$router.push({
+                this.$refs.confirmationWindow.changeComponent('funiswap-add-liquidity-confirmation', {
+                    props: { ...params },
+                });
+                this.$refs.confirmationWindow.show();
+
+                // TMP
+                setTimeout(() => {
+                    this.init(true);
+                }, 2000);
+
+                /*this.$router.push({
                     name: 'funiswap-add-liquidity-confirmation',
                     params,
-                });
+                });*/
             }
         },
 
         onAccountPicked() {
             this.init(true);
             this.resetInputValues();
+        },
+
+        onCancelButtonClick(cancelBtnClicked) {
+            if (!cancelBtnClicked) {
+                this.init(true);
+            }
         },
     },
 };
