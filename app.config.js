@@ -4,7 +4,7 @@ const appConfig = {
     // app description
     description: 'Fantom fWallet',
     // app keywords
-    keywords: 'fantom, metamask',
+    keywords: 'fantom, opera, wallet',
     // apollo client settings
     apollo: {
         // list of providers. if one of them is unavailable, another is randomly picked
