@@ -5,7 +5,9 @@
 
     max-width: 600px;
 
-    .title {
+    header .title {
+        overflow: initial;
+
         h2 {
             font-size: 28px;
             font-weight: normal;
@@ -20,6 +22,14 @@
     &.f-window {
         .body {
             overflow: hidden;
+        }
+    }
+
+    .fsteps {
+        --fsteps-padding: 16px;
+
+        &_cont {
+            max-width: 300px;
         }
     }
 }
