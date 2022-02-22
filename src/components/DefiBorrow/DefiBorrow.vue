@@ -664,10 +664,12 @@ export default {
             this.init();
         },
 
-        onCancelButtonClick() {
-            this.currDebt = '0';
+        onCancelButtonClick(cancelBtnClicked) {
+            if (!cancelBtnClicked) {
+                this.currDebt = '0';
 
-            this.init(true);
+                this.init();
+            }
         },
 
         formatNumberByLocale,
