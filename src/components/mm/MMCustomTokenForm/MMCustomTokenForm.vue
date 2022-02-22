@@ -1,5 +1,5 @@
 <template>
-    <div class="metamaskcustomtokenform">
+    <div class="mmcustomtokenform">
         <f-form center-form @f-form-submit="onFormSubmit">
             <f-input
                 type="text"
@@ -53,7 +53,7 @@ import FInput from '@/components/core/FInput/FInput.vue';
 import FMessage from '@/components/core/FMessage/FMessage.vue';
 
 export default {
-    name: 'MetamaskCustomTokenForm',
+    name: 'MMCustomTokenForm',
 
     components: { FMessage, FInput, FForm },
 

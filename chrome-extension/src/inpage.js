@@ -301,7 +301,7 @@ class FantomInpageProvider extends FantomEventEmitter {
 }
 
 window.ethereum = new FantomInpageProvider();
-window.web3 = { currentProvider: window.ethereum }; // for old Metamask compatibility
+window.web3 = { currentProvider: window.ethereum }; // for old MM compatibility
 window.addEventListener("message", function (event) {
     window.ethereum._receiveFromContentScript(event);
 });

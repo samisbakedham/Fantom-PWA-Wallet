@@ -56,7 +56,7 @@
 
         <f-window
             v-if="currentAccount.isMetamaskAccount"
-            ref="metamaskNoticeWindow"
+            ref="mmNoticeWindow"
             modal
             title="Notice"
             class="double-body-padding"
@@ -65,14 +65,14 @@
             animation-out="scale-center-leave-active"
         >
             <div class="align-center">
-                <div v-if="!$metamask.isInstalled()">
-                    Metamask is not installed.
+                <div v-if="!$mm.isInstalled()">
+                    MM is not installed.
                 </div>
-                <div v-else-if="!$metamask.isCorrectChainId()">
-                    Please, select Opera chain in Metamask.
+                <div v-else-if="!$mm.isCorrectChainId()">
+                    Please, select Opera chain in MM.
                 </div>
-                <div v-else-if="metamaskAccount.toLowerCase() !== currentAccount.address.toLowerCase()">
-                    Please, select account <b>{{ currentAccount.address }}</b> in Metamask.
+                <div v-else-if="mmAccount.toLowerCase() !== currentAccount.address.toLowerCase()">
+                    Please, select account <b>{{ currentAccount.address }}</b> in MM.
                 </div>
             </div>
         </f-window>
@@ -209,9 +209,9 @@ export default {
     },
 
     computed: {
-        ...mapState('metamask', {
-            metamaskAccount: 'account',
-            metamaskChainId: 'chainId',
+        ...mapState('mm', {
+            mmAccount: 'account',
+            mmChainId: 'chainId',
         }),
 
         ...mapState('walletConnect', {
@@ -223,19 +223,19 @@ export default {
     },
 
     watch: {
-        metamaskAccount() {
-            if (this.areMetamaskParamsOk()) {
-                this.$refs.metamaskNoticeWindow.hide();
+        mmAccount() {
+            if (this.areMMParamsOk()) {
+                this.$refs.mmNoticeWindow.hide();
             } else {
-                this.$refs.metamaskNoticeWindow.show();
+                this.$refs.mmNoticeWindow.show();
             }
         },
 
-        metamaskChainId() {
-            if (this.areMetamaskParamsOk()) {
-                this.$refs.metamaskNoticeWindow.hide();
+        mmChainId() {
+            if (this.areMMParamsOk()) {
+                this.$refs.mmNoticeWindow.hide();
             } else {
-                this.$refs.metamaskNoticeWindow.show();
+                this.$refs.mmNoticeWindow.show();
             }
         },
 
@@ -372,15 +372,12 @@ export default {
                         // this.errorMsg = _error.toString();
                     }
                 } else if (currentAccount.isMetamaskAccount) {
-                    if (this.areMetamaskParamsOk()) {
+                    if (this.areMMParamsOk()) {
                         const from = currentAccount.address;
                         const to = this.tx.to;
 
                         this.waiting = true;
-                        const txHash = await this.$metamask.signTransaction(
-                            cloneObject(this.tx),
-                            currentAccount.address
-                        );
+                        const txHash = await this.$mm.signTransaction(cloneObject(this.tx), currentAccount.address);
 
                         if (this.onSendTransactionSuccess && txHash) {
                             this.onSendTransactionSuccess({
@@ -394,7 +391,7 @@ export default {
                             });
                         }
                     } else {
-                        this.$refs.metamaskNoticeWindow.show();
+                        this.$refs.mmNoticeWindow.show();
                     }
 
                     this.waiting = false;
@@ -481,11 +478,11 @@ export default {
             }
         },
 
-        areMetamaskParamsOk() {
+        areMMParamsOk() {
             return (
-                this.$metamask.isInstalled() &&
-                this.metamaskAccount.toLowerCase() === this.currentAccount.address.toLowerCase() &&
-                this.$metamask.isCorrectChainId()
+                this.$mm.isInstalled() &&
+                this.mmAccount.toLowerCase() === this.currentAccount.address.toLowerCase() &&
+                this.$mm.isCorrectChainId()
             );
         },
 

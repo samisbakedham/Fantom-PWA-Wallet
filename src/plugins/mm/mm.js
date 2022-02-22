@@ -2,12 +2,12 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import appConfig from '../../../app.config.js';
 import Web3 from 'web3';
 import { store } from '@/store';
-import { SET_ACCOUNT, SET_CHAIN_ID } from '@/plugins/metamask/store.js';
-import './metamask.types.js';
+import { SET_ACCOUNT, SET_CHAIN_ID } from '@/plugins/mm/store.js';
+import './mm.types.js';
 
 const OPERA_CHAIN_ID = appConfig.chainId;
 
-/** @type {MetamaskChain} */
+/** @type {MMChain} */
 export const OPERA_MAINNET = {
     chainId: appConfig.mainnet.chainId,
     chainName: 'Fantom Opera Mainnet',
@@ -20,7 +20,7 @@ export const OPERA_MAINNET = {
     blockExplorerUrls: [appConfig.mainnet.explorerUrl],
 };
 
-/** @type {MetamaskChain} */
+/** @type {MMChain} */
 export const OPERA_TESTNET = {
     chainId: appConfig.testnet.chainId,
     chainName: 'Fantom Testnet',
@@ -33,32 +33,32 @@ export const OPERA_TESTNET = {
     blockExplorerUrls: [appConfig.testnet.explorerUrl],
 };
 
-/** @type {Metamask} */
-export let metamask = null;
+/** @type {MM} */
+export let mm = null;
 
 /**
- * Plugin for communication with Metamask.
+ * Plugin for communication with MM.
  */
-export class Metamask {
+export class MM {
     /**
      * @param {Vue} _Vue
      */
     static install(_Vue) {
-        if (!metamask) {
-            metamask = new Metamask();
-            _Vue.prototype.$metamask = metamask;
+        if (!mm) {
+            mm = new MM();
+            _Vue.prototype.$mm = mm;
         }
     }
 
     constructor() {
         /**
-         * Metamask provider.
+         * MM provider.
          *
          * @type {null}
          * @private
          */
         this._provider = null;
-        /** Signals, if Metamask is installed. */
+        /** Signals, if MM is installed. */
         this._installed = false;
         this._initialized = false;
         this._web3 = null;
@@ -95,7 +95,7 @@ export class Metamask {
     }
 
     /**
-     * Signals, if Metamask is installed.
+     * Signals, if MM is installed.
      *
      * @return {boolean}
      */
@@ -162,7 +162,7 @@ export class Metamask {
     }
 
     /**
-     * @param {MetamaskChain} _chain
+     * @param {MMChain} _chain
      * @return {Promise<*>}
      */
     async addEthereumChain(_chain) {
@@ -175,7 +175,7 @@ export class Metamask {
     }
 
     /**
-     * @param {MetamaskAsset} _asset
+     * @param {MMAsset} _asset
      * @return {Promise<*>}
      */
     async watchAsset(_asset) {
@@ -192,7 +192,7 @@ export class Metamask {
      * @private
      */
     _setChainId(_chainId) {
-        store.commit(`metamask/${SET_CHAIN_ID}`, _chainId);
+        store.commit(`mm/${SET_CHAIN_ID}`, _chainId);
     }
 
     /**
@@ -200,7 +200,7 @@ export class Metamask {
      * @private
      */
     _setAccount(_account) {
-        store.commit(`metamask/${SET_ACCOUNT}`, _account[0] || '');
+        store.commit(`mm/${SET_ACCOUNT}`, _account[0] || '');
     }
 
     /**

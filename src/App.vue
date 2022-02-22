@@ -26,7 +26,7 @@
         </f-breakpoints>
         <f-aria-alert />
         <f-network-status />
-        <metamask-account-picker-window ref="metamaskAccountPickerWindow" :metamask-account="dMetamaskAccount" />
+        <m-m-account-picker-window ref="mmAccountPickerWindow" :mm-account="dMMAccount" />
     </div>
 </template>
 
@@ -49,7 +49,7 @@ import FAriaAlert from './components/core/FAriaAlert/FAriaAlert.vue';
 import { filtersOptions } from './filters.js';
 import { eventBusMixin } from './mixins/event-bus.js';
 import FNetworkStatus from '@/components/core/FNetworkStatus/FNetworkStatus.vue';
-import MetamaskAccountPickerWindow from '@/components/metamask/MetamaskAccountPickerWindow/MetamaskAccountPickerWindow.vue';
+import MMAccountPickerWindow from '@/components/mm/MMAccountPickerWindow/MMAccountPickerWindow.vue';
 import { mapGetters, mapState } from 'vuex';
 import { switchRTLDirection } from '@/components/RTLSwitch/RTLSwitch.vue';
 
@@ -57,7 +57,7 @@ export default {
     name: 'App',
 
     components: {
-        MetamaskAccountPickerWindow,
+        MMAccountPickerWindow,
         FNetworkStatus,
         FAriaAlert,
         FBreakpoint,
@@ -68,14 +68,14 @@ export default {
 
     data() {
         return {
-            dMetamaskAccount: '',
+            dMMAccount: '',
         };
     },
 
     computed: {
         /*
-        ...mapState('metamask', {
-            metamaskAccount: 'account',
+        ...mapState('mm', {
+            mmAccount: 'account',
         }),
         */
 
@@ -209,13 +209,13 @@ export default {
         },
 
         /**
-         * @param {string} _account Metamask account.
+         * @param {string} _account MM account.
          */
-        showMetamaskAccountPickerWindow(_account) {
+        showMMAccountPickerWindow(_account) {
             if (_account) {
-                this.dMetamaskAccount = this.$fWallet.toChecksumAddress(_account);
+                this.dMMAccount = this.$fWallet.toChecksumAddress(_account);
             }
-            this.$refs.metamaskAccountPickerWindow.show();
+            this.$refs.mmAccountPickerWindow.show();
         },
 
         onFBreakpointChange(_event) {

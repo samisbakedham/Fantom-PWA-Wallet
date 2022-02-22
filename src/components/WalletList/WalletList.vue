@@ -26,7 +26,7 @@
 <script>
 import { cloneObject } from '@/utils';
 import { isAriaAction } from '@/utils/aria.js';
-import metamaskIcon from '../../assets/svg/metamask.svg';
+import mmIcon from '../../assets/svg/metamask.svg';
 import ledgerIcon from '../../assets/svg/ledger-logo-icon.svg';
 import coinbaseWalletIcon from '../../assets/svg/coinbase-wallet.svg';
 import walletConnectWalletIcon from '../../assets/svg/walletconnect-circle-blue.svg';
@@ -44,9 +44,9 @@ export default {
         return {
             wallets: [
                 {
-                    code: 'metamask',
+                    code: 'mm',
                     name: 'Metamask',
-                    icon: metamaskIcon,
+                    icon: mmIcon,
                     iconOriginal: true,
                     showLoading: true,
                 },

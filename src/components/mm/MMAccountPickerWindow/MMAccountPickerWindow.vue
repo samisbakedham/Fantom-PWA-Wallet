@@ -8,25 +8,25 @@
         animation-out="scale-center-leave-active"
         @window-hide="$emit('window-hide', $event)"
     >
-        <metamask-account-picker
-            :metamask-account="metamaskAccount"
-            @metamask-account-picker-cancel="onMetamaskAccountPickerCancel"
-            @metamask-account-added="onMetamaskAccountAdded"
+        <m-m-account-picker
+            :mm-account="mmAccount"
+            @mm-account-picker-cancel="onMMAccountPickerCancel"
+            @mm-account-added="onMMAccountAdded"
         />
     </f-window>
 </template>
 
 <script>
 import FWindow from '@/components/core/FWindow/FWindow.vue';
-import MetamaskAccountPicker from '@/components/metamask/MetamaskAccountPicker/MetamaskAccountPicker.vue';
+import MMAccountPicker from '@/components/mm/MMAccountPicker/MMAccountPicker.vue';
 
 export default {
-    name: 'MetamaskAccountPickerWindow',
+    name: 'MMAccountPickerWindow',
 
-    components: { MetamaskAccountPicker, FWindow },
+    components: { MMAccountPicker, FWindow },
 
     props: {
-        metamaskAccount: {
+        mmAccount: {
             type: String,
             default: '',
         },
@@ -37,11 +37,11 @@ export default {
             this.$refs.win.show();
         },
 
-        onMetamaskAccountPickerCancel() {
+        onMMAccountPickerCancel() {
             this.$refs.win.hide();
         },
 
-        onMetamaskAccountAdded() {
+        onMMAccountAdded() {
             this.$refs.win.hide();
         },
     },

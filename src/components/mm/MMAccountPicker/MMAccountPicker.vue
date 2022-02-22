@@ -1,21 +1,21 @@
 <template>
-    <div class="metamask-account-picker">
-        <div v-if="!$metamask.isInstalled()" class="metamask-not-installed">
-            Metamask is not installed. <br /><br />
-            <button class="btn large" :disabled="installMetamaskInProgress" @click="onInstallMetamaskClick">
-                Install Metamask <pulse-loader v-if="installMetamaskInProgress" color="#fff"></pulse-loader>
+    <div class="mm-account-picker">
+        <div v-if="!$mm.isInstalled()" class="mm-not-installed">
+            MM is not installed. <br /><br />
+            <button class="btn large" :disabled="installMMInProgress" @click="onInstallMMClick">
+                Install MM <pulse-loader v-if="installMMInProgress" color="#fff"></pulse-loader>
             </button>
         </div>
         <template v-else>
             <div v-if="!accountExists">
-                Would you like to add account <b>{{ dMetamaskAccount }}</b> ?
+                Would you like to add account <b>{{ dMMAccount }}</b> ?
             </div>
             <div v-else>
-                Account <b>{{ dMetamaskAccount }}</b> is already in your wallet list. Please, select another one.
+                Account <b>{{ dMMAccount }}</b> is already in your wallet list. Please, select another one.
             </div>
         </template>
 
-        <div v-if="$metamask.isInstalled()" class="form-buttons">
+        <div v-if="$mm.isInstalled()" class="form-buttons">
             <button v-show="!accountExists" class="btn large" @click="onAddAccountClick">Add Account</button>
             <button v-show="accountExists" class="btn large" @click="onOkClick">Ok</button>
         </div>
@@ -29,12 +29,12 @@ import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 import MetaMaskOnboarding from '@metamask/onboarding';
 
 export default {
-    name: 'MetamaskAccountPicker',
+    name: 'MMAccountPicker',
 
     components: { PulseLoader },
 
     props: {
-        metamaskAccount: {
+        mmAccount: {
             type: String,
             default: '',
         },
@@ -42,18 +42,18 @@ export default {
 
     data() {
         return {
-            dMetamaskAccount: '',
-            installMetamaskInProgress: false,
+            dMMAccount: '',
+            installMMInProgress: false,
         };
     },
 
     computed: {
-        ...mapState('metamask', ['account']),
+        ...mapState('mm', ['account']),
 
         ...mapGetters(['getAccountByAddress']),
 
         accountExists() {
-            return this.getAccountByAddress(this.dMetamaskAccount) && !this._closing;
+            return this.getAccountByAddress(this.dMMAccount) && !this._closing;
         },
     },
 
@@ -61,9 +61,9 @@ export default {
         account(_account) {
             if (!this._closing) {
                 if (_account) {
-                    this.dMetamaskAccount = this.$fWallet.toChecksumAddress(_account);
+                    this.dMMAccount = this.$fWallet.toChecksumAddress(_account);
                 } else {
-                    this.$emit('metamask-account-picker-cancel');
+                    this.$emit('mm-account-picker-cancel');
                 }
             }
         },
@@ -75,8 +75,8 @@ export default {
         /** @type {MetaMaskOnboarding} */
         this._onboarding = null;
 
-        if (this.metamaskAccount) {
-            this.dMetamaskAccount = this.$fWallet.toChecksumAddress(this.metamaskAccount);
+        if (this.mmAccount) {
+            this.dMMAccount = this.$fWallet.toChecksumAddress(this.mmAccount);
         }
     },
 
@@ -84,17 +84,17 @@ export default {
         async onAddAccountClick() {
             this._closing = true;
 
-            await this.$store.dispatch(ADD_METAMASK_ACCOUNT, this.dMetamaskAccount);
-            this.$router.push({ name: 'account-history', params: { address: this.dMetamaskAccount } });
-            this.$emit('metamask-account-added');
+            await this.$store.dispatch(ADD_METAMASK_ACCOUNT, this.dMMAccount);
+            this.$router.push({ name: 'account-history', params: { address: this.dMMAccount } });
+            this.$emit('mm-account-added');
         },
 
         onOkClick() {
-            this.$emit('metamask-account-picker-cancel');
+            this.$emit('mm-account-picker-cancel');
         },
 
-        onInstallMetamaskClick() {
-            this.installMetamaskInProgress = true;
+        onInstallMMClick() {
+            this.installMMInProgress = true;
             this._onboarding = new MetaMaskOnboarding();
             this._onboarding.startOnboarding();
         },
