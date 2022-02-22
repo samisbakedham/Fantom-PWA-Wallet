@@ -1,5 +1,5 @@
 <template>
-    <div class="metamaskcustomtokenwindow">
+    <div class="mmcustomtokenwindow">
         <f-window
             ref="win"
             modal
@@ -10,19 +10,19 @@
             animation-out="scale-center-leave-active"
             @window-hide="$emit('window-hide', $event)"
         >
-            <metamask-custom-token-form @custom-token-form-data="onCustomTokenFormData" />
+            <m-m-custom-token-form @custom-token-form-data="onCustomTokenFormData" />
         </f-window>
     </div>
 </template>
 
 <script>
 import FWindow from '@/components/core/FWindow/FWindow.vue';
-import MetamaskCustomTokenForm from '@/components/metamask/MetamaskCustomTokenForm/MetamaskCustomTokenForm.vue';
+import MMCustomTokenForm from '@/components/mm/MMCustomTokenForm/MMCustomTokenForm.vue';
 
 export default {
-    name: 'MetamaskCustomTokenWindow',
+    name: 'MMCustomTokenWindow',
 
-    components: { MetamaskCustomTokenForm, FWindow },
+    components: { MMCustomTokenForm, FWindow },
 
     methods: {
         show() {

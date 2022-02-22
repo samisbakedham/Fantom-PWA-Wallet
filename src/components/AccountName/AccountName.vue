@@ -35,7 +35,7 @@
         </template>
 
         <span
-            v-if="isActiveMetamaskAccount || isActiveCoinbaseWalletAccount || isActiveWalletConnectAccount"
+            v-if="isActiveMMAccount || isActiveCoinbaseWalletAccount || isActiveWalletConnectAccount"
             class="account-active"
         ></span>
     </span>
@@ -91,8 +91,8 @@ export default {
     },
 
     computed: {
-        ...mapState('metamask', {
-            metamaskAccount: 'account',
+        ...mapState('mm', {
+            mmAccount: 'account',
         }),
 
         ...mapState('walletConnect', {
@@ -126,10 +126,10 @@ export default {
             };
         },
 
-        isActiveMetamaskAccount() {
+        isActiveMMAccount() {
             const { address } = this.account;
 
-            return address.toLowerCase() === this.metamaskAccount;
+            return address.toLowerCase() === this.mmAccount;
         },
 
         isActiveCoinbaseWalletAccount() {

@@ -52,21 +52,21 @@ export default {
         async onWalletPicked(_wallet) {
             // this.$walletlink.disconnect();
 
-            if (_wallet.code === 'metamask') {
+            if (_wallet.code === 'mm') {
                 // root node (App.vue)
                 const appNode = this.$root.$children[0];
 
-                if (!this.$metamask.isInstalled()) {
-                    appNode.showMetamaskAccountPickerWindow('');
+                if (!this.$mm.isInstalled()) {
+                    appNode.showMMAccountPickerWindow('');
                     this.$refs.win.hide('fade-leave-active');
                     return;
                 }
 
                 try {
-                    const accounts = await this.$metamask.requestAccounts();
+                    const accounts = await this.$mm.requestAccounts();
 
                     if (accounts && appNode) {
-                        appNode.showMetamaskAccountPickerWindow(accounts[0]);
+                        appNode.showMMAccountPickerWindow(accounts[0]);
                     }
 
                     this.$refs.win.hide('fade-leave-active');

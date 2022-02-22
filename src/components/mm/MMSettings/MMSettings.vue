@@ -1,9 +1,9 @@
 <template>
-    <div class="metamasksettings">
+    <div class="mmsettings">
         <f-card class="f-card-double-padding">
             <div class="small-container">
-                <template v-if="isMetamaskInstalled">
-                    <div class="metamasksettings_section">
+                <template v-if="isMMInstalled">
+                    <div class="mmsettings_section">
                         <h3>Networks</h3>
                         <button
                             id="add_mainnet_btn"
@@ -25,7 +25,7 @@
                         </button>
                     </div>
 
-                    <div class="metamasksettings_section">
+                    <div class="mmsettings_section">
                         <h3>Assets</h3>
                         <button
                             id="add_token_btn"
@@ -71,15 +71,15 @@
                         @defi-token-picked="onDefiTokenPicked"
                     />
 
-                    <metamask-custom-token-window
+                    <m-m-custom-token-window
                         ref="customTokenWindow"
                         @window-hide="stopLoadingIndicators"
                         @custom-token-form-data="onCustomTokenFormData"
                     />
                 </template>
                 <template v-else>
-                    <button class="btn large" :disabled="installMetamaskInProgress" @click="onInstallMetamaskClick">
-                        Install Metamask <pulse-loader v-if="installMetamaskInProgress" color="#fff"></pulse-loader>
+                    <button class="btn large" :disabled="installMMInProgress" @click="onInstallMMClick">
+                        Install Metamask <pulse-loader v-if="installMMInProgress" color="#fff"></pulse-loader>
                     </button>
                 </template>
             </div>
@@ -89,29 +89,29 @@
 
 <script>
 import FCard from '@/components/core/FCard/FCard.vue';
-import { OPERA_MAINNET, OPERA_TESTNET } from '@/plugins/metamask/metamask.js';
+import { OPERA_MAINNET, OPERA_TESTNET } from '@/plugins/mm/mm.js';
 import FWindow from '@/components/core/FWindow/FWindow.vue';
 import { mapGetters } from 'vuex';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 import DefiTokenPickerWindow from '@/components/windows/DefiTokenPickerWindow/DefiTokenPickerWindow.vue';
 import MetaMaskOnboarding from '@metamask/onboarding';
-import MetamaskCustomTokenWindow from '@/components/metamask/MetamaskCustomTokenWindow/MetamaskCustomTokenWindow.vue';
+import MMCustomTokenWindow from '@/components/mm/MMCustomTokenWindow/MMCustomTokenWindow.vue';
 
 export default {
-    name: 'MetamaskSettings',
+    name: 'MMSettings',
 
-    components: { MetamaskCustomTokenWindow, DefiTokenPickerWindow, FWindow, FCard, PulseLoader },
+    components: { MMCustomTokenWindow, DefiTokenPickerWindow, FWindow, FCard, PulseLoader },
 
     data() {
         return {
-            isMetamaskInstalled: false,
+            isMMInstalled: false,
             popoverText: '',
             btnId: '',
             addFantomMainnetInProgress: false,
             addFantomTestnetInProgress: false,
             addTokenInProgress: false,
             addCustomTokenInProgress: false,
-            installMetamaskInProgress: false,
+            installMMInProgress: false,
             defiTokens: [],
             requestPendingMessage: 'Request already pending',
         };
@@ -150,15 +150,15 @@ export default {
             this.addFantomTestnetInProgress = false;
             this.addTokenInProgress = false;
             this.addCustomTokenInProgress = false;
-            this.installMetamaskInProgress = false;
+            this.installMMInProgress = false;
         },
 
         setInterval(_interval = 30) {
             this.clearInterval();
 
             this._intervalId = setInterval(() => {
-                if (this.$metamask._initialized) {
-                    this.isMetamaskInstalled = this.$metamask.isInstalled();
+                if (this.$mm._initialized) {
+                    this.isMMInstalled = this.$mm.isInstalled();
                     this.clearInterval();
                 }
             }, _interval);
@@ -187,7 +187,7 @@ export default {
             }
 
             try {
-                const response = await this.$metamask.addEthereumChain(chain);
+                const response = await this.$mm.addEthereumChain(chain);
 
                 if (response === null) {
                     this.showPopover(`${chain.chainName} was added to Metamask`, btnId);
@@ -223,7 +223,7 @@ export default {
             const btnId = _btnId || 'add_token_btn';
 
             try {
-                const response = await this.$metamask.watchAsset({
+                const response = await this.$mm.watchAsset({
                     type: 'ERC20',
                     options: {
                         address: _token.address,
@@ -252,8 +252,8 @@ export default {
             this.onDefiTokenPicked(_data, 'add_custom_token_btn');
         },
 
-        onInstallMetamaskClick() {
-            this.installMetamaskInProgress = true;
+        onInstallMMClick() {
+            this.installMMInProgress = true;
             this._onboarding = new MetaMaskOnboarding();
             this._onboarding.startOnboarding();
         },

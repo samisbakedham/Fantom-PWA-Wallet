@@ -3,7 +3,7 @@ import { store } from '@/store';
 export const SET_CHAIN_ID = 'setChainId';
 export const SET_ACCOUNT = 'setAccount';
 
-const metamaskStore = {
+const mmStore = {
     namespaced: true,
 
     state: {
@@ -31,4 +31,4 @@ const metamaskStore = {
     },
 };
 
-store.registerModule('metamask', metamaskStore);
+store.registerModule('mm', mmStore);

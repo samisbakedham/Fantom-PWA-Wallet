@@ -9,7 +9,7 @@
         <f-uniswap-settings />
 
         <h2>Metamask</h2>
-        <metamask-settings />
+        <m-m-settings />
 
         <h2>Links</h2>
         <settings-links />
@@ -18,14 +18,14 @@
 
 <script>
 import SettingsForm from '@/components/forms/SettingsForm.vue';
-import MetamaskSettings from '@/components/metamask/MetamaskSettings/MetamaskSettings.vue';
+import MMSettings from '@/components/mm/MMSettings/MMSettings.vue';
 import FUniswapSettings from '@/components/funi/FUniswapSettings/FUniswapSettings.vue';
 import SettingsLinks from '@/views/Settings/SettingsLinks.vue';
 
 export default {
     name: 'Settings',
 
-    components: { SettingsLinks, FUniswapSettings, MetamaskSettings, SettingsForm },
+    components: { SettingsLinks, FUniswapSettings, MMSettings, SettingsForm },
 };
 </script>
 
