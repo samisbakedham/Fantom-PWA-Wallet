@@ -1,5 +1,5 @@
 <template>
-    <div class="view-defi">
+    <div class="view-defi std-view">
         <template v-if="!currentAccount">
             <f-message type="error" alert with-icon>Bad wallet</f-message>
         </template>
