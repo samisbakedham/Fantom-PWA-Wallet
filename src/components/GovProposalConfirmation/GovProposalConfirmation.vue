@@ -36,7 +36,7 @@
                     <h3 class="gov-proposal-detail__sub-title">Your vote</h3>
                     <div class="gov-proposal-detail__cont-resolved">
                         <ul class="no-markers gov-proposal-detail__options" aria-label="list of proposals">
-                            <li v-for="(item, index) in d_proposal.options" :key="`govprpsl${index}`">
+                            <li v-for="(item, index) in proposal.options" :key="`govprpsl${index}`">
                                 <div class="row align-items-center no-collapse">
                                     <div class="col col-8 gov-proposal-detail__option">{{ item }}</div>
                                     <div class="col col-4 gov-proposal-detail__vote">{{ getVote(index) }}</div>
@@ -128,8 +128,6 @@ export default {
         return {
             tx: {},
             compName: toKebabCase(this.$options.name),
-            /**@type {GovernanceProposal} */
-            d_proposal: this.proposal,
             /** Proposal's od */
             d_proposalId: this.proposalId,
             /** Governance contract address */
@@ -168,7 +166,7 @@ export default {
         },
 
         hasCorrectParams() {
-            return !!this.d_proposalId && !!this.d_governanceId && !!this.d_proposal.options;
+            return !!this.d_proposalId && !!this.d_governanceId && !!this.proposal.options;
         },
     },
 
@@ -217,7 +215,7 @@ export default {
         getVote(_index) {
             // const { $fWallet } = this;
             const { d_votes } = this;
-            const { opinionScales } = this.d_proposal;
+            const { opinionScales } = this.proposal;
 
             if (opinionScales && d_votes && d_votes[_index] !== undefined) {
                 return parseInt(opinionScales[parseInt(d_votes[_index], 16)], 16);
