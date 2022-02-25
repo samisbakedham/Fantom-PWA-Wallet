@@ -1,5 +1,5 @@
 <template>
-    <div class="view-account">
+    <div class="view-account std-view">
         <h1 class="not-visible" data-focus>
             Wallet <span v-if="currentAccount">{{ currentAccount.name || currentAccount.address }}</span>
         </h1>
@@ -14,7 +14,9 @@
             <!--            <button @click="onRemoveAccountButClick">Remove wallet</button>-->
 
             <main class="main">
-                <router-view></router-view>
+                <f-view-transition watch-route :views-structure="viewsStructure">
+                    <router-view></router-view>
+                </f-view-transition>
             </main>
         </template>
     </div>
@@ -35,9 +37,12 @@ import AddressInfoBox from '../../components/AddressInfoBox/AddressInfoBox.vue';
 import FMessage from '../../components/core/FMessage/FMessage.vue';
 import { eventBusMixin } from '@/mixins/event-bus.js';
 import { focusElem } from '@/utils/aria.js';
+import FViewTransition from '@/components/core/FViewTransition/FViewTransition.vue';
+import { appStructureTree } from '@/app-structure.js';
 
 export default {
     components: {
+        FViewTransition,
         FMessage,
         AddressInfoBox,
         AccountHeader,
@@ -49,6 +54,12 @@ export default {
 
     computed: {
         ...mapGetters(['currentAccount']),
+
+        viewsStructure() {
+            const accountNode = appStructureTree.serialize(appStructureTree.get('account'));
+
+            return accountNode ? [JSON.parse(accountNode)] : [];
+        },
     },
 
     watch: {

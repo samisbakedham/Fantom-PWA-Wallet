@@ -1,11 +1,11 @@
 <template>
     <div class="blockchain-picker-form">
-        <f-card class="f-card-double-padding">
-            <h2 data-focus>
-                Send Opera FTM <span class="f-steps"><b>1</b> / 3</span>
-            </h2>
+        <h2 class="with-back-btn align-center" data-focus>
+            Send Opera FTM
+        </h2>
 
-            <h3 :id="labelId" class="align-center h2">Which blockchain are you sending FTM to?</h3>
+        <f-card class="f-card-double-padding">
+            <h3 :id="labelId" class="align-center">Which blockchain are you sending FTM to?</h3>
 
             <div class="bc-picker">
                 <f-form ref="form" :aria-labelledby="labelId" center-form @f-form-submit="onFormSubmit">
@@ -24,16 +24,19 @@
 
 <script>
 import FCard from '../core/FCard/FCard.vue';
-import { SET_SEND_DIRECTION } from '../../store/mutations.type.js';
+// import { SET_SEND_DIRECTION } from '../../store/mutations.type.js';
 import FForm from '../core/FForm/FForm.vue';
 import BlockchainPicker from '../BlockchainPicker/BlockchainPicker.vue';
 import { focusElem } from '@/utils/aria.js';
 import { getUniqueId } from '@/utils';
+import { viewHelpersMixin } from '@/mixins/view-helpers.js';
 
 export default {
     name: 'BlockchainPickerForm',
 
     components: { BlockchainPicker, FForm, FCard },
+
+    mixins: [viewHelpersMixin],
 
     data() {
         return {
@@ -41,7 +44,7 @@ export default {
         };
     },
 
-    activated() {
+    mounted() {
         focusElem(this.$el);
     },
 
@@ -63,11 +66,11 @@ export default {
                         break;
                 }
 
-                this.$store.commit(SET_SEND_DIRECTION, direction);
-
-                this.$emit('change-component', {
-                    to: 'send-transaction-form',
-                    from: 'blockchain-picker-form',
+                this.$router.push({
+                    name: 'account-send-transaction-form',
+                    params: {
+                        sendDirection: direction,
+                    },
                 });
             }
         },

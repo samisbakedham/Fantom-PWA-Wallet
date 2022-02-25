@@ -10,6 +10,23 @@ const appStructure = [
         id: 'wallet',
         _c: [
             {
+                id: 'account',
+                _c: [
+                    {
+                        id: 'account-history',
+                        _c: [
+                            {
+                                id: 'account-blockchain-picker-form',
+                                _c: [{ id: 'account-send-transaction-form' }, { id: 'account-receive' }],
+                            },
+                            {
+                                id: 'account-send-erc20',
+                            },
+                        ],
+                    },
+                ],
+            },
+            {
                 id: 'defi-fmint',
                 _c: [
                     { id: 'defi-lock' },

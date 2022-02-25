@@ -1,5 +1,5 @@
 <template>
-    <div class="view-account-receieve account-main-content-mt">
+    <div class="view-account-receieve">
         <receive-coins :verify-account="!!this.$route.params.verify" />
     </div>
 </template>

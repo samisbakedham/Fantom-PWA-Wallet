@@ -4,7 +4,7 @@
             Send your {{ $bnb.getFTMCurrencyByDirection(direction) }} to:
 
             <template v-if="address">
-                <h3 class="address break-word h2">
+                <h3 class="address break-word">
                     {{ address }} &nbsp;
                     <f-copy-button
                         :text="address"

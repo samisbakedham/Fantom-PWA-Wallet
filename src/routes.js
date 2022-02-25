@@ -5,7 +5,6 @@ import Welcome from './views/Welcome/Welcome.vue';
 // import RestoreAccount from './views/RestoreAccount/RestoreAccount.vue';
 import Account from './views/Account/Account.vue';
 import Dashboard from './views/Dashboard/Dashboard.vue';
-import AccountSend from './views/AccountSend.vue';
 import AccountReceive from './views/AccountReceive.vue';
 // import AccountStake from './views/AccountStake.vue';
 // import LedgerAccounts from './views/LedgerAccounts/LedgerAccounts.vue';
@@ -57,6 +56,8 @@ import GovCancelVoteConfirmation from '@/components/GovCancelVoteConfirmation/Go
 import FUniswapPairDetail from '@/components/funi/FUniswapPairDetail/FUniswapPairDetail.vue';
 import FMint from '@/views/FMint/FMint.vue';
 import FSwap from '@/views/FSwap/FSwap.vue';
+import BlockchainPickerForm from '@/components/forms/BlockchainPickerForm.vue';
+import SendTransactionForm from '@/components/forms/SendTransactionForm.vue';
 
 export const routes = [
     {
@@ -132,25 +133,46 @@ export const routes = [
                         name: 'account-history',
                         path: '',
                         component: AccountHistory,
-                        meta: { dontScrollToTop: true },
+                        // meta: { dontScrollToTop: true },
                     },
-                    {
+                    /* {
                         name: 'account-send',
                         path: 'send',
                         component: AccountSend,
-                        meta: { dontScrollToTop: true },
+                        // meta: { dontScrollToTop: true },
+                    }, */
+                    {
+                        name: 'account-blockchain-picker-form',
+                        path: 'send',
+                        component: BlockchainPickerForm,
+                    },
+                    {
+                        name: 'account-send-transaction-form',
+                        path: 'send/form',
+                        component: SendTransactionForm,
+                        // meta: { dontScrollToTop: true },
                     },
                     {
                         name: 'account-send-erc20',
                         path: 'send',
                         component: AccountSendErc20,
-                        meta: { dontScrollToTop: true },
+                        // meta: { dontScrollToTop: true },
                     },
                     {
                         name: 'account-receive',
                         path: 'receive',
                         component: AccountReceive,
-                        meta: { dontScrollToTop: true },
+                        // meta: { dontScrollToTop: true },
+                    },
+                    {
+                        name: 'account-transaction-success-message',
+                        path: 'send/confirmation/success',
+                        component: TransactionSuccessMessageView,
+                    },
+                    {
+                        name: 'account-transaction-reject-message',
+                        path: 'send/confirmation/reject',
+                        component: TransactionRejectMessageView,
                     },
                     /*
                     {

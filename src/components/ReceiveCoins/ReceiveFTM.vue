@@ -3,7 +3,7 @@
         <div class="align-center">
             Send your Opera FTM to:
 
-            <h3 class="address break-word h2" :class="addressCssClass">
+            <h3 class="address break-word" :class="addressCssClass">
                 {{ currentAccount.address }} &nbsp;
                 <icon
                     v-show="complete && verified"
@@ -66,7 +66,7 @@
 
             <p class="align-center">Please verify following address on your Ledger device:</p>
 
-            <h3 class="break-word h2 align-center">{{ currentAccount.address }}</h3>
+            <h3 class="break-word align-center">{{ currentAccount.address }}</h3>
         </f-window>
     </div>
 </template>

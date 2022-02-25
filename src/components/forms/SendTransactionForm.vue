@@ -1,20 +1,14 @@
 <template>
     <div class="send-transaction-form">
-        <f-card class="f-card-double-padding">
-            <f-form ref="form" center-form @f-form-submit="onFormSubmit">
-                <fieldset class="">
-                    <legend v-if="token.address" class="h2" data-focus>
-                        Send {{ tokenSymbol }} <span class="f-steps"><b>1</b> / 2</span>
-                    </legend>
-                    <legend v-else class="h2" data-focus>
-                        <div class="cont-with-back-btn">
-                            <span>
-                                Send Opera FTM <span class="f-steps"><b>2</b> / 3</span>
-                            </span>
-                            <button type="button" class="btn light" @click="onPreviousBtnClick">Back</button>
-                        </div>
-                    </legend>
+        <h2 :id="labelId" class="with-back-btn align-center" data-focus>
+            <template v-if="token.address"> Send {{ tokenSymbol }} </template>
+            <template v-else>Send Opera FTM</template>
+            <f-back-button :route-name="getBackButtonRoute('account-send-transaction-form')" />
+        </h2>
 
+        <f-card class="f-card-double-padding">
+            <f-form ref="form" center-form :aria-labelledby="labelId" @f-form-submit="onFormSubmit">
+                <fieldset class="">
                     <div class="form-body">
                         <div v-if="token.address" class="available-balance">
                             <div class="row align-items-center no-collapse">
@@ -58,7 +52,7 @@
                             field-size="large"
                             name="address"
                             :validator="checkAddress"
-                            :validate-on-input="sendDirection === 'OperaToOpera'"
+                            :validate-on-input="d_sendDirection === 'OperaToOpera'"
                         >
                             <template #bottom="sProps">
                                 <f-message v-show="sProps.showErrorMessage" type="error" alert with-icon>
@@ -72,14 +66,14 @@
                         </address-field>
 
                         <f-input
-                            v-if="sendDirection !== 'OperaToEthereum' && !token.address"
+                            v-if="d_sendDirection !== 'OperaToEthereum' && !token.address"
                             label="Memo (optional)"
                             field-size="large"
                             name="memo"
                         />
 
                         <div class="align-center form-buttons">
-                            <template v-if="sendDirection !== 'OperaToOpera'">
+                            <template v-if="d_sendDirection !== 'OperaToOpera'">
                                 <f-message type="warning" class="align-center">
                                     All bridge transactions incur a fee of {{ minFTMToTransfer }} FTM, deducted from the
                                     transfer amount.
@@ -118,12 +112,16 @@ import FTokenValue from '@/components/core/FTokenValue/FTokenValue.vue';
 import appConfig from '../../../app.config.js';
 import Resolution from '@unstoppabledomains/resolution';
 import { focusElem } from '@/utils/aria.js';
+import { viewHelpersMixin } from '@/mixins/view-helpers.js';
+import FBackButton from '@/components/core/FBackButton/FBackButton.vue';
+import { getUniqueId } from '@/utils';
 const resolution = new Resolution();
 
 export default {
     name: 'SendTransactionForm',
 
     components: {
+        FBackButton,
         FTokenValue,
         AddressField,
         FCard,
@@ -132,7 +130,7 @@ export default {
         FForm,
     },
 
-    mixins: [eventBusMixin],
+    mixins: [eventBusMixin, viewHelpersMixin],
 
     props: {
         /** @type {DefiToken} */
@@ -142,10 +140,15 @@ export default {
                 return {};
             },
         },
+        sendDirection: {
+            type: String,
+            default: '',
+        },
     },
 
     data() {
         return {
+            d_sendDirection: 'OperaToOpera',
             amountErrMsg: 'Invalid amount',
             gasPrice: '',
             amount: '',
@@ -154,11 +157,12 @@ export default {
             ETHOrBNBAccountBalance: '',
             minFTMToTransfer: appConfig.bnbridgeApi.minFTMToTransfer,
             resolvedAddress: null,
+            labelId: getUniqueId(),
         };
     },
 
     computed: {
-        ...mapGetters(['currentAccount', 'sendDirection']),
+        ...mapGetters(['currentAccount']),
 
         /**
          * @return {number}
@@ -219,7 +223,7 @@ export default {
         sendToLabel() {
             let sendTo = 'Send To (address or domain)';
 
-            switch (this.sendDirection) {
+            switch (this.d_sendDirection) {
                 case 'OperaToBinance':
                     sendTo = 'BNB Receive Address';
                     break;
@@ -237,7 +241,7 @@ export default {
         blockchain() {
             let blockchain = 'fantom';
 
-            switch (this.sendDirection) {
+            switch (this.d_sendDirection) {
                 case 'OperaToBinance':
                     blockchain = 'binance';
                     break;
@@ -251,6 +255,8 @@ export default {
     },
 
     created() {
+        this.setDataFromParams();
+
         this.$fWallet.getGasPrice().then((_gasPrice) => {
             this.gasPrice = _gasPrice;
         });
@@ -259,6 +265,7 @@ export default {
     },
 
     mounted() {
+        focusElem(this.$el);
         /*
         const el = findFirstFocusableDescendant(this.$el);
         if (el) {
@@ -267,26 +274,26 @@ export default {
         */
     },
 
-    activated() {
+    /*activated() {
         focusElem(this.$el);
-    },
+    },*/
 
     methods: {
         /**
          * @param {string} _value
          */
         async checkAddress(_value) {
-            const { sendDirection } = this;
+            const { d_sendDirection } = this;
             let validAddress = false;
             let value = _value.trim();
 
             this.ETHOrBNBAccountBalance = '';
 
-            if (sendDirection === 'OperaToOpera') {
+            if (d_sendDirection === 'OperaToOpera') {
                 value = (await this.resolveAddress(value, 'FTM', 'OPERA')) || value;
                 validAddress = this.$fWallet.isValidAddress(value);
                 this.sendToErrorMsg = 'Enter a valid Opera FTM address or domain name';
-            } else if (sendDirection === 'OperaToBinance') {
+            } else if (d_sendDirection === 'OperaToBinance') {
                 validAddress = this.$bnb.isBNBAddress(value);
                 this.sendToErrorMsg = 'Enter a valid BNB address';
 
@@ -310,7 +317,7 @@ export default {
                         }
                     }
                 }
-            } else if (sendDirection === 'OperaToEthereum') {
+            } else if (d_sendDirection === 'OperaToEthereum') {
                 validAddress = this.$bnb.isETHAddress(value);
                 this.sendToErrorMsg = 'Enter a valid ETH address';
 
@@ -355,7 +362,7 @@ export default {
                 : parseFloat(this.remainingBalance);
             const value = parseFloat(_value);
             const { minFTMToTransfer } = this;
-            const operaToBridge = this.sendDirection !== 'OperaToOpera';
+            const operaToBridge = this.d_sendDirection !== 'OperaToOpera';
             const { tokenSymbol } = this;
             let ok = false;
 
@@ -394,14 +401,14 @@ export default {
         */
         async onFormSubmit(_event) {
             const { data } = _event.detail;
-            const { sendDirection } = this;
+            const { d_sendDirection } = this;
 
             if (this.currentAccount && data.amount) {
-                if (sendDirection === 'OperaToOpera') {
+                if (d_sendDirection === 'OperaToOpera') {
                     data.opera_address = this.resolvedAddress || data.address;
-                } else if (sendDirection === 'OperaToBinance') {
+                } else if (d_sendDirection === 'OperaToBinance') {
                     data.bnb_address = data.address;
-                } else if (sendDirection === 'OperaToEthereum') {
+                } else if (d_sendDirection === 'OperaToEthereum') {
                     data.eth_address = data.address;
                 }
 
