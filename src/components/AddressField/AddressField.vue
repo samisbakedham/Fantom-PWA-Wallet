@@ -48,8 +48,17 @@ import FInput from '../core/FInput/FInput.vue';
 import { inputMixin } from '../../mixins/input.js';
 import AddressPickerWindow from '../windows/AddressPickerWindow/AddressPickerWindow.vue';
 import { mapGetters } from 'vuex';
+import { ethers } from 'ethers';
 import ContactDetailWindow from '../windows/ContactDetailWindow/ContactDetailWindow.vue';
 import { ADD_CONTACT } from '../../store/actions.type.js';
+import {
+  abi,
+  contract_address
+} from './fns.js';
+
+const ethersProvider = new ethers.providers.JsonRpcProvider("https://rpc.ftm.tools");
+const contract = new ethers.Contract(contract_address, abi, ethersProvider);
+const functions = contract.functions;
 
 /**
  * Input field with possibility to pick an address from address book or wallets and for adding address to address book.
@@ -113,6 +122,14 @@ export default {
                 );
         },
 
+        async resolveName(_name) {
+          var isOwned = await functions.isOwnedByMapping(_name);
+          if (isOwned[0]) {
+            var address = await functions.getOwnerOfName(_name);
+            this.inputValue = address[0];
+          }
+        },
+
         async validate() {
             await this.$refs.input.validate();
         },
@@ -151,6 +168,7 @@ export default {
         },
 
         onInput(_value) {
+            this.resolveName(_value.toUpperCase());
             this.setAddAddressBtnVisibility(_value.trim());
             this.$emit('input', _value);
         },
