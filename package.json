@@ -5,7 +5,7 @@
         "serve": "vue-cli-service serve --fix",
         "serve:chrome-extension:app": "vue-cli-service serve --mode chrome-extension-development",
         "serve.production": "vue-cli-service serve --mode production",
-        "build": "vue-cli-service serve --fix",
+        "build": "vue-cli-service build --fix",
         "build:chrome-extension": "npm run build:chrome-extension:app && npm run build:chrome-extension:background-js",
         "build:chrome-extension:app": "vue-cli-service build --mode chrome-extension-production && node chrome-extension/src/manifest.js",
         "build:chrome-extension:background-js": "vue-cli-service build --no-clean --mode chrome-extension-backgroundjs --formats umd,umd-min --skip-plugins html,pwa,apollo,i18n --target lib --name background chrome-extension/src/background.js",
