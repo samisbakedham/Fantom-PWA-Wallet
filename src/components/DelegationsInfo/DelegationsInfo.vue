@@ -1,6 +1,8 @@
 <template>
     <div class="delegations-info">
-        <f-tabs class="account-main-content-mt">
+        <h1 data-focus="staking">Staking</h1>
+
+        <f-tabs class="account-main-content-mt__">
             <template #delegations>
                 Wallet Delegations
                 <span class="f-records-count">({{ delegationsRecordsCount }})</span>
@@ -98,10 +100,9 @@ export default {
          * @param {object} _item
          */
         onDelegationsRowAction(_item) {
-            this.$emit('change-component', {
-                to: 'staking-info',
-                from: 'delegations-info',
-                data: {
+            this.$router.push({
+                name: 'staking-info',
+                params: {
                     stakerId: _item.delegation.toStakerId,
                 },
             });

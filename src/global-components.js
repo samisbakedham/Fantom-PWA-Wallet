@@ -11,6 +11,7 @@ import FUniswapSwapConfirmation from '@/views/funi/FUniswapSwapConfirmation/FUni
 import FUniswapAddLiquidityConfirmation from '@/views/funi/FUniswapAddLiquidityConfirmation/FUniswapAddLiquidityConfirmation.vue';
 import FUniswapRemoveLiquidityConfirmation from '@/views/funi/FUniswapRemoveLiquidityConfirmation/FUniswapRemoveLiquidityConfirmation.vue';
 import TransactionConfirmation from '@/components/TransactionConfirmation/TransactionConfirmation.vue';
+import ClaimRewardsConfirmation from '@/components/ClaimRewardsConfirmation/ClaimRewardsConfirmation.vue';
 
 Vue.component('DefiDepositConfirmation', DefiDepositConfirmation);
 Vue.component('DefiBorrowConfirmation', DefiBorrowConfirmation);
@@ -23,3 +24,4 @@ Vue.component('FUniswapSwapConfirmation', FUniswapSwapConfirmation);
 Vue.component('FUniswapAddLiquidityConfirmation', FUniswapAddLiquidityConfirmation);
 Vue.component('FUniswapRemoveLiquidityConfirmation', FUniswapRemoveLiquidityConfirmation);
 Vue.component('TransactionConfirmation', TransactionConfirmation);
+Vue.component('ClaimRewardsConfirmation', ClaimRewardsConfirmation);

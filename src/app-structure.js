@@ -48,6 +48,54 @@ const appStructure = [
                 ],
             },
             {
+                id: 'staking',
+                _c: [
+                    {
+                        id: 'staking-delegations-info',
+                        _c: [
+                            {
+                                id: 'staking-info',
+                                _c: [
+                                    {
+                                        id: 'staking-unstake-ftm',
+                                        _c: [
+                                            {
+                                                id: 'staking-transaction-confirmation',
+                                                component: 'transaction-confirmation',
+                                                _c: [
+                                                    {
+                                                        id: 'staking-transaction-success-message',
+                                                        component: 'transaction-success-message',
+                                                    },
+                                                    {
+                                                        id: 'staking-transaction-reject-message',
+                                                        component: 'transaction-reject-message',
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        id: 'staking-claim-rewards-confirmation',
+                                        component: 'claim-rewards-confirmation',
+                                        _c: [
+                                            {
+                                                id: 'staking-claim-rewards-confirmation-success-message',
+                                                component: 'transaction-success-message',
+                                            },
+                                            {
+                                                id: 'staking-claim-rewards-confirmation-reject-message',
+                                                component: 'transaction-reject-message',
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            },
+            {
                 id: 'defi-fmint',
                 _c: [
                     { id: 'defi-lock' },

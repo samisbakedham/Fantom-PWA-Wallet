@@ -7,14 +7,15 @@
             password-label="Please enter your wallet password to claim rewards"
             :hide-tx-form="cantRestake"
             :on-send-transaction-success="onSendTransactionSuccess"
-            @change-component="onChangeComponent"
+            card-off
+            :show-cancel-button="true"
+            :window-mode="true"
+            class="min-h-100"
+            @cancel-button-click="$emit('cancel-button-click', $event)"
         >
-            <h2 class="cont-with-back-btn" data-focus>
+            <h2 class="align-center" data-focus>
                 <span v-if="reStake">Claim & Restake</span>
                 <span v-else>Claim Rewards</span>
-                <button type="button" class="btn light" aria-label="Go to previous page" @click="onBackBtnClick">
-                    Back
-                </button>
             </h2>
 
             <div class="transaction-info">
@@ -194,35 +195,18 @@ export default {
 
         onSendTransactionSuccess(_data) {
             this.$emit('change-component', {
-                to: 'transaction-success-message',
+                to: 'staking-claim-rewards-confirmation-success-message',
                 from: 'claim-rewards-confirmation',
                 data: {
                     tx: _data.data.sendTransaction.hash,
                     successMessage: this.reStake ? 'Claim & Restake Rewards Successful' : 'Claiming Rewards Successful',
-                    continueTo: 'staking-info',
                     continueToParams: {
                         stakerId: this.stakerId,
                     },
-                },
-            });
-        },
-
-        /**
-         * Re-target `'change-component'` event.
-         *
-         * @param {object} _data
-         */
-        onChangeComponent(_data) {
-            this.$emit('change-component', _data);
-        },
-
-        onBackBtnClick() {
-            this.$emit('change-component', {
-                // to: this.fromDelegationList ? 'delegations-info' : 'staking-info',
-                to: 'staking-info',
-                from: 'claim-rewards-confirmation',
-                data: {
-                    stakerId: this.stakerId,
+                    continueTo: 'hide-window',
+                    continueButtonLabel: 'Close',
+                    cardOff: true,
+                    windowMode: true,
                 },
             });
         },

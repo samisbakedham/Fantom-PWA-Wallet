@@ -66,6 +66,7 @@ import voteIcon from '../../assets/svg/thumb.svg';
 */
 
 const ACCOUNT_DEFAULT_VIEW = 'account-history';
+const STAKING_DEFAULT_VIEW = 'staking-delegations-info';
 
 /**
  * Main menu.
@@ -112,7 +113,7 @@ export default {
                 },
                 {
                     url: {
-                        name: 'staking',
+                        name: STAKING_DEFAULT_VIEW,
                     },
                     title: 'Staking',
                     icon: stakingIcon,
@@ -266,7 +267,7 @@ export default {
          */
         setWalletUrl(_account) {
             this.setMenuItemUrl('walletLink', _account);
-            this.setMenuItemUrl('stakingLink', _account, 'staking');
+            this.setMenuItemUrl('stakingLink', _account, STAKING_DEFAULT_VIEW);
             // this.setMenuItemUrl('deFiLink', _account, 'defi-home');
             this.setMenuItemUrl('fmintLink', _account, 'defi-fmint');
             this.setMenuItemUrl('fswapLink', _account, 'defi-ftrade');

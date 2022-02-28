@@ -1,21 +1,12 @@
 <template>
     <div ref="doc" class="stake-ftm" tabindex="0">
-        <f-card class="f-card-double-padding f-data-layout" tag="section" :aria-labelledby="infoId">
-            <h2 :id="infoId" class="cont-with-back-btn" aria-label="Staking info" data-focus>
-                <span>Staking</span>
-                <template v-if="stakerId">
-                    <a
-                        href="#"
-                        class="btn light break-word"
-                        style="max-width: 100%;"
-                        aria-label="Go to previous page"
-                        @click.prevent="onPreviousBtnClick"
-                    >
-                        Back
-                    </a>
-                </template>
-            </h2>
+        <h1 :id="infoId" class="with-back-btn align-center" aria-label="Delegation" data-focus>
+            <span>Delegation</span>
+            <f-back-button ref="backButton" :route-name="getBackButtonRoute('staking-info')" />
+        </h1>
+        <br />
 
+        <f-card class="f-card-double-padding f-data-layout" tag="section" :aria-labelledby="infoId">
             <div class="row no-vert-col-padding collapse-md">
                 <div class="col">
                     <div class="row no-collapse">
@@ -275,6 +266,15 @@
                 @withdraw-request-selected="onWithdrawRequestSelected"
             />
         </f-card>
+
+        <tx-confirmation-window
+            ref="confirmationWindow"
+            body-min-height="350px"
+            window-class="send-transaction-form-tx-window"
+            :steps-count="stepsCount"
+            :active-step="activeStep"
+            @cancel-button-click="onCancelButtonClick"
+        />
     </div>
 </template>
 
@@ -292,11 +292,24 @@ import { SFC_CLAIM_MAX_EPOCHS } from '@/plugins/fantom-web3-wallet.js';
 import dayjs from 'dayjs';
 import FTMTokenValue from '@/components/core/FTMTokenValue/FTMTokenValue.vue';
 import { getUniqueId } from '@/utils';
+import { viewHelpersMixin } from '@/mixins/view-helpers.js';
+import FBackButton from '@/components/core/FBackButton/FBackButton.vue';
+import TxConfirmationWindow from '@/components/windows/TxConfirmationWindow/TxConfirmationWindow.vue';
 
 export default {
     name: 'StakingInfo',
 
-    components: { FTMTokenValue, FPlaceholder, FMessage, WithdrawRequestList, FCard },
+    components: {
+        TxConfirmationWindow,
+        FBackButton,
+        FTMTokenValue,
+        FPlaceholder,
+        FMessage,
+        WithdrawRequestList,
+        FCard,
+    },
+
+    mixins: [viewHelpersMixin],
 
     props: {
         /***/
@@ -313,6 +326,7 @@ export default {
 
     data() {
         return {
+            d_stakerId: '',
             isFluidStakingActive: false,
             lockedUntil: '',
             isDelegationLocked: false,
@@ -321,6 +335,8 @@ export default {
             claimMaxEpochs: SFC_CLAIM_MAX_EPOCHS,
             /** @type {DefiToken} */
             sftmToken: {},
+            stepsCount: 1,
+            activeStep: 1,
             infoId: getUniqueId(),
             undelegationId: getUniqueId(),
         };
@@ -587,7 +603,7 @@ export default {
             }
 
             if (!delegation) {
-                delegation = await this.fetchDelegation(this.stakerId);
+                delegation = await this.fetchDelegation(this.d_stakerId);
                 this._delegation = delegation;
                 this.isFluidStakingActive = delegation.isFluidStakingActive;
                 this.lockedUntil = delegation.lockedUntil;
@@ -627,6 +643,8 @@ export default {
     },
 
     created() {
+        this.setDataFromParams();
+
         this._accountInfo = null;
         this._delegation = null;
     },
@@ -658,7 +676,7 @@ export default {
                 data: {
                     increaseDelegation: !!_increaseDelegation,
                     stakerInfo,
-                    stakerId: this.stakerId,
+                    stakerId: this.d_stakerId,
                 },
             });
         },
@@ -671,7 +689,19 @@ export default {
             const accountInfo = await this.accountInfo;
             const stakerInfo = await this.stakerInfo;
 
-            this.$emit('change-component', {
+            this.$router.push({
+                name: 'staking-unstake-ftm',
+                params: {
+                    accountInfo: {
+                        ...accountInfo,
+                        stakerInfo,
+                        withdrawRequestsAmount: this.withdrawRequestsAmount,
+                    },
+                    stakerId: this.d_stakerId,
+                },
+            });
+
+            /*this.$emit('change-component', {
                 to: 'unstake-f-t-m',
                 from: 'staking-info',
                 data: {
@@ -680,9 +710,9 @@ export default {
                         stakerInfo,
                         withdrawRequestsAmount: this.withdrawRequestsAmount,
                     },
-                    stakerId: this.stakerId,
+                    stakerId: this.d_stakerId,
                 },
-            });
+            });*/
         },
 
         lockDelegation() {
@@ -694,7 +724,7 @@ export default {
                 to: 'delegation-lock',
                 from: 'staking-info',
                 data: {
-                    stakerId: this.stakerId,
+                    stakerId: this.d_stakerId,
                 },
             });
         },
@@ -708,7 +738,7 @@ export default {
                 to: 'delegation-lock',
                 from: 'staking-info',
                 data: {
-                    stakerId: this.stakerId,
+                    stakerId: this.d_stakerId,
                     extendLock: true,
                     delegationLockDuration: this.lockDuration,
                 },
@@ -726,7 +756,7 @@ export default {
                 to: 'defi-mint-s-f-t-m-confirmation',
                 from: 'staking-info',
                 data: {
-                    stakerId: this.stakerId,
+                    stakerId: this.d_stakerId,
                     amountDelegated: this._delegation.amountDelegated,
                     // stakerAddress: stakerInfo ? stakerInfo.stakerAddress : '',
                 },
@@ -742,7 +772,7 @@ export default {
                 to: 'defi-repay-s-f-t-m-confirmation',
                 from: 'staking-info',
                 data: {
-                    stakerId: this.stakerId,
+                    stakerId: this.d_stakerId,
                     outstandingSFTM: this._delegation.outstandingSFTM,
                     // stakerAddress: stakerInfo ? stakerInfo.stakerAddress : '',
                 },
@@ -759,12 +789,25 @@ export default {
             return new Date().getTime();
         },
 
+        showConfirmationWindow(_compName, _data) {
+            this.$refs.confirmationWindow.changeComponent(_compName, _data);
+            this.$refs.confirmationWindow.show();
+        },
+
         async claimRewards() {
             const accountInfo = await this.accountInfo;
             const stakerInfo = await this.stakerInfo;
 
+            this.showConfirmationWindow('claim-rewards-confirmation', {
+                accountInfo: {
+                    ...accountInfo,
+                    stakerInfo,
+                },
+                stakerId: this.d_stakerId,
+            });
+
             // if (accountInfo.pendingRewards > 0 && !this.canIncreaseDelegation) {
-            this.$emit('change-component', {
+            /*this.$emit('change-component', {
                 to: 'claim-rewards-confirmation',
                 from: 'staking-info',
                 data: {
@@ -772,9 +815,9 @@ export default {
                         ...accountInfo,
                         stakerInfo,
                     },
-                    stakerId: this.stakerId,
+                    stakerId: this.d_stakerId,
                 },
-            });
+            });*/
             // }
         },
 
@@ -782,8 +825,17 @@ export default {
             const accountInfo = await this.accountInfo;
             const stakerInfo = await this.stakerInfo;
 
+            this.showConfirmationWindow('claim-rewards-confirmation', {
+                accountInfo: {
+                    ...accountInfo,
+                    stakerInfo,
+                },
+                stakerId: this.d_stakerId,
+                reStake: true,
+            });
+
             // if (accountInfo.pendingRewards > 0 && !this.canIncreaseDelegation) {
-            this.$emit('change-component', {
+            /*this.$emit('change-component', {
                 to: 'claim-rewards-confirmation',
                 from: 'staking-info',
                 data: {
@@ -791,10 +843,10 @@ export default {
                         ...accountInfo,
                         stakerInfo,
                     },
-                    stakerId: this.stakerId,
+                    stakerId: this.d_stakerId,
                     reStake: true,
                 },
-            });
+            });*/
             // }
         },
 
@@ -885,16 +937,22 @@ export default {
                     amount: WeiToFtm(_withdrawRequest.amount),
                     withdraw: true,
                     withdrawRequest: _withdrawRequest,
-                    stakerId: this.stakerId,
+                    stakerId: this.d_stakerId,
                 },
             });
         },
 
-        onPreviousBtnClick() {
+        /*onPreviousBtnClick() {
             this.$emit('change-component', {
                 to: this.previousComponent,
                 from: 'stake-form',
             });
+        },*/
+
+        onCancelButtonClick(cancelBtnClicked) {
+            if (!cancelBtnClicked) {
+                this.$emit('reload-view');
+            }
         },
 
         toFTM,

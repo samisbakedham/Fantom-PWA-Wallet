@@ -1,8 +1,13 @@
 <template>
     <div class="unstake-ftm">
+        <h1 :id="labelId" class="with-back-btn align-center" data-focus>
+            <span>Undelegate FTM</span>
+            <f-back-button ref="backButton" :route-name="getBackButtonRoute('staking-unstake-ftm')" />
+        </h1>
+
         <f-card class="f-card-double-padding f-data-layout">
-            <f-form ref="form" center-form @f-form-submit="onFormSubmit">
-                <legend class="h2" data-focus>
+            <f-form ref="form" center-form :aria-labelledby="labelId" @f-form-submit="onFormSubmit">
+                <!--                <legend class="h2" data-focus>
                     <div class="cont-with-back-btn">
                         <span>
                             Undelegate FTM <span class="f-steps"><b>1</b> / {{ lockExist ? '3' : '2' }}</span>
@@ -16,7 +21,7 @@
                             Back
                         </button>
                     </div>
-                </legend>
+                </legend>-->
 
                 <div class="form-body">
                     <h3>The withdrawal of your delegated tokens will take 7 days</h3>
@@ -80,10 +85,15 @@ import { WEIToFTM } from '../../utils/transactions.js';
 import gql from 'graphql-tag';
 import { bFromWei, toBigNumber, toHex } from '@/utils/big-number.js';
 import { focusElem } from '@/utils/aria.js';
+import { viewHelpersMixin } from '@/mixins/view-helpers.js';
+import FBackButton from '@/components/core/FBackButton/FBackButton.vue';
+import { getUniqueId } from '@/utils';
 export default {
     name: 'UnstakeFTM',
 
-    components: { FMessage, FInput, FForm, FCard },
+    components: { FBackButton, FMessage, FInput, FForm, FCard },
+
+    mixins: [viewHelpersMixin],
 
     props: {
         /** `accountInfo` object from `StakingInfo` component. */
@@ -102,20 +112,23 @@ export default {
 
     data() {
         return {
+            d_accountInfo: {},
+            d_stakerId: '',
             amountErrMsg: '',
             amount: '',
             unlockPenalty: '',
             unlockedAmount: '',
             toUnlockAmount: '',
+            labelId: getUniqueId(),
         };
     },
 
     computed: {
         undelegateMax() {
-            return this.accountInfo ? WEIToFTM(this.accountInfo.delegation.amountDelegated) : 0;
+            return this.d_accountInfo ? WEIToFTM(this.d_accountInfo.delegation.amountDelegated) : 0;
             /*
-            return this.accountInfo
-                ? WEIToFTM(this.accountInfo.delegation.amount) - this.accountInfo.withdrawRequestsAmount
+            return this.d_accountInfo
+                ? WEIToFTM(this.d_accountInfo.delegation.amount) - this.d_accountInfo.withdrawRequestsAmount
                 : 0;
 */
         },
@@ -172,9 +185,11 @@ export default {
     },
 
     async created() {
+        this.setDataFromParams();
+
         if (this.isLocked) {
-            this.unlockedAmount = await this.$fWallet.fetchUnlockedAmount(this.accountInfo.address, this.stakerId);
-            console.log(this.accountInfo);
+            this.unlockedAmount = await this.$fWallet.fetchUnlockedAmount(this.d_accountInfo.address, this.d_stakerId);
+            console.log(this.d_accountInfo);
         }
 
         this.setMaxUndelegation();
@@ -216,8 +231,8 @@ export default {
 
                 bAmount = toBigNumber(amount);
 
-                if (_amount === this.undelegateMax || bAmount.comparedTo(this.accountInfo.amountDelegated) === 1) {
-                    bAmount = toBigNumber(this.accountInfo.amountDelegated);
+                if (_amount === this.undelegateMax || bAmount.comparedTo(this.d_accountInfo.amountDelegated) === 1) {
+                    bAmount = toBigNumber(this.d_accountInfo.amountDelegated);
                 }
 
                 // console.log('amount: ', bFromWei(bAmount).toString());
@@ -239,7 +254,7 @@ export default {
                     'toUnlockAmount: ',
                     this.toUnlockAmount,
                     bFromWei(this.toUnlockAmount).toString(),
-                    this.accountInfo.amountDelegated
+                    this.d_accountInfo.amountDelegated
                 );
 
                 const data = await this.$apollo.query({
@@ -251,8 +266,8 @@ export default {
                         }
                     `,
                     variables: {
-                        address: this.accountInfo.address,
-                        staker: this.stakerId,
+                        address: this.d_accountInfo.address,
+                        staker: this.d_stakerId,
                         amount: this.toUnlockAmount,
                     },
                     fetchPolicy: 'network-only',
@@ -265,16 +280,6 @@ export default {
             }
         },
 
-        onPreviousBtnClick() {
-            this.$emit('change-component', {
-                to: 'staking-info',
-                from: 'unstake-f-t-m',
-                data: {
-                    stakerId: this.stakerId,
-                },
-            });
-        },
-
         onFormSubmit(_event) {
             const amount = parseFloat(_event.detail.data.amount);
 
@@ -282,11 +287,11 @@ export default {
                 to: this.lockExist ? 'delegation-unlock-confirmation' : 'unstake-confirmation',
                 from: 'unstake-f-t-m',
                 data: {
-                    accountInfo: this.accountInfo,
+                    accountInfo: this.d_accountInfo,
                     amount,
                     toUnlockAmount: this.toUnlockAmount,
                     undelegateMax: amount === this.undelegateMax,
-                    stakerId: this.stakerId,
+                    stakerId: this.d_stakerId,
                 },
             });
         },

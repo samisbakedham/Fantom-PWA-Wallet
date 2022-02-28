@@ -58,6 +58,9 @@ import FMint from '@/views/FMint/FMint.vue';
 import FSwap from '@/views/FSwap/FSwap.vue';
 import BlockchainPickerForm from '@/components/forms/BlockchainPickerForm.vue';
 import SendTransactionForm from '@/components/forms/SendTransactionForm.vue';
+import DelegationsInfo from '@/components/DelegationsInfo/DelegationsInfo.vue';
+import StakingInfo from '@/components/StakingInfo/StakingInfo.vue';
+import UnstakeFTM from '@/components/UnstakeFTM/UnstakeFTM.vue';
 
 export const routes = [
     {
@@ -193,6 +196,43 @@ export const routes = [
                 name: 'staking',
                 path: '/staking/:address',
                 component: Staking,
+                children: [
+                    {
+                        name: 'staking-delegations-info',
+                        path: '',
+                        component: DelegationsInfo,
+                    },
+                    {
+                        name: 'staking-info',
+                        path: 'detail/:stakerId',
+                        component: StakingInfo,
+                    },
+                    {
+                        name: 'staking-unstake-ftm',
+                        path: 'detail/:stakerId/undelegate',
+                        component: UnstakeFTM,
+                    },
+                    {
+                        name: 'staking-transaction-success-message',
+                        path: 'staking/confirmation/success',
+                        component: TransactionSuccessMessageView,
+                    },
+                    {
+                        name: 'staking-transaction-success-message2',
+                        path: 'staking/confirmation2/success',
+                        component: TransactionSuccessMessageView,
+                    },
+                    {
+                        name: 'staking-transaction-reject-message',
+                        path: 'staking/confirmation/reject',
+                        component: TransactionRejectMessageView,
+                    },
+                    {
+                        name: 'staking-transaction-reject-message2',
+                        path: 'staking/confirmation2/reject',
+                        component: TransactionRejectMessageView,
+                    },
+                ],
             },
             {
                 name: 'fmint',
