@@ -17,7 +17,28 @@ const appStructure = [
                         _c: [
                             {
                                 id: 'account-blockchain-picker-form',
-                                _c: [{ id: 'account-send-transaction-form' }, { id: 'account-receive' }],
+                                _c: [
+                                    {
+                                        id: 'account-send-transaction-form',
+                                        _c: [
+                                            {
+                                                id: 'account-transaction-confirmation',
+                                                component: 'transaction-confirmation',
+                                                _c: [
+                                                    {
+                                                        id: 'account-transaction-success-message',
+                                                        component: 'transaction-success-message',
+                                                    },
+                                                    {
+                                                        id: 'account-transaction-reject-message',
+                                                        component: 'transaction-reject-message',
+                                                    },
+                                                ],
+                                            },
+                                            { id: 'account-receive' },
+                                        ],
+                                    },
+                                ],
                             },
                             {
                                 id: 'account-send-erc20',

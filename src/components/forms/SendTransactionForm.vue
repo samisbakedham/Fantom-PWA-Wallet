@@ -3,7 +3,7 @@
         <h2 :id="labelId" class="with-back-btn align-center" data-focus>
             <template v-if="token.address"> Send {{ tokenSymbol }} </template>
             <template v-else>Send Opera FTM</template>
-            <f-back-button :route-name="getBackButtonRoute('account-send-transaction-form')" />
+            <f-back-button ref="backButton" :route-name="getBackButtonRoute('account-send-transaction-form')" />
         </h2>
 
         <f-card class="f-card-double-padding">
@@ -96,6 +96,15 @@
                 </fieldset>
             </f-form>
         </f-card>
+
+        <tx-confirmation-window
+            ref="confirmationWindow"
+            body-min-height="350px"
+            window-class="send-transaction-form-tx-window"
+            :steps-count="1"
+            :active-step="1"
+            @cancel-button-click="onCancelButtonClick"
+        />
     </div>
 </template>
 
@@ -115,12 +124,14 @@ import { focusElem } from '@/utils/aria.js';
 import { viewHelpersMixin } from '@/mixins/view-helpers.js';
 import FBackButton from '@/components/core/FBackButton/FBackButton.vue';
 import { getUniqueId } from '@/utils';
+import TxConfirmationWindow from '@/components/windows/TxConfirmationWindow/TxConfirmationWindow.vue';
 const resolution = new Resolution();
 
 export default {
     name: 'SendTransactionForm',
 
     components: {
+        TxConfirmationWindow,
         FBackButton,
         FTokenValue,
         AddressField,
@@ -266,17 +277,7 @@ export default {
 
     mounted() {
         focusElem(this.$el);
-        /*
-        const el = findFirstFocusableDescendant(this.$el);
-        if (el) {
-            el.focus();
-        }
-        */
     },
-
-    /*activated() {
-        focusElem(this.$el);
-    },*/
 
     methods: {
         /**
@@ -433,27 +434,27 @@ export default {
                 });
 */
 
-                this.$emit('change-component', {
+                this.$refs.confirmationWindow.changeComponent('transaction-confirmation', {
+                    txData: { ...data },
+                    sendDirection: d_sendDirection,
+                    token: this.token,
+                });
+                this.$refs.confirmationWindow.show();
+
+                /*this.$emit('change-component', {
                     to: 'transaction-confirmation',
                     from: 'send-transaction-form',
                     data: {
                         ...data,
                         // fee: this.$fWallet.WEIToFTM(this.$fWallet.getTransactionFee(this.gasPrice)),
                     },
-                });
+                });*/
             }
         },
 
-        onPreviousBtnClick() {
-            this.$emit('change-component', {
-                to: 'blockchain-picker-form',
-                from: 'send-transaction-form',
-            });
-        },
-
         onAccountPicked() {
-            // this.$refs.form.reset();
-            // this.$refs.form.checkValidity();
+            this.$refs.backButton.goBack();
+            // this.$refs.form.reset(true);
         },
 
         onEntireBalanceClick() {
@@ -464,6 +465,12 @@ export default {
                     this.maxRemainingErc20TokenBalance > 0 ? this.maxRemainingErc20TokenBalance.toString() : '0';
             } else {
                 this.amount = this.maxRemainingBalance > 0 ? this.maxRemainingBalance.toString() : '0';
+            }
+        },
+
+        onCancelButtonClick(cancelBtnClicked) {
+            if (!cancelBtnClicked) {
+                this.$refs.backButton.goBack();
             }
         },
     },
@@ -483,6 +490,12 @@ export default {
             font-size: 26px;
             text-align: end;
         }
+    }
+}
+
+.send-transaction-form-tx-window {
+    .column-layout--body-footer > div:first-child {
+        overflow: hidden;
     }
 }
 </style>

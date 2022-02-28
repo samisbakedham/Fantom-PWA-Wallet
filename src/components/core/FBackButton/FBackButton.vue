@@ -27,6 +27,10 @@ export default {
 
     methods: {
         onClick() {
+            this.goBack();
+        },
+
+        goBack() {
             if (this.routeName) {
                 this.$router.replace({ name: this.routeName, params: this.params });
             }

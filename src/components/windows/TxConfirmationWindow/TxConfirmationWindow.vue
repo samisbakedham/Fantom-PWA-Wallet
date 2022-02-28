@@ -4,6 +4,7 @@
             ref="win"
             modal
             class="tx-confirmation-f-window"
+            :class="windowClass"
             animation-in="scale-center-enter-active"
             animation-out="scale-center-leave-active"
             no-controls
@@ -61,6 +62,10 @@ export default {
             default: 1,
         },
         structureRootNode: {
+            type: String,
+            default: '',
+        },
+        windowClass: {
             type: String,
             default: '',
         },

@@ -6,16 +6,15 @@
             send-button-label="Send"
             password-label="Please enter your wallet password to send the transaction"
             :on-send-transaction-success="onSendTransactionSuccess"
-            @change-component="onChangeComponent"
+            card-off
+            :show-cancel-button="true"
+            :window-mode="true"
+            class="min-h-100"
+            @cancel-button-click="$emit('cancel-button-click', $event)"
         >
-            <h2 class="cont-with-back-btn" data-focus>
-                <span v-if="token.address">
-                    Send {{ tokenSymbol }} - Confirmation <span class="f-steps"><b>2</b> / 2</span>
-                </span>
-                <span v-else>
-                    Send Opera FTM - Confirmation <span class="f-steps"><b>3</b> / 3</span>
-                </span>
-                <button type="button" class="btn light" @click="onBackBtnClick">Back</button>
+            <h2 class="align-center" data-focus>
+                <span v-if="token.address"> Send {{ tokenSymbol }} </span>
+                <span v-else>Send Opera FTM</span>
             </h2>
 
             <div class="transaction-info">
@@ -138,7 +137,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { findFirstFocusableDescendant, focusElem } from '../../utils/aria.js';
+import { focusElem } from '../../utils/aria.js';
 import { Web3 } from '../../plugins/fantom-web3-wallet.js';
 import { toFTM } from '../../utils/transactions.js';
 import { formatNumberByLocale } from '../../filters.js';
@@ -167,6 +166,10 @@ export default {
                 return {};
             },
         },
+        sendDirection: {
+            type: String,
+            default: '',
+        },
     },
 
     data() {
@@ -179,7 +182,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters(['currentAccount', 'sendDirection', 'getAccountByAddress', 'txFee']),
+        ...mapGetters(['currentAccount', 'getAccountByAddress', 'txFee']),
 
         /**
          * @return {string}
@@ -239,24 +242,11 @@ export default {
     },
 
     mounted() {
-        if (!this.currentAccount.isLedgerAccount) {
-            const el = findFirstFocusableDescendant(this.$el);
-            if (el) {
-                el.focus();
-            }
-        }
-
-        // this.setSendToAddress();
-    },
-
-    /**
-     * Called when component is activated through `keep-alive`.
-     */
-    activated() {
         this.dTxData = this.txData;
         this.setSendToAddress();
 
         focusElem(this.$el);
+        // this.setSendToAddress();
     },
 
     methods: {
@@ -335,6 +325,8 @@ export default {
                     data: {
                         tx: _data.data.sendTransaction.hash,
                         ...this._swapTokenData,
+                        cardOff: true,
+                        windowMode: true,
                     },
                 });
             } else {
@@ -343,26 +335,13 @@ export default {
                     from: 'transaction-confirmation',
                     data: {
                         tx: _data.data.sendTransaction.hash,
-                        continueTo: 'account-history',
+                        continueTo: 'hide-window',
+                        continueButtonLabel: 'Close',
+                        cardOff: true,
+                        windowMode: true,
                     },
                 });
             }
-        },
-
-        /**
-         * Re-target `'change-component'` event.
-         *
-         * @param {object} _data
-         */
-        onChangeComponent(_data) {
-            this.$emit('change-component', _data);
-        },
-
-        onBackBtnClick() {
-            this.$emit('change-component', {
-                to: 'send-transaction-form',
-                from: 'transaction-confirmation',
-            });
         },
 
         toFTM,

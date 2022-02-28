@@ -10,6 +10,7 @@ import GovCancelVoteConfirmation from '@/components/GovCancelVoteConfirmation/Go
 import FUniswapSwapConfirmation from '@/views/funi/FUniswapSwapConfirmation/FUniswapSwapConfirmation.vue';
 import FUniswapAddLiquidityConfirmation from '@/views/funi/FUniswapAddLiquidityConfirmation/FUniswapAddLiquidityConfirmation.vue';
 import FUniswapRemoveLiquidityConfirmation from '@/views/funi/FUniswapRemoveLiquidityConfirmation/FUniswapRemoveLiquidityConfirmation.vue';
+import TransactionConfirmation from '@/components/TransactionConfirmation/TransactionConfirmation.vue';
 
 Vue.component('DefiDepositConfirmation', DefiDepositConfirmation);
 Vue.component('DefiBorrowConfirmation', DefiBorrowConfirmation);
@@ -21,3 +22,4 @@ Vue.component('GovCancelVoteConfirmation', GovCancelVoteConfirmation);
 Vue.component('FUniswapSwapConfirmation', FUniswapSwapConfirmation);
 Vue.component('FUniswapAddLiquidityConfirmation', FUniswapAddLiquidityConfirmation);
 Vue.component('FUniswapRemoveLiquidityConfirmation', FUniswapRemoveLiquidityConfirmation);
+Vue.component('TransactionConfirmation', TransactionConfirmation);
