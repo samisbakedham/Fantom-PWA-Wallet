@@ -91,6 +91,25 @@ const appStructure = [
                                     },
                                 ],
                             },
+                            {
+                                id: 'staking-stake-form',
+                                _c: [
+                                    {
+                                        id: 'staking-stake-form-confirmation',
+                                        component: 'stake-confirmation',
+                                        _c: [
+                                            {
+                                                id: 'staking-stake-form-success-message',
+                                                component: 'transaction-success-message',
+                                            },
+                                            {
+                                                id: 'staking-stake-form-reject-message',
+                                                component: 'transaction-reject-message',
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
                         ],
                     },
                 ],

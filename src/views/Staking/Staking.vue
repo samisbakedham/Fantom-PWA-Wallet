@@ -11,7 +11,11 @@
                 <!--                <account-stake />-->
                 <!--                <router-view></router-view>-->
                 <f-view-transition watch-route :views-structure="viewsStructure" :disabled="fViewTransitionDisabled">
-                    <router-view :key="reload + $route.fullPath" @reload-view="onReloadView"></router-view>
+                    <router-view
+                        :key="reload + $route.fullPath"
+                        :reloaded="reload !== ''"
+                        @reload-view="onReloadView"
+                    ></router-view>
                 </f-view-transition>
             </main>
         </template>

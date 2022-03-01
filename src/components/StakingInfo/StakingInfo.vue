@@ -322,11 +322,28 @@ export default {
             type: String,
             default: 'delegations-info',
         },
+        /** Show 'claim rewards' popup */
+        claim: {
+            type: Boolean,
+            default: false,
+        },
+        /** Show 'claim rewards and restake' popup */
+        reStake: {
+            type: Boolean,
+            default: false,
+        },
+        /** Component was reloaded */
+        reloaded: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     data() {
         return {
             d_stakerId: '',
+            d_claim: false,
+            d_reStake: false,
             isFluidStakingActive: false,
             lockedUntil: '',
             isDelegationLocked: false,
@@ -653,6 +670,14 @@ export default {
         this.$refs.doc.focus();
 
         this.init();
+
+        if (!this.reloaded) {
+            if (this.d_reStake) {
+                this.claimRewardsAndReStake();
+            } else if (this.d_claim) {
+                this.claimRewards();
+            }
+        }
     },
 
     methods: {
@@ -798,6 +823,7 @@ export default {
             const accountInfo = await this.accountInfo;
             const stakerInfo = await this.stakerInfo;
 
+            // if (accountInfo.pendingRewards > 0 && !this.canIncreaseDelegation) {
             this.showConfirmationWindow('claim-rewards-confirmation', {
                 accountInfo: {
                     ...accountInfo,
@@ -805,19 +831,6 @@ export default {
                 },
                 stakerId: this.d_stakerId,
             });
-
-            // if (accountInfo.pendingRewards > 0 && !this.canIncreaseDelegation) {
-            /*this.$emit('change-component', {
-                to: 'claim-rewards-confirmation',
-                from: 'staking-info',
-                data: {
-                    accountInfo: {
-                        ...accountInfo,
-                        stakerInfo,
-                    },
-                    stakerId: this.d_stakerId,
-                },
-            });*/
             // }
         },
 
@@ -825,6 +838,7 @@ export default {
             const accountInfo = await this.accountInfo;
             const stakerInfo = await this.stakerInfo;
 
+            // if (accountInfo.pendingRewards > 0 && !this.canIncreaseDelegation) {
             this.showConfirmationWindow('claim-rewards-confirmation', {
                 accountInfo: {
                     ...accountInfo,
@@ -833,20 +847,6 @@ export default {
                 stakerId: this.d_stakerId,
                 reStake: true,
             });
-
-            // if (accountInfo.pendingRewards > 0 && !this.canIncreaseDelegation) {
-            /*this.$emit('change-component', {
-                to: 'claim-rewards-confirmation',
-                from: 'staking-info',
-                data: {
-                    accountInfo: {
-                        ...accountInfo,
-                        stakerInfo,
-                    },
-                    stakerId: this.d_stakerId,
-                    reStake: true,
-                },
-            });*/
             // }
         },
 

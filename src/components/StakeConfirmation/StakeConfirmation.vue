@@ -6,14 +6,13 @@
             password-label="Please enter your wallet password to delegate your FTM"
             send-button-label="Delegate"
             :on-send-transaction-success="onSendTransactionSuccess"
-            @change-component="onChangeComponent"
+            card-off
+            :show-cancel-button="true"
+            :window-mode="true"
+            class="min-h-100"
+            @cancel-button-click="$emit('cancel-button-click', $event)"
         >
-            <h2 class="cont-with-back-btn" data-focus>
-                <span>
-                    Delegate FTM - Confirmation <span class="f-steps"><b>2</b> / 2</span>
-                </span>
-                <button type="button" class="btn light" @click="onBackBtnClick">Back</button>
-            </h2>
+            <h2 class="align-center" data-focus>Delegate FTM</h2>
 
             <div class="transaction-info">
                 <div class="row no-collapse">
@@ -112,37 +111,18 @@ export default {
             const stakerId = this.stakerId || this.stakeData.id;
 
             this.$emit('change-component', {
-                to: 'transaction-success-message',
+                to: 'staking-stake-form-success-message',
                 from: 'stake-confirmation',
                 data: {
                     tx: _data.data.sendTransaction.hash,
                     successMessage: 'Delegation Successful',
-                    continueTo: 'staking-info',
                     continueToParams: { stakerId },
+                    continueTo: 'hide-window',
+                    continueButtonLabel: 'Close',
+                    cardOff: true,
+                    windowMode: true,
                 },
             });
-        },
-
-        onBackBtnClick() {
-            this.$emit('change-component', {
-                to: 'stake-form',
-                from: 'stake-confirmation',
-                data: {
-                    increaseDelegation: this.increaseDelegation,
-                    stakerInfo: this.stakerInfo,
-                    previousComponent: this.previousComponent,
-                    stakerId: this.stakerId,
-                },
-            });
-        },
-
-        /**
-         * Re-target `'change-component'` event.
-         *
-         * @param {object} _data
-         */
-        onChangeComponent(_data) {
-            this.$emit('change-component', _data);
         },
 
         toFTM,
