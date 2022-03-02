@@ -273,6 +273,7 @@
             window-class="send-transaction-form-tx-window"
             :steps-count="stepsCount"
             :active-step="activeStep"
+            :titles="titles"
             @cancel-button-click="onCancelButtonClick"
         />
     </div>
@@ -354,6 +355,7 @@ export default {
             sftmToken: {},
             stepsCount: 1,
             activeStep: 1,
+            titles: [],
             infoId: getUniqueId(),
             undelegationId: getUniqueId(),
         };
@@ -745,13 +747,22 @@ export default {
                 return;
             }
 
-            this.$emit('change-component', {
+            this.showConfirmationWindow({
+                compName: 'delegation-lock',
+                data: {
+                    stakerId: this.d_stakerId,
+                },
+                stepsCount: 2,
+                titles: ['Lock Delegation', 'Confirmation'],
+            });
+
+            /*this.$emit('change-component', {
                 to: 'delegation-lock',
                 from: 'staking-info',
                 data: {
                     stakerId: this.d_stakerId,
                 },
-            });
+            });*/
         },
 
         extendDelegationLock() {
@@ -814,8 +825,11 @@ export default {
             return new Date().getTime();
         },
 
-        showConfirmationWindow(_compName, _data) {
-            this.$refs.confirmationWindow.changeComponent(_compName, _data);
+        showConfirmationWindow({ compName = '', data = null, stepsCount = 1, titles = [] }) {
+            this.stepsCount = stepsCount;
+            this.titles = titles;
+
+            this.$refs.confirmationWindow.changeComponent(compName, data);
             this.$refs.confirmationWindow.show();
         },
 
@@ -824,12 +838,15 @@ export default {
             const stakerInfo = await this.stakerInfo;
 
             // if (accountInfo.pendingRewards > 0 && !this.canIncreaseDelegation) {
-            this.showConfirmationWindow('claim-rewards-confirmation', {
-                accountInfo: {
-                    ...accountInfo,
-                    stakerInfo,
+            this.showConfirmationWindow({
+                compName: 'claim-rewards-confirmation',
+                data: {
+                    accountInfo: {
+                        ...accountInfo,
+                        stakerInfo,
+                    },
+                    stakerId: this.d_stakerId,
                 },
-                stakerId: this.d_stakerId,
             });
             // }
         },
@@ -839,13 +856,16 @@ export default {
             const stakerInfo = await this.stakerInfo;
 
             // if (accountInfo.pendingRewards > 0 && !this.canIncreaseDelegation) {
-            this.showConfirmationWindow('claim-rewards-confirmation', {
-                accountInfo: {
-                    ...accountInfo,
-                    stakerInfo,
+            this.showConfirmationWindow({
+                compName: 'claim-rewards-confirmation',
+                data: {
+                    accountInfo: {
+                        ...accountInfo,
+                        stakerInfo,
+                    },
+                    stakerId: this.d_stakerId,
+                    reStake: true,
                 },
-                stakerId: this.d_stakerId,
-                reStake: true,
             });
             // }
         },

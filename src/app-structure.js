@@ -89,6 +89,26 @@ const appStructure = [
                                             },
                                         ],
                                     },
+                                    {
+                                        id: 'staking-delegation-lock',
+                                        component: 'delegation-lock',
+                                        _c: [
+                                            {
+                                                id: 'staking-delegation-lock-confirmation',
+                                                component: 'delegation-lock-confirmation',
+                                                _c: [
+                                                    {
+                                                        id: 'staking-delegation-lock-confirmation-success-message',
+                                                        component: 'transaction-success-message',
+                                                    },
+                                                    {
+                                                        id: 'staking-delegation-lock-confirmation-reject-message',
+                                                        component: 'transaction-reject-message',
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
                                 ],
                             },
                             {

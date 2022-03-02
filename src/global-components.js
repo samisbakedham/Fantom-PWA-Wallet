@@ -13,6 +13,8 @@ import FUniswapRemoveLiquidityConfirmation from '@/views/funi/FUniswapRemoveLiqu
 import TransactionConfirmation from '@/components/TransactionConfirmation/TransactionConfirmation.vue';
 import ClaimRewardsConfirmation from '@/components/ClaimRewardsConfirmation/ClaimRewardsConfirmation.vue';
 import StakeConfirmation from '@/components/StakeConfirmation/StakeConfirmation.vue';
+import DelegationLock from '@/components/DelegationLock/DelegationLock.vue';
+import DelegationLockConfirmation from '@/components/DelegationLockConfirmation/DelegationLockConfirmation.vue';
 
 Vue.component('DefiDepositConfirmation', DefiDepositConfirmation);
 Vue.component('DefiBorrowConfirmation', DefiBorrowConfirmation);
@@ -27,3 +29,5 @@ Vue.component('FUniswapRemoveLiquidityConfirmation', FUniswapRemoveLiquidityConf
 Vue.component('TransactionConfirmation', TransactionConfirmation);
 Vue.component('ClaimRewardsConfirmation', ClaimRewardsConfirmation);
 Vue.component('StakeConfirmation', StakeConfirmation);
+Vue.component('DelegationLock', DelegationLock);
+Vue.component('DelegationLockConfirmation', DelegationLockConfirmation);

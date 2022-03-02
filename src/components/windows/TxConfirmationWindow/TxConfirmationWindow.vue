@@ -13,7 +13,7 @@
             @window-hide="$emit('window-hide', $event)"
         >
             <template #title>
-                <h2 data-focus>Confirmation</h2>
+                <h2 data-focus>{{ title }}</h2>
                 <f-steps v-if="stepsCount > 0" :labels="stepLabels" :active="dActiveStep" />
             </template>
             <slot>
@@ -69,6 +69,12 @@ export default {
             type: String,
             default: '',
         },
+        titles: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
     },
 
     data() {
@@ -94,6 +100,13 @@ export default {
             labels.push('Finished');
 
             return labels;
+        },
+
+        title() {
+            const { titles } = this;
+            const { dActiveStep } = this;
+
+            return titles.length > 0 && titles[dActiveStep - 1] ? titles[dActiveStep - 1] : 'Confirmation';
         },
     },
 
