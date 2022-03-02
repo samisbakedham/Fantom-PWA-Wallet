@@ -3,30 +3,24 @@
         <tx-confirmation
             v-if="hasCorrectParams"
             :tx="tx"
-            :card-off="isView"
             send-button-label="Submit"
             set-tmp-pwd
             :tmp-pwd-code="d_tmpPwdCode"
             :password-label="passwordLabel"
             :on-send-transaction-success="onSendTransactionSuccess"
-            @change-component="onChangeComponent"
+            card-off
+            :show-cancel-button="true"
+            :window-mode="true"
+            class="min-h-100"
+            @cancel-button-click="$emit('cancel-button-click', $event)"
         >
-            <h1 v-if="isView" class="with-back-btn" data-focus>
-                Confirmation
-                <span class="f-steps">
-                    <b>{{ d_step }}</b> / 2
-                </span>
-                <f-back-button v-if="d_step === 1" :route-name="getBackButtonRoute(compName)" :params="$route.params" />
-            </h1>
-            <h2 v-else class="cont-with-back-btn" data-focus>
+            <h2 class="not-visible" data-focus>
                 <span>
                     Repay sFTM - Confirmation
                     <span class="f-steps">
                         <b>{{ d_step }}</b> / 2
                     </span>
                 </span>
-                <button v-if="d_step === 1" type="button" class="btn light" @click="onBackBtnClick">Back</button>
-                <span v-else></span>
             </h2>
 
             <div class="confirmation-info" tabindex="0" data-focus>
@@ -48,7 +42,6 @@
 
 <script>
 import TxConfirmation from '@/components/TxConfirmation/TxConfirmation.vue';
-import FBackButton from '@/components/core/FBackButton/FBackButton.vue';
 import LedgerConfirmationContent from '@/components/LedgerConfirmationContent/LedgerConfirmationContent.vue';
 import FMessage from '@/components/core/FMessage/FMessage.vue';
 import { mapGetters } from 'vuex';
@@ -57,11 +50,12 @@ import { getUniqueId, toKebabCase } from '@/utils';
 import sfcUtils from 'fantom-ledgerjs/src/sfc-utils.js';
 import erc20Utils from 'fantom-ledgerjs/src/erc20-utils.js';
 import Web3 from 'web3';
+import appConfig from '../../../app.config.js';
 
 export default {
     name: 'DefiRepaySFTMConfirmation',
 
-    components: { FMessage, LedgerConfirmationContent, FBackButton, TxConfirmation },
+    components: { FMessage, LedgerConfirmationContent, TxConfirmation },
 
     // mixins: [viewHelpersMixin],
 
@@ -126,16 +120,8 @@ export default {
     },
 
     created() {
-        // this.setDataFromParams();
-
-        if (!this.hasCorrectParams && this.isView) {
-            // redirect
-            setTimeout(() => {
-                this.$router.replace({
-                    name: this.getBackButtonRoute(this.compName),
-                    params: this.$route.params,
-                });
-            }, 3000);
+        if (this.d_step === 2) {
+            this.$emit('step', 2);
         }
 
         this.setTx();
@@ -182,80 +168,39 @@ export default {
         },
 
         onSendTransactionSuccess(_data) {
-            if (!this.isView) {
-                if (this.d_step === 1) {
-                    this.$emit('change-component', {
-                        to: 'transaction-success-message',
-                        from: this.compName,
-                        data: {
-                            tx: _data.data.sendTransaction.hash,
-                            continueTo: this.compName,
-                            continueToParams: {
-                                step: 2,
-                                stakerId: this.d_stakerId,
-                                outstandingSFTM: this.d_outstandingSFTM,
-                                tmpPwdCode: this.d_tmpPwdCode,
-                            },
-                        },
-                    });
-                } else {
-                    this.$emit('change-component', {
-                        to: 'transaction-success-message',
-                        from: this.compName,
-                        data: {
-                            tx: _data.data.sendTransaction.hash,
-                            // successMessage: 'Undelegation Successful',
-                            continueTo: 'staking-info',
-                            continueToParams: {
-                                stakerId: this.d_stakerId,
-                            },
-                        },
-                    });
-                }
-            } else {
-                const params = {
-                    tx: _data.data.sendTransaction.hash,
-                    title: 'Success',
-                    continueTo: this.getBackButtonRoute(this.compName),
-                    continueToParams: this.$route.params,
-                };
-
-                this.$router.replace({
-                    name: `defi-repay-sftm-transaction-success-message`,
-                    params,
-                });
-            }
-        },
-
-        onBackBtnClick() {
-            this.$emit('change-component', {
-                to: 'staking-info',
-                from: this.compName,
-                data: {
-                    stakerId: this.d_stakerId,
-                },
-            });
-        },
-
-        /**
-         * Re-target `'change-component'` event.
-         *
-         * @param {object} _data
-         */
-        onChangeComponent(_data) {
-            let transactionRejectComp = `defi-repay-sftm-transaction-reject-message`;
-
-            if (!this.isView) {
-                this.$emit('change-component', _data);
-            } else if (_data.to === 'transaction-reject-message') {
-                this.$router.replace({
-                    name: transactionRejectComp,
-                    params: {
-                        continueTo: this.getBackButtonRoute(this.compName),
+            if (this.d_step === 1) {
+                this.$emit('change-component', {
+                    to: 'staking-repay-sftm-confirmation-success-message',
+                    from: this.compName,
+                    data: {
+                        tx: _data.data.sendTransaction.hash,
                         continueToParams: {
-                            ...this.$route.params,
+                            step: 2,
+                            stakerId: this.d_stakerId,
+                            outstandingSFTM: this.d_outstandingSFTM,
                             tmpPwdCode: this.d_tmpPwdCode,
                         },
+                        continueTo: 'staking-repay-sftm-confirmation2',
+                        continueButtonLabel: 'Next Step',
+                        cardOff: true,
+                        windowMode: true,
+                        autoContinueToAfter: appConfig.settings.autoContinueToAfter,
+                    },
+                });
+            } else {
+                this.$emit('change-component', {
+                    to: 'staking-repay-sftm-confirmation-success-message2',
+                    from: this.compName,
+                    data: {
+                        tx: _data.data.sendTransaction.hash,
+                        // successMessage: 'Undelegation Successful',
+                        continueToParams: {
+                            stakerId: this.d_stakerId,
+                        },
+                        continueTo: 'hide-window',
+                        continueButtonLabel: 'Close',
+                        cardOff: true,
+                        windowMode: true,
                     },
                 });
             }

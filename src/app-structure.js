@@ -123,6 +123,36 @@ const appStructure = [
                                             },
                                         ],
                                     },
+                                    {
+                                        id: 'staking-repay-sftm-confirmation',
+                                        component: 'defi-repay-s-f-t-m-confirmation',
+                                        _c: [
+                                            {
+                                                id: 'staking-repay-sftm-confirmation-success-message',
+                                                component: 'transaction-success-message',
+                                                _c: [
+                                                    {
+                                                        id: 'staking-repay-sftm-confirmation2',
+                                                        component: 'defi-repay-s-f-t-m-confirmation',
+                                                        _c: [
+                                                            {
+                                                                id: 'staking-repay-sftm-confirmation-success-message2',
+                                                                component: 'transaction-success-message',
+                                                            },
+                                                            {
+                                                                id: 'staking-repay-sftm-confirmation-reject-message2',
+                                                                component: 'transaction-reject-message',
+                                                            },
+                                                        ],
+                                                    },
+                                                ],
+                                            },
+                                            {
+                                                id: 'staking-repay-sftm-confirmation-reject-message',
+                                                component: 'transaction-reject-message',
+                                            },
+                                        ],
+                                    },
                                 ],
                             },
                             {

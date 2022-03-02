@@ -794,16 +794,6 @@ export default {
                 steps: ['Confirm', 'Finished'],
                 windowTitle: 'Mint sFTM',
             });
-
-            /*this.$emit('change-component', {
-                to: 'defi-mint-s-f-t-m-confirmation',
-                from: 'staking-info',
-                data: {
-                    stakerId: this.d_stakerId,
-                    amountDelegated: this._delegation.amountDelegated,
-                    // stakerAddress: stakerInfo ? stakerInfo.stakerAddress : '',
-                },
-            });*/
         },
 
         repaySFTM() {
@@ -811,7 +801,19 @@ export default {
                 return;
             }
 
-            this.$emit('change-component', {
+            this.showConfirmationWindow({
+                compName: 'defi-repay-s-f-t-m-confirmation',
+                data: {
+                    stakerId: this.d_stakerId,
+                    outstandingSFTM: this._delegation.outstandingSFTM,
+                    // stakerAddress: stakerInfo ? stakerInfo.stakerAddress : '',
+                },
+                stepsCount: 2,
+                steps: ['Allow', 'Confirm', 'Finished'],
+                windowTitle: 'Repay sFTM',
+            });
+
+            /*this.$emit('change-component', {
                 to: 'defi-repay-s-f-t-m-confirmation',
                 from: 'staking-info',
                 data: {
@@ -819,7 +821,7 @@ export default {
                     outstandingSFTM: this._delegation.outstandingSFTM,
                     // stakerAddress: stakerInfo ? stakerInfo.stakerAddress : '',
                 },
-            });
+            });*/
         },
 
         increaseDelegation() {
