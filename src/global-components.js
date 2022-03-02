@@ -17,6 +17,7 @@ import DelegationLock from '@/components/DelegationLock/DelegationLock.vue';
 import DelegationLockConfirmation from '@/components/DelegationLockConfirmation/DelegationLockConfirmation.vue';
 import DefiMintSFTMConfirmation from '@/components/DefiMintSFTMConfirmation/DefiMintSFTMConfirmation.vue';
 import DefiRepaySFTMConfirmation from '@/components/DefiRepaySFTMConfirmation/DefiRepaySFTMConfirmation.vue';
+import WithdrawFTMConfirmation from '@/components/WithdrawFTMConfirmation/WithdrawFTMConfirmation.vue';
 
 Vue.component('DefiDepositConfirmation', DefiDepositConfirmation);
 Vue.component('DefiBorrowConfirmation', DefiBorrowConfirmation);
@@ -35,3 +36,4 @@ Vue.component('DelegationLock', DelegationLock);
 Vue.component('DelegationLockConfirmation', DelegationLockConfirmation);
 Vue.component('DefiMintSFTMConfirmation', DefiMintSFTMConfirmation);
 Vue.component('DefiRepaySFTMConfirmation', DefiRepaySFTMConfirmation);
+Vue.component('WithdrawFTMConfirmation', WithdrawFTMConfirmation);

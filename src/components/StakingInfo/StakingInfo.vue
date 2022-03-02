@@ -757,7 +757,8 @@ export default {
                     stakerId: this.d_stakerId,
                 },
                 stepsCount: 2,
-                titles: ['Lock Delegation', 'Confirmation'],
+                windowTitle: 'Delegate FTM',
+                steps: ['Lock', 'Confirm', 'Finished'],
             });
         },
 
@@ -791,7 +792,6 @@ export default {
                     amountDelegated: this._delegation.amountDelegated,
                     // stakerAddress: stakerInfo ? stakerInfo.stakerAddress : '',
                 },
-                steps: ['Confirm', 'Finished'],
                 windowTitle: 'Mint sFTM',
             });
         },
@@ -842,6 +842,10 @@ export default {
             windowTitle = '',
             steps = [],
         }) {
+            if (stepsCount === 1) {
+                steps = ['Confirm', 'Finished'];
+            }
+
             this.stepsCount = stepsCount;
             this.titles = titles;
             this.windowTitle = windowTitle;
@@ -865,6 +869,7 @@ export default {
                     },
                     stakerId: this.d_stakerId,
                 },
+                windowTitle: 'Claim Rewards',
             });
             // }
         },
@@ -884,6 +889,7 @@ export default {
                     stakerId: this.d_stakerId,
                     reStake: true,
                 },
+                windowTitle: 'Claim & Restake',
             });
             // }
         },
@@ -964,7 +970,22 @@ export default {
             const accountInfo = await this.accountInfo;
             const stakerInfo = await this.stakerInfo;
 
-            this.$emit('change-component', {
+            this.showConfirmationWindow({
+                compName: 'withdraw-f-t-m-confirmation',
+                data: {
+                    accountInfo: {
+                        ...accountInfo,
+                        stakerInfo,
+                    },
+                    amount: WeiToFtm(_withdrawRequest.amount),
+                    withdraw: true,
+                    withdrawRequest: _withdrawRequest,
+                    stakerId: this.d_stakerId,
+                },
+                windowTitle: 'Withdraw delegated FTM',
+            });
+
+            /*this.$emit('change-component', {
                 to: 'withdraw-f-t-m-confirmation',
                 from: 'staking-info',
                 data: {
@@ -977,7 +998,7 @@ export default {
                     withdrawRequest: _withdrawRequest,
                     stakerId: this.d_stakerId,
                 },
-            });
+            });*/
         },
 
         /*onPreviousBtnClick() {

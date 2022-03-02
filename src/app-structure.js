@@ -153,6 +153,20 @@ const appStructure = [
                                             },
                                         ],
                                     },
+                                    {
+                                        id: 'staking-withdraw-ftm-confirmation',
+                                        component: 'withdraw-f-t-m-confirmation',
+                                        _c: [
+                                            {
+                                                id: 'staking-withdraw-ftm-confirmation-success-message',
+                                                component: 'transaction-success-message',
+                                            },
+                                            {
+                                                id: 'staking-withdraw-ftm-confirmation-reject-message',
+                                                component: 'transaction-reject-message',
+                                            },
+                                        ],
+                                    },
                                 ],
                             },
                             {
