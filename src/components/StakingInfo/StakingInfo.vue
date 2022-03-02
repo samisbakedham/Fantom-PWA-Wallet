@@ -274,6 +274,8 @@
             :steps-count="stepsCount"
             :active-step="activeStep"
             :titles="titles"
+            :window-title="windowTitle"
+            :steps="windowSteps"
             @cancel-button-click="onCancelButtonClick"
         />
     </div>
@@ -356,6 +358,8 @@ export default {
             stepsCount: 1,
             activeStep: 1,
             titles: [],
+            windowTitle: '',
+            windowSteps: [],
             infoId: getUniqueId(),
             undelegationId: getUniqueId(),
         };
@@ -755,14 +759,6 @@ export default {
                 stepsCount: 2,
                 titles: ['Lock Delegation', 'Confirmation'],
             });
-
-            /*this.$emit('change-component', {
-                to: 'delegation-lock',
-                from: 'staking-info',
-                data: {
-                    stakerId: this.d_stakerId,
-                },
-            });*/
         },
 
         extendDelegationLock() {
@@ -788,7 +784,18 @@ export default {
 
             // const stakerInfo = await this.stakerInfo;
 
-            this.$emit('change-component', {
+            this.showConfirmationWindow({
+                compName: 'defi-mint-s-f-t-m-confirmation',
+                data: {
+                    stakerId: this.d_stakerId,
+                    amountDelegated: this._delegation.amountDelegated,
+                    // stakerAddress: stakerInfo ? stakerInfo.stakerAddress : '',
+                },
+                steps: ['Confirm', 'Finished'],
+                windowTitle: 'Mint sFTM',
+            });
+
+            /*this.$emit('change-component', {
                 to: 'defi-mint-s-f-t-m-confirmation',
                 from: 'staking-info',
                 data: {
@@ -796,7 +803,7 @@ export default {
                     amountDelegated: this._delegation.amountDelegated,
                     // stakerAddress: stakerInfo ? stakerInfo.stakerAddress : '',
                 },
-            });
+            });*/
         },
 
         repaySFTM() {
@@ -825,9 +832,18 @@ export default {
             return new Date().getTime();
         },
 
-        showConfirmationWindow({ compName = '', data = null, stepsCount = 1, titles = [] }) {
+        showConfirmationWindow({
+            compName = '',
+            data = null,
+            stepsCount = 1,
+            titles = [],
+            windowTitle = '',
+            steps = [],
+        }) {
             this.stepsCount = stepsCount;
             this.titles = titles;
+            this.windowTitle = windowTitle;
+            this.windowSteps = steps;
 
             this.$refs.confirmationWindow.changeComponent(compName, data);
             this.$refs.confirmationWindow.show();

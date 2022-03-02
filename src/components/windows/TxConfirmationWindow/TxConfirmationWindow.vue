@@ -61,11 +61,21 @@ export default {
             type: Number,
             default: 1,
         },
+        steps: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
         structureRootNode: {
             type: String,
             default: '',
         },
         windowClass: {
+            type: String,
+            default: '',
+        },
+        windowTitle: {
             type: String,
             default: '',
         },
@@ -91,6 +101,10 @@ export default {
             const labels = [];
             const { stepsCount } = this;
 
+            if (this.steps.length > 0) {
+                return this.steps;
+            }
+
             if (stepsCount > 0) {
                 for (let i = 0; i < stepsCount; i++) {
                     labels.push(`Step ${i + 1}`);
@@ -105,6 +119,10 @@ export default {
         title() {
             const { titles } = this;
             const { dActiveStep } = this;
+
+            if (this.windowTitle) {
+                return this.windowTitle;
+            }
 
             return titles.length > 0 && titles[dActiveStep - 1] ? titles[dActiveStep - 1] : 'Confirmation';
         },

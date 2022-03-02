@@ -15,6 +15,7 @@ import ClaimRewardsConfirmation from '@/components/ClaimRewardsConfirmation/Clai
 import StakeConfirmation from '@/components/StakeConfirmation/StakeConfirmation.vue';
 import DelegationLock from '@/components/DelegationLock/DelegationLock.vue';
 import DelegationLockConfirmation from '@/components/DelegationLockConfirmation/DelegationLockConfirmation.vue';
+import DefiMintSFTMConfirmation from '@/components/DefiMintSFTMConfirmation/DefiMintSFTMConfirmation.vue';
 
 Vue.component('DefiDepositConfirmation', DefiDepositConfirmation);
 Vue.component('DefiBorrowConfirmation', DefiBorrowConfirmation);
@@ -31,3 +32,4 @@ Vue.component('ClaimRewardsConfirmation', ClaimRewardsConfirmation);
 Vue.component('StakeConfirmation', StakeConfirmation);
 Vue.component('DelegationLock', DelegationLock);
 Vue.component('DelegationLockConfirmation', DelegationLockConfirmation);
+Vue.component('DefiMintSFTMConfirmation', DefiMintSFTMConfirmation);

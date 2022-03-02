@@ -3,22 +3,16 @@
         <tx-confirmation
             v-if="hasCorrectParams"
             :tx="tx"
-            :card-off="isView"
             send-button-label="Submit"
             password-label="Please enter your wallet password to mint sFTM"
             :on-send-transaction-success="onSendTransactionSuccess"
-            @change-component="onChangeComponent"
+            card-off
+            :show-cancel-button="true"
+            :window-mode="true"
+            class="min-h-100"
+            @cancel-button-click="$emit('cancel-button-click', $event)"
         >
-            <h1 v-if="isView" class="with-back-btn" data-focus>
-                Confirmation
-                <f-back-button :route-name="getBackButtonRoute(compName)" :params="$route.params" />
-            </h1>
-            <h2 v-else class="cont-with-back-btn" data-focus>
-                <span>
-                    Mint sFTM - Confirmation
-                </span>
-                <button type="button" class="btn light" @click="onBackBtnClick">Back</button>
-            </h2>
+            <h2 class="not-visible" data-focus>Mint sFTM - Confirmation</h2>
 
             <div class="confirmation-info" tabindex="0" data-focus>
                 You’re minting
@@ -43,7 +37,6 @@
 
 <script>
 import TxConfirmation from '@/components/TxConfirmation/TxConfirmation.vue';
-import FBackButton from '@/components/core/FBackButton/FBackButton.vue';
 import LedgerConfirmationContent from '@/components/LedgerConfirmationContent/LedgerConfirmationContent.vue';
 import FMessage from '@/components/core/FMessage/FMessage.vue';
 import { mapGetters } from 'vuex';
@@ -57,7 +50,7 @@ import { filtersOptions } from '@/filters.js';
 export default {
     name: 'DefiMintSFTMConfirmation',
 
-    components: { FTokenValue, FMessage, LedgerConfirmationContent, FBackButton, TxConfirmation },
+    components: { FTokenValue, FMessage, LedgerConfirmationContent, TxConfirmation },
 
     // mixins: [viewHelpersMixin],
 
@@ -139,15 +132,18 @@ export default {
         onSendTransactionSuccess(_data) {
             if (!this.isView) {
                 this.$emit('change-component', {
-                    to: 'transaction-success-message',
+                    to: 'staking-mint-sftm-confirmation-success-message',
                     from: this.compName,
                     data: {
                         tx: _data.data.sendTransaction.hash,
                         // successMessage: 'Undelegation Successful',
-                        continueTo: 'staking-info',
                         continueToParams: {
                             stakerId: this.d_stakerId,
                         },
+                        continueTo: 'hide-window',
+                        continueButtonLabel: 'Close',
+                        cardOff: true,
+                        windowMode: true,
                     },
                 });
             } else {
@@ -163,16 +159,6 @@ export default {
                     params,
                 });
             }
-        },
-
-        onBackBtnClick() {
-            this.$emit('change-component', {
-                to: 'staking-info',
-                from: this.compName,
-                data: {
-                    stakerId: this.d_stakerId,
-                },
-            });
         },
 
         /**

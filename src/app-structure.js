@@ -109,6 +109,20 @@ const appStructure = [
                                             },
                                         ],
                                     },
+                                    {
+                                        id: 'staking-mint-sftm-confirmation',
+                                        component: 'defi-mint-s-f-t-m-confirmation',
+                                        _c: [
+                                            {
+                                                id: 'staking-mint-sftm-confirmation-success-message',
+                                                component: 'transaction-success-message',
+                                            },
+                                            {
+                                                id: 'staking-mint-sftm-confirmation-reject-message',
+                                                component: 'transaction-reject-message',
+                                            },
+                                        ],
+                                    },
                                 ],
                             },
                             {
