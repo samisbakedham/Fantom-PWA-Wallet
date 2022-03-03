@@ -13,7 +13,7 @@
             class="min-h-100"
             @cancel-button-click="$emit('cancel-button-click', $event)"
         >
-            <h2 class="align-center" data-focus>
+            <h2 class="not-visible" data-focus>
                 <span v-if="reStake">Claim & Restake</span>
                 <span v-else>Claim Rewards</span>
             </h2>

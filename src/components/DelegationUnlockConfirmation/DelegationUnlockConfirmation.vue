@@ -8,16 +8,13 @@
             set-tmp-pwd
             :tmp-pwd-code="tmpPwdCode"
             :on-send-transaction-success="onSendTransactionSuccess"
-            @change-component="onChangeComponent"
+            card-off
+            :show-cancel-button="true"
+            :window-mode="true"
+            class="min-h-100"
+            @cancel-button-click="$emit('cancel-button-click', $event)"
         >
-            <h2 class="cont-with-back-btn" data-focus>
-                <span>
-                    Unlock FTM - Confirmation <span class="f-steps"><b>2</b> / 3</span>
-                </span>
-                <button type="button" class="btn light" aria-label="Go to previous page" @click="onBackBtnClick">
-                    Back
-                </button>
-            </h2>
+            <h2 class="not-visible" data-focus>Unlock FTM - Confirmation</h2>
 
             <div class="transaction-info">
                 <div class="row no-collapse">
@@ -57,6 +54,7 @@ import TxConfirmation from '../TxConfirmation/TxConfirmation.vue';
 import LedgerConfirmationContent from '../LedgerConfirmationContent/LedgerConfirmationContent.vue';
 import { getUniqueId } from '@/utils';
 import FTMTokenValue from '@/components/core/FTMTokenValue/FTMTokenValue.vue';
+import appConfig from '../../../app.config.js';
 
 export default {
     name: 'DelegationUnlockConfirmation',
@@ -110,6 +108,7 @@ export default {
 
     // activated() {
     mounted() {
+        this.$emit('step', 2);
         this.setTx();
     },
 
@@ -134,12 +133,11 @@ export default {
 
         onSendTransactionSuccess(_data) {
             this.$emit('change-component', {
-                to: 'transaction-success-message',
+                to: 'staking-delegation-unlock-confirmation-success-message',
                 from: 'delegation-unlock-confirmation',
                 data: {
                     tx: _data.data.sendTransaction.hash,
                     successMessage: 'Unlock Successful',
-                    continueTo: 'unstake-confirmation',
                     continueToParams: {
                         accountInfo: this.accountInfo,
                         amount: this.amount,
@@ -148,28 +146,13 @@ export default {
                         stakerId: this.stakerId,
                         tmpPwdCode: this.tmpPwdCode,
                     },
+                    continueTo: 'unstake-confirmation',
+                    continueButtonLabel: 'Next Step',
+                    cardOff: true,
+                    windowMode: true,
+                    autoContinueToAfter: appConfig.settings.autoContinueToAfter,
                 },
             });
-        },
-
-        onBackBtnClick() {
-            this.$emit('change-component', {
-                to: 'unstake-f-t-m',
-                from: 'delegation-unlock-confirmation',
-                data: {
-                    accountInfo: this.accountInfo,
-                    stakerId: this.stakerId,
-                },
-            });
-        },
-
-        /**
-         * Re-target `'change-component'` event.
-         *
-         * @param {object} _data
-         */
-        onChangeComponent(_data) {
-            this.$emit('change-component', _data);
         },
     },
 };

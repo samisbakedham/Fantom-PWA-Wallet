@@ -60,7 +60,7 @@ import BlockchainPickerForm from '@/components/forms/BlockchainPickerForm.vue';
 import SendTransactionForm from '@/components/forms/SendTransactionForm.vue';
 import DelegationsInfo from '@/components/DelegationsInfo/DelegationsInfo.vue';
 import StakingInfo from '@/components/StakingInfo/StakingInfo.vue';
-import UnstakeFTM from '@/components/UnstakeFTM/UnstakeFTM.vue';
+// import UnstakeFTM from '@/components/UnstakeFTM/UnstakeFTM.vue';
 import StakeForm from '@/components/forms/StakeForm.vue';
 
 export const routes = [
@@ -208,11 +208,11 @@ export const routes = [
                         path: 'detail/:stakerId',
                         component: StakingInfo,
                     },
-                    {
+                    /*{
                         name: 'staking-unstake-ftm',
                         path: 'detail/:stakerId/undelegate',
                         component: UnstakeFTM,
-                    },
+                    },*/
                     {
                         name: 'staking-stake-form',
                         path: 'stake',

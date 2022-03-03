@@ -67,7 +67,7 @@ export default {
         },
         title: {
             type: String,
-            default: 'Transaction sent!',
+            default: 'Success',
         },
         /** Name of component/route used in 'continue' button. */
         continueTo: {

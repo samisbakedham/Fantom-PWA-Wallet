@@ -1,11 +1,8 @@
 <template>
     <div class="unstake-ftm">
-        <h1 :id="labelId" class="with-back-btn align-center" data-focus>
-            <span>Undelegate FTM</span>
-            <f-back-button ref="backButton" :route-name="getBackButtonRoute('staking-unstake-ftm')" />
-        </h1>
+        <h2 :id="labelId" class="not-visible" data-focus>Undelegate FTM</h2>
 
-        <f-card class="f-card-double-padding f-data-layout">
+        <f-card class="__f-card-double-padding f-data-layout" off>
             <f-form ref="form" center-form :aria-labelledby="labelId" @f-form-submit="onFormSubmit">
                 <!--                <legend class="h2" data-focus>
                     <div class="cont-with-back-btn">
@@ -65,6 +62,14 @@
                     </f-input>
 
                     <div class="form-buttons align-center">
+                        <button
+                            type="button"
+                            class="btn secondary large break-word"
+                            style="max-width: 100%;"
+                            @click="$emit('cancel-button-click', $event)"
+                        >
+                            Cancel
+                        </button>
                         <button type="submit" class="btn large" :class="{ 'orange-btn': orangeBtn }">
                             <template v-if="!lockExist">Ok, undelegate</template>
                             <template v-else>Ok, unlock</template>
@@ -85,15 +90,11 @@ import { WEIToFTM } from '../../utils/transactions.js';
 import gql from 'graphql-tag';
 import { bFromWei, toBigNumber, toHex } from '@/utils/big-number.js';
 import { focusElem } from '@/utils/aria.js';
-import { viewHelpersMixin } from '@/mixins/view-helpers.js';
-import FBackButton from '@/components/core/FBackButton/FBackButton.vue';
 import { getUniqueId } from '@/utils';
 export default {
     name: 'UnstakeFTM',
 
-    components: { FBackButton, FMessage, FInput, FForm, FCard },
-
-    mixins: [viewHelpersMixin],
+    components: { FMessage, FInput, FForm, FCard },
 
     props: {
         /** `accountInfo` object from `StakingInfo` component. */
@@ -112,8 +113,6 @@ export default {
 
     data() {
         return {
-            d_accountInfo: {},
-            d_stakerId: '',
             amountErrMsg: '',
             amount: '',
             unlockPenalty: '',
@@ -125,10 +124,10 @@ export default {
 
     computed: {
         undelegateMax() {
-            return this.d_accountInfo ? WEIToFTM(this.d_accountInfo.delegation.amountDelegated) : 0;
+            return this.accountInfo ? WEIToFTM(this.accountInfo.delegation.amountDelegated) : 0;
             /*
-            return this.d_accountInfo
-                ? WEIToFTM(this.d_accountInfo.delegation.amount) - this.d_accountInfo.withdrawRequestsAmount
+            return this.accountInfo
+                ? WEIToFTM(this.accountInfo.delegation.amount) - this.accountInfo.withdrawRequestsAmount
                 : 0;
 */
         },
@@ -185,11 +184,9 @@ export default {
     },
 
     async created() {
-        this.setDataFromParams();
-
         if (this.isLocked) {
-            this.unlockedAmount = await this.$fWallet.fetchUnlockedAmount(this.d_accountInfo.address, this.d_stakerId);
-            console.log(this.d_accountInfo);
+            this.unlockedAmount = await this.$fWallet.fetchUnlockedAmount(this.accountInfo.address, this.stakerId);
+            console.log(this.accountInfo);
         }
 
         this.setMaxUndelegation();
@@ -231,8 +228,8 @@ export default {
 
                 bAmount = toBigNumber(amount);
 
-                if (_amount === this.undelegateMax || bAmount.comparedTo(this.d_accountInfo.amountDelegated) === 1) {
-                    bAmount = toBigNumber(this.d_accountInfo.amountDelegated);
+                if (_amount === this.undelegateMax || bAmount.comparedTo(this.accountInfo.amountDelegated) === 1) {
+                    bAmount = toBigNumber(this.accountInfo.amountDelegated);
                 }
 
                 // console.log('amount: ', bFromWei(bAmount).toString());
@@ -254,7 +251,7 @@ export default {
                     'toUnlockAmount: ',
                     this.toUnlockAmount,
                     bFromWei(this.toUnlockAmount).toString(),
-                    this.d_accountInfo.amountDelegated
+                    this.accountInfo.amountDelegated
                 );
 
                 const data = await this.$apollo.query({
@@ -266,8 +263,8 @@ export default {
                         }
                     `,
                     variables: {
-                        address: this.d_accountInfo.address,
-                        staker: this.d_stakerId,
+                        address: this.accountInfo.address,
+                        staker: this.stakerId,
                         amount: this.toUnlockAmount,
                     },
                     fetchPolicy: 'network-only',
@@ -287,11 +284,11 @@ export default {
                 to: this.lockExist ? 'delegation-unlock-confirmation' : 'unstake-confirmation',
                 from: 'unstake-f-t-m',
                 data: {
-                    accountInfo: this.d_accountInfo,
+                    accountInfo: this.accountInfo,
                     amount,
                     toUnlockAmount: this.toUnlockAmount,
                     undelegateMax: amount === this.undelegateMax,
-                    stakerId: this.d_stakerId,
+                    stakerId: this.stakerId,
                 },
             });
         },

@@ -719,8 +719,27 @@ export default {
 
             const accountInfo = await this.accountInfo;
             const stakerInfo = await this.stakerInfo;
+            const isLocked =
+                (accountInfo && accountInfo.delegation && accountInfo.delegation.isDelegationLocked) || false;
 
-            this.$router.push({
+            this.showConfirmationWindow({
+                compName: 'unstake-f-t-m',
+                data: {
+                    accountInfo: {
+                        ...accountInfo,
+                        stakerInfo,
+                        withdrawRequestsAmount: this.withdrawRequestsAmount,
+                    },
+                    stakerId: this.d_stakerId,
+                },
+                stepsCount: isLocked ? 4 : 3,
+                windowTitle: 'Undelegate FTM',
+                steps: isLocked
+                    ? ['Unlock', 'Confirm', 'Undelegate', 'Finished']
+                    : ['Undelegate', 'Confirm', 'Finished'],
+            });
+
+            /*this.$router.push({
                 name: 'staking-unstake-ftm',
                 params: {
                     accountInfo: {
@@ -730,7 +749,7 @@ export default {
                     },
                     stakerId: this.d_stakerId,
                 },
-            });
+            });*/
 
             /*this.$emit('change-component', {
                 to: 'unstake-f-t-m',

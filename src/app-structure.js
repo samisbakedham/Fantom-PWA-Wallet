@@ -58,17 +58,36 @@ const appStructure = [
                                 _c: [
                                     {
                                         id: 'staking-unstake-ftm',
+                                        component: 'unstake-f-t-m',
                                         _c: [
                                             {
-                                                id: 'staking-transaction-confirmation',
-                                                component: 'transaction-confirmation',
+                                                id: 'staking-delegation-unlock-confirmation',
+                                                component: 'delegation-unlock-confirmation',
                                                 _c: [
                                                     {
-                                                        id: 'staking-transaction-success-message',
+                                                        id: 'staking-delegation-unlock-confirmation-success-message',
                                                         component: 'transaction-success-message',
+                                                        _c: [
+                                                            {
+                                                                id: 'staking-unstake-confirmation',
+                                                                component: 'unstake-confirmation',
+                                                                _c: [
+                                                                    {
+                                                                        id:
+                                                                            'staking-unstake-confirmation-success-message',
+                                                                        component: 'transaction-success-message',
+                                                                    },
+                                                                    {
+                                                                        id:
+                                                                            'staking-unstake-confirmation-reject-message',
+                                                                        component: 'transaction-reject-message',
+                                                                    },
+                                                                ],
+                                                            },
+                                                        ],
                                                     },
                                                     {
-                                                        id: 'staking-transaction-reject-message',
+                                                        id: 'staking-delegation-unlock-confirmation-reject-message',
                                                         component: 'transaction-reject-message',
                                                     },
                                                 ],
