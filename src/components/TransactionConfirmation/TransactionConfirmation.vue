@@ -12,7 +12,7 @@
             class="min-h-100"
             @cancel-button-click="$emit('cancel-button-click', $event)"
         >
-            <h2 class="align-center" data-focus>
+            <h2 class="not-visible" data-focus>
                 <span v-if="token.address"> Send {{ tokenSymbol }} </span>
                 <span v-else>Send Opera FTM</span>
             </h2>

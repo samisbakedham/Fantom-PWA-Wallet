@@ -46,6 +46,7 @@
             ref="confirmationWindow"
             body-min-height="350px"
             window-class="send-transaction-form-tx-window"
+            :window-title="windowTitle"
             :steps-count="1"
             :active-step="1"
             @cancel-button-click="onCancelButtonClick"
@@ -79,6 +80,7 @@ export default {
             allDelegationsRecordsCount: 0,
             loadAllDelegations: false,
             reStake: false,
+            windowTitle: '',
         };
     },
 
@@ -100,7 +102,8 @@ export default {
             this.$store.commit(SET_ACTIVE_ACCOUNT_ADDRESS, _address);
         },
 
-        showConfirmationWindow(_compName, _data) {
+        showConfirmationWindow(_compName, _data, _title = '') {
+            this.windowTitle = _title;
             this.$refs.confirmationWindow.changeComponent(_compName, _data);
             this.$refs.confirmationWindow.show();
         },
@@ -167,11 +170,15 @@ export default {
         },
 
         onClaimRewards(_data) {
-            this.showConfirmationWindow('claim-rewards-confirmation', {
-                stakerId: _data.delegation.toStakerId,
-                reStake: _data.reStake,
-                fromDelegationList: _data.fromDelegationList,
-            });
+            this.showConfirmationWindow(
+                'claim-rewards-confirmation',
+                {
+                    stakerId: _data.delegation.toStakerId,
+                    reStake: _data.reStake,
+                    fromDelegationList: _data.fromDelegationList,
+                },
+                _data.reStake ? 'Claim & Restake' : 'Claim Rewards'
+            );
 
             this.reStake = _data.reStake;
         },
@@ -195,11 +202,15 @@ export default {
                     },
                 });
             } else {
-                this.showConfirmationWindow('claim-rewards-confirmation', {
-                    stakerId: _data.delegation.toStakerId,
-                    reStake: _data.reStake,
-                    fromDelegationList: _data.fromDelegationList,
-                });
+                this.showConfirmationWindow(
+                    'claim-rewards-confirmation',
+                    {
+                        stakerId: _data.delegation.toStakerId,
+                        reStake: _data.reStake,
+                        fromDelegationList: _data.fromDelegationList,
+                    },
+                    _data.reStake ? 'Claim & Restake' : 'Claim Rewards'
+                );
 
                 this.reStake = _data.reStake;
             }

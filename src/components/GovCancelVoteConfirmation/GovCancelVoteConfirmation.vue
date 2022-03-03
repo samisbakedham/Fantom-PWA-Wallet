@@ -17,9 +17,7 @@
                 Cancel Vote Confirmation
                 <f-back-button :route-name="getBackButtonRoute(compName)" :params="$route.params" />
             </h1>
-            <h2>
-                Cancel Vote
-            </h2>
+            <h2 class="not-visible" data-focus>Cancel Vote</h2>
 
             <div class="confirmation-info__">
                 <div v-if="d_validator.stakerAddress" class="gov-proposal-detail__validator-info align-center">

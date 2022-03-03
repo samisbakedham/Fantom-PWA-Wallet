@@ -106,8 +106,12 @@ export default {
             }
 
             if (stepsCount > 0) {
-                for (let i = 0; i < stepsCount; i++) {
-                    labels.push(`Step ${i + 1}`);
+                if (stepsCount === 1) {
+                    labels.push('Confirm');
+                } else {
+                    for (let i = 0; i < stepsCount; i++) {
+                        labels.push(`Step ${i + 1}`);
+                    }
                 }
             }
 

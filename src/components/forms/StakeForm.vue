@@ -80,6 +80,7 @@
             ref="confirmationWindow"
             body-min-height="350px"
             window-class="send-transaction-form-tx-window"
+            window-title="Delegate FTM"
             :steps-count="1"
             :active-step="1"
             @cancel-button-click="onCancelButtonClick"

@@ -101,6 +101,7 @@
             ref="confirmationWindow"
             body-min-height="350px"
             window-class="send-transaction-form-tx-window"
+            :window-title="windowTitle"
             :steps-count="1"
             :active-step="1"
             @cancel-button-click="onCancelButtonClick"
@@ -168,6 +169,7 @@ export default {
             ETHOrBNBAccountBalance: '',
             minFTMToTransfer: appConfig.bnbridgeApi.minFTMToTransfer,
             resolvedAddress: null,
+            windowTitle: '',
             labelId: getUniqueId(),
         };
     },
@@ -433,6 +435,11 @@ export default {
                     },
                 });
 */
+
+                this.windowTitle =
+                    this.token && this.token.symbol
+                        ? `Send ${this.$defi.getTokenSymbol(this.token)}`
+                        : 'Send Opera FTM';
 
                 this.$refs.confirmationWindow.changeComponent('transaction-confirmation', {
                     txData: { ...data },

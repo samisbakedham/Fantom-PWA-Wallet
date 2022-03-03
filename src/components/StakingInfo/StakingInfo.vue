@@ -776,7 +776,7 @@ export default {
                     stakerId: this.d_stakerId,
                 },
                 stepsCount: 2,
-                windowTitle: 'Delegate FTM',
+                windowTitle: 'Lock Delegation',
                 steps: ['Lock', 'Confirm', 'Finished'],
             });
         },
@@ -861,10 +861,6 @@ export default {
             windowTitle = '',
             steps = [],
         }) {
-            if (stepsCount === 1) {
-                steps = ['Confirm', 'Finished'];
-            }
-
             this.stepsCount = stepsCount;
             this.titles = titles;
             this.windowTitle = windowTitle;

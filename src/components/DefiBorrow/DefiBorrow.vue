@@ -206,6 +206,8 @@
             body-min-height="350px"
             :steps-count="stepsCount"
             :active-step="1"
+            :window-title="windowTitle"
+            :steps="windowSteps"
             @cancel-button-click="onCancelButtonClick"
         />
     </div>
@@ -312,6 +314,8 @@ export default {
             decreasedDebt: 0,
             borrowOrRepay: this.borrow || this.repay,
             sliderLabels: ['0%', '25%', '50%', '75%', '100%'],
+            windowTitle: '',
+            windowSteps: [],
             id: getUniqueId(),
             stepsCount: this.repay ? 2 : 1,
         };
@@ -618,6 +622,8 @@ export default {
             }
 
             if (!this.submitDisabled) {
+                this.windowTitle = this.borrow ? 'Mint Synths' : 'Repay Synths';
+                this.windowSteps = this.borrow ? [] : ['Allow', 'Confirm', 'Finished'];
                 this.$refs.confirmationWindow.changeComponent('defi-borrow-confirmation', {
                     params,
                     compName: 'defi-mint-repay',
