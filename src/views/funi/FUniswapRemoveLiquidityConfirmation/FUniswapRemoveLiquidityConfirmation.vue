@@ -150,12 +150,12 @@ export default {
         sendButtonLabel() {
             let label = '';
 
-            if (this.params.step === 1) {
-                label = 'Continue to the next step';
-            } else {
-                label = 'Submit';
-                // label = 'Trade now';
-            }
+            // if (this.params.step === 1) {
+            //     label = 'Continue to the next step';
+            // } else {
+            label = 'Submit';
+            // label = 'Trade now';
+            // }
 
             return label;
         },
