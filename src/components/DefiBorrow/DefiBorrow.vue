@@ -548,7 +548,7 @@ export default {
 
             if (!this.singleToken) {
                 // get tokens that are possible to borrow
-                this.tokens = tokens.filter(this.mintRepayMode ? $defi.canTokenBeMinted : $defi.canTokenBeBorrowed);
+                this.tokens = tokens.filter(this.getTokensFilter());
             }
 
             if (!_dontSetDToken) {
@@ -559,14 +559,26 @@ export default {
                         this.dToken = tokens.find((_token) => _token.symbol === this.tokenSymbol);
                     } else {
                         // get first token that can be borrowed
-                        this.dToken = tokens.find(
-                            this.mintRepayMode ? $defi.canTokenBeMinted : $defi.canTokenBeBorrowed
-                        );
+                        this.dToken = tokens.find((token) => token.symbol === 'FUSD');
                     }
                 } else {
                     this.dToken = tokens.find((_item) => _item.symbol === this.token.symbol);
                 }
             }
+        },
+
+        getTokensFilter() {
+            const { $defi } = this;
+
+            if (this.mintRepayMode) {
+                if (this.repay) {
+                    return $defi.canTokenBeRepayed;
+                } else {
+                    return $defi.canTokenBeMinted;
+                }
+            }
+
+            return $defi.canTokenBeBorrowed;
         },
 
         formatInputValue(_value) {
