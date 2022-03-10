@@ -66,13 +66,13 @@
         >
             <div class="align-center">
                 <div v-if="!$mm.isInstalled()">
-                    MM is not installed.
+                    Metamask is not installed.
                 </div>
                 <div v-else-if="!$mm.isCorrectChainId()">
-                    Please, select Opera chain in MM.
+                    Please, select Opera chain in Metamask.
                 </div>
                 <div v-else-if="mmAccount.toLowerCase() !== currentAccount.address.toLowerCase()">
-                    Please, select account <b>{{ currentAccount.address }}</b> in MM.
+                    Please, select account <b>{{ currentAccount.address }}</b> in Metamask.
                 </div>
             </div>
         </f-window>

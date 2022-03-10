@@ -966,11 +966,6 @@ export default {
                 });
                 this.$refs.confirmationWindow.show();
 
-                // TMP
-                setTimeout(() => {
-                    this.init(true);
-                }, 2000);
-
                 /*this.$router.push({
                     name: 'funiswap-add-liquidity-confirmation',
                     params,

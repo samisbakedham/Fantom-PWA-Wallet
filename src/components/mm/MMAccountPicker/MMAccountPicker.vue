@@ -1,9 +1,9 @@
 <template>
     <div class="mm-account-picker">
         <div v-if="!$mm.isInstalled()" class="mm-not-installed">
-            MM is not installed. <br /><br />
+            Metamask is not installed. <br /><br />
             <button class="btn large" :disabled="installMMInProgress" @click="onInstallMMClick">
-                Install MM <pulse-loader v-if="installMMInProgress" color="#fff"></pulse-loader>
+                Install Metamask <pulse-loader v-if="installMMInProgress" color="#fff"></pulse-loader>
             </button>
         </div>
         <template v-else>
