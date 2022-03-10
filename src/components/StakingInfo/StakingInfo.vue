@@ -298,6 +298,7 @@ import { getUniqueId } from '@/utils';
 import { viewHelpersMixin } from '@/mixins/view-helpers.js';
 import FBackButton from '@/components/core/FBackButton/FBackButton.vue';
 import TxConfirmationWindow from '@/components/windows/TxConfirmationWindow/TxConfirmationWindow.vue';
+import { eventBusMixin } from '@/mixins/event-bus.js';
 
 export default {
     name: 'StakingInfo',
@@ -312,7 +313,7 @@ export default {
         FCard,
     },
 
-    mixins: [viewHelpersMixin],
+    mixins: [viewHelpersMixin, eventBusMixin],
 
     props: {
         /***/
@@ -670,6 +671,8 @@ export default {
 
         this._accountInfo = null;
         this._delegation = null;
+
+        this._eventBus.on('account-picked', this.onAccountPicked);
     },
 
     mounted() {
@@ -1027,6 +1030,10 @@ export default {
             if (!cancelBtnClicked) {
                 this.$emit('reload-view');
             }
+        },
+
+        onAccountPicked() {
+            this.$refs.backButton.goBack();
         },
 
         toFTM,
