@@ -1,5 +1,5 @@
 <template>
-    <span class="f-token-value" :title="value">
+    <span class="f-token-value" :title="titleValue">
         <f-placeholder
             v-if="usePlaceholder"
             :content-loaded="!!token.symbol || contentLoaded"
@@ -7,12 +7,14 @@
         >
             <span class="f-token-value__value">
                 {{ tokenValue }}<span v-if="showDots" class="f-token-value__dots">&#8230;</span>
+                <span v-if="showDots">{{ titleValue.charAt(titleValue.length - 1) }}</span>
             </span>
             <span v-if="!noCurrency" class="currency">{{ tokenSymbol }}</span>
         </f-placeholder>
         <template v-else>
             <span class="f-token-value__value">
                 {{ tokenValue }}<span v-if="showDots" class="f-token-value__dots">&#8230;</span>
+                <span v-if="showDots">{{ titleValue.charAt(titleValue.length - 1) }}</span>
             </span>
             <span v-if="!noCurrency" class="currency">{{ tokenSymbol }}</span>
         </template>
@@ -116,6 +118,34 @@ export default {
             }
 
             return false;
+        },
+
+        titleValue() {
+            let value = this.value;
+            let sValue = '';
+            let r = '';
+            let spl;
+
+            if (this.value.toFixed) {
+                sValue = this.value.toFixed(18);
+                spl = sValue.split('.');
+
+                if (spl.length === 2) {
+                    r = spl[1];
+
+                    if (r.length > 0) {
+                        while (r.length && r.at(r.length - 1) === '0') {
+                            r = r.slice(0, -1);
+                        }
+                    }
+
+                    if (r.length > 0) {
+                        value = `${spl[0]}.${r}`;
+                    }
+                }
+            }
+
+            return value.toString();
         },
     },
 
