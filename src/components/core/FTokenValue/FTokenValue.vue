@@ -134,7 +134,7 @@ export default {
                     r = spl[1];
 
                     if (r.length > 0) {
-                        while (r.length && r.at(r.length - 1) === '0') {
+                        while (r.length && r.charAt(r.length - 1) === '0') {
                             r = r.slice(0, -1);
                         }
                     }
