@@ -713,8 +713,6 @@ export class FantomWeb3Wallet {
             }
         }
 
-        console.log(mnemonic);
-
         return mnemonic;
     }
 
