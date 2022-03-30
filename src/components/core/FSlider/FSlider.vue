@@ -152,13 +152,17 @@ export default {
         updateFills(_value) {
             const dValue = this.getDetailedValue(_value);
             const inputStyle = this.$refs.input.$el.style;
+            let sliderValue = 0;
 
             if (inputStyle.setProperty && (this.useLowerFillBar || this.useUpperFillBar)) {
+                sliderValue = ((dValue.value - dValue.min) / (dValue.max - dValue.min)) * 100;
+
+                if (isNaN(sliderValue)) {
+                    sliderValue = 0;
+                }
+
                 // Set slider value in percentage to css custom property
-                inputStyle.setProperty(
-                    '--f-slider-value',
-                    ((dValue.value - dValue.min) / (dValue.max - dValue.min)) * 100
-                );
+                inputStyle.setProperty('--f-slider-value', sliderValue);
             }
         },
 

@@ -130,16 +130,17 @@
                                 <router-link :to="{ name: 'defi-ftrade' }">Swap</router-link>
                             </template>
                         </template>
-                        <template v-if="item.canMint">
-                            <router-link :to="{ name: 'defi-mint', params: { tokenAddress: item.address } }">
-                                Mint
+                        <router-link
+                            v-if="item.canMint"
+                            :to="{ name: 'defi-mint', params: { tokenAddress: item.address } }"
+                        >
+                            Mint
+                        </router-link>
+                        <template v-if="item._debt > 0">
+                            ,
+                            <router-link :to="{ name: 'defi-repay', params: { tokenAddress: item.address } }">
+                                Repay
                             </router-link>
-                            <template v-if="item._debt > 0">
-                                ,
-                                <router-link :to="{ name: 'defi-repay', params: { tokenAddress: item.address } }">
-                                    Repay
-                                </router-link>
-                            </template>
                         </template>
                     </div>
                 </div>
@@ -159,16 +160,17 @@
                             <router-link :to="{ name: 'defi-ftrade' }">Swap</router-link>
                         </template>
                     </template>
-                    <template v-if="item.canMint">
-                        <router-link :to="{ name: 'defi-mint', params: { tokenAddress: item.address } }">
-                            Mint
+                    <router-link
+                        v-if="item.canMint"
+                        :to="{ name: 'defi-mint', params: { tokenAddress: item.address } }"
+                    >
+                        Mint
+                    </router-link>
+                    <template v-if="item._debt > 0">
+                        <br />
+                        <router-link :to="{ name: 'defi-repay', params: { tokenAddress: item.address } }">
+                            Repay
                         </router-link>
-                        <template v-if="item._debt > 0">
-                            <br />
-                            <router-link :to="{ name: 'defi-repay', params: { tokenAddress: item.address } }">
-                                Repay
-                            </router-link>
-                        </template>
                     </template>
                 </template>
             </template>
