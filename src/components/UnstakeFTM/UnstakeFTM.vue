@@ -1,8 +1,10 @@
 <template>
     <div class="unstake-ftm">
-        <f-card class="f-card-double-padding f-data-layout">
-            <f-form ref="form" center-form @f-form-submit="onFormSubmit">
-                <legend class="h2" data-focus>
+        <h2 :id="labelId" class="not-visible" data-focus>Undelegate FTM</h2>
+
+        <f-card class="__f-card-double-padding f-data-layout" off>
+            <f-form ref="form" center-form :aria-labelledby="labelId" @f-form-submit="onFormSubmit">
+                <!--                <legend class="h2" data-focus>
                     <div class="cont-with-back-btn">
                         <span>
                             Undelegate FTM <span class="f-steps"><b>1</b> / {{ lockExist ? '3' : '2' }}</span>
@@ -16,7 +18,7 @@
                             Back
                         </button>
                     </div>
-                </legend>
+                </legend>-->
 
                 <div class="form-body">
                     <h3>The withdrawal of your delegated tokens will take 7 days</h3>
@@ -60,6 +62,14 @@
                     </f-input>
 
                     <div class="form-buttons align-center">
+                        <button
+                            type="button"
+                            class="btn secondary large break-word"
+                            style="max-width: 100%;"
+                            @click="$emit('cancel-button-click', $event)"
+                        >
+                            Cancel
+                        </button>
                         <button type="submit" class="btn large" :class="{ 'orange-btn': orangeBtn }">
                             <template v-if="!lockExist">Ok, undelegate</template>
                             <template v-else>Ok, unlock</template>
@@ -80,6 +90,7 @@ import { WEIToFTM } from '../../utils/transactions.js';
 import gql from 'graphql-tag';
 import { bFromWei, toBigNumber, toHex } from '@/utils/big-number.js';
 import { focusElem } from '@/utils/aria.js';
+import { getUniqueId } from '@/utils';
 export default {
     name: 'UnstakeFTM',
 
@@ -107,6 +118,7 @@ export default {
             unlockPenalty: '',
             unlockedAmount: '',
             toUnlockAmount: '',
+            labelId: getUniqueId(),
         };
     },
 
@@ -263,16 +275,6 @@ export default {
                 console.error(_error);
                 return '';
             }
-        },
-
-        onPreviousBtnClick() {
-            this.$emit('change-component', {
-                to: 'staking-info',
-                from: 'unstake-f-t-m',
-                data: {
-                    stakerId: this.stakerId,
-                },
-            });
         },
 
         onFormSubmit(_event) {

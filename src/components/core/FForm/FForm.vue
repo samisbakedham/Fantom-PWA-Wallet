@@ -165,8 +165,22 @@ export default {
         /**
          * Reset form.
          */
-        reset() {
+        reset(_resetValidations) {
             this.$refs.form.reset();
+
+            if (_resetValidations) {
+                this.resetValidations();
+            }
+        },
+
+        resetValidations() {
+            const elems = this.getElements();
+
+            elems.forEach((elem) => {
+                if (elem.setCustomValidity) {
+                    elem.setCustomValidity('');
+                }
+            });
         },
 
         getErrorMessages() {

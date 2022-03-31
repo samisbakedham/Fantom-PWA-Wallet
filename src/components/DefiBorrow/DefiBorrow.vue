@@ -206,6 +206,8 @@
             body-min-height="350px"
             :steps-count="stepsCount"
             :active-step="1"
+            :window-title="windowTitle"
+            :steps="windowSteps"
             @cancel-button-click="onCancelButtonClick"
         />
     </div>
@@ -312,6 +314,8 @@ export default {
             decreasedDebt: 0,
             borrowOrRepay: this.borrow || this.repay,
             sliderLabels: ['0%', '25%', '50%', '75%', '100%'],
+            windowTitle: '',
+            windowSteps: [],
             id: getUniqueId(),
             stepsCount: this.repay ? 2 : 1,
         };
@@ -433,7 +437,13 @@ export default {
         },
 
         fSliderMax() {
-            const maxValue = this.repay ? Math.min(this.maxDebt, this.availableBalance) : this.maxDebt;
+            let maxValue = 0;
+
+            if (this.repay) {
+                maxValue = this.availableBalance > 0 ? Math.min(this.maxDebt, this.availableBalance) : this.maxDebt;
+            } else {
+                maxValue = this.maxDebt;
+            }
 
             return isNaN(maxValue) || maxValue < 0 ? 0 : maxValue;
         },
@@ -544,7 +554,7 @@ export default {
 
             if (!this.singleToken) {
                 // get tokens that are possible to borrow
-                this.tokens = tokens.filter(this.mintRepayMode ? $defi.canTokenBeMinted : $defi.canTokenBeBorrowed);
+                this.tokens = tokens.filter(this.getTokensFilter());
             }
 
             if (!_dontSetDToken) {
@@ -555,14 +565,26 @@ export default {
                         this.dToken = tokens.find((_token) => _token.symbol === this.tokenSymbol);
                     } else {
                         // get first token that can be borrowed
-                        this.dToken = tokens.find(
-                            this.mintRepayMode ? $defi.canTokenBeMinted : $defi.canTokenBeBorrowed
-                        );
+                        this.dToken = tokens.find((token) => token.symbol === 'FUSD');
                     }
                 } else {
                     this.dToken = tokens.find((_item) => _item.symbol === this.token.symbol);
                 }
             }
+        },
+
+        getTokensFilter() {
+            const { $defi } = this;
+
+            if (this.mintRepayMode) {
+                if (this.repay) {
+                    return $defi.canTokenBeRepayed;
+                } else {
+                    return $defi.canTokenBeMinted;
+                }
+            }
+
+            return $defi.canTokenBeBorrowed;
         },
 
         formatInputValue(_value) {
@@ -618,6 +640,8 @@ export default {
             }
 
             if (!this.submitDisabled) {
+                this.windowTitle = this.borrow ? 'Mint Synths' : 'Repay Synths';
+                this.windowSteps = this.borrow ? [] : ['Allow', 'Confirm', 'Finished'];
                 this.$refs.confirmationWindow.changeComponent('defi-borrow-confirmation', {
                     params,
                     compName: 'defi-mint-repay',

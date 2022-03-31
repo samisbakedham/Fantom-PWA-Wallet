@@ -1,14 +1,7 @@
 <template>
     <div class="delegation-lock">
-        <f-card class="f-card-double-padding f-data-layout">
-            <h2 class="align-start cont-with-back-btn" data-focus>
-                <span>
-                    Lock Delegation <span v-if="canLockDelegation" class="f-steps"><b>1</b> / 2</span>
-                </span>
-                <button type="button" class="btn light" aria-label="Go to previous page" @click="onPreviousBtnClick">
-                    Back
-                </button>
-            </h2>
+        <f-card class="f-card-double-padding f-data-layout" off>
+            <h2 class="not-visible" data-focus>Lock Delegation</h2>
 
             <div class="delegation-lock-body">
                 <f-placeholder :content-loaded="canLockDelegation" block style="min-height: 200px;">
@@ -89,6 +82,14 @@
                 </f-message>
 
                 <div class="form-buttons align-center">
+                    <button
+                        type="button"
+                        class="btn secondary large break-word"
+                        style="max-width: 100%;"
+                        @click="$emit('cancel-button-click', $event)"
+                    >
+                        Cancel
+                    </button>
                     <button
                         type="submit"
                         class="btn large"
@@ -447,8 +448,10 @@ export default {
                     lockDuration = 10 * 60 + 5;
                 }
 
+                this.$emit('step', 2);
+
                 this.$emit('change-component', {
-                    to: 'delegation-lock-confirmation',
+                    to: 'staking-delegation-lock-confirmation',
                     from: 'delegation-lock',
                     data: {
                         stakerId: this.stakerId,
@@ -462,16 +465,6 @@ export default {
                     },
                 });
             }
-        },
-
-        onPreviousBtnClick() {
-            this.$emit('change-component', {
-                to: 'staking-info',
-                from: 'delegation-lock',
-                data: {
-                    stakerId: this.stakerId,
-                },
-            });
         },
 
         /**

@@ -47,14 +47,16 @@
                             >
                                 {{ cancelButtonLabel }}
                             </button>
-                            <button
+                            <FButton
                                 type="submit"
                                 class="btn large break-word"
+                                :loading="loading"
+                                :no-label-while-loading="true"
                                 style="max-width: 100%;"
                                 :disabled="notEnoughFTM || disabledSubmit"
                             >
                                 {{ sendButtonLabel }}
-                            </button>
+                            </FButton>
 
                             <!-- <details>
                                 <summary>Gas Settings</summary>
@@ -82,11 +84,12 @@ import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 import { mapGetters } from 'vuex';
 import { formatNumberByLocale } from '@/filters.js';
 import AdvancedTxFunctions from '@/components/AdvancedTxFunctions/AdvancedTxFunctions.vue';
+import FButton from '@/components/core/FButton/FButton.vue';
 
 export default {
     name: 'TransactionConfirmationForm',
 
-    components: { AdvancedTxFunctions, FMessage, FPasswordField, FForm, PulseLoader },
+    components: { FButton, AdvancedTxFunctions, FMessage, FPasswordField, FForm, PulseLoader },
 
     props: {
         showPasswordField: {
@@ -134,6 +137,11 @@ export default {
         },
         /** */
         disabledSubmit: {
+            type: Boolean,
+            default: false,
+        },
+        /** */
+        loading: {
             type: Boolean,
             default: false,
         },

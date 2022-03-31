@@ -186,6 +186,8 @@
             body-min-height="350px"
             :steps-count="3"
             :active-step="1"
+            window-title="Add Liquidity"
+            :steps="['Allow', 'Allow', 'Confirm', 'Finished']"
             @cancel-button-click="onCancelButtonClick"
         />
     </section>
@@ -963,11 +965,6 @@ export default {
                     props: { ...params },
                 });
                 this.$refs.confirmationWindow.show();
-
-                // TMP
-                setTimeout(() => {
-                    this.init(true);
-                }, 2000);
 
                 /*this.$router.push({
                     name: 'funiswap-add-liquidity-confirmation',

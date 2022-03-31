@@ -167,6 +167,8 @@
             body-min-height="350px"
             :steps-count="stepsCount"
             :active-step="1"
+            window-title="Swap"
+            :steps="windowSteps"
             @cancel-button-click="onCancelButtonClick"
         />
     </div>
@@ -224,6 +226,7 @@ export default {
             tokens: [],
             sliderLabels: ['0%', '25%', '50%', '75%', '100%'],
             stepsCount: 1,
+            windowSteps: [],
             id: getUniqueId(),
         };
     },
@@ -638,6 +641,10 @@ export default {
                 this.stepsCount = 2;
                 params.steps = this.stepsCount;
                 params.step = this.$refs.confirmationWindow.activeStep;
+
+                this.windowSteps = ['Allow', 'Confirm', 'Finished'];
+            } else {
+                this.windowSteps = [];
             }
 
             if (!this.submitDisabled) {

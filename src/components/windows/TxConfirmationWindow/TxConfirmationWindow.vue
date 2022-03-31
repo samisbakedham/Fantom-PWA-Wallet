@@ -4,6 +4,7 @@
             ref="win"
             modal
             class="tx-confirmation-f-window"
+            :class="windowClass"
             animation-in="scale-center-enter-active"
             animation-out="scale-center-leave-active"
             no-controls
@@ -12,7 +13,7 @@
             @window-hide="$emit('window-hide', $event)"
         >
             <template #title>
-                <h2 data-focus>Confirmation</h2>
+                <h2 data-focus>{{ title }}</h2>
                 <f-steps v-if="stepsCount > 0" :labels="stepLabels" :active="dActiveStep" />
             </template>
             <slot>
@@ -60,9 +61,29 @@ export default {
             type: Number,
             default: 1,
         },
+        steps: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
         structureRootNode: {
             type: String,
             default: '',
+        },
+        windowClass: {
+            type: String,
+            default: '',
+        },
+        windowTitle: {
+            type: String,
+            default: '',
+        },
+        titles: {
+            type: Array,
+            default() {
+                return [];
+            },
         },
     },
 
@@ -80,15 +101,34 @@ export default {
             const labels = [];
             const { stepsCount } = this;
 
+            if (this.steps.length > 0) {
+                return this.steps;
+            }
+
             if (stepsCount > 0) {
-                for (let i = 0; i < stepsCount; i++) {
-                    labels.push(`Step ${i + 1}`);
+                if (stepsCount === 1) {
+                    labels.push('Confirm');
+                } else {
+                    for (let i = 0; i < stepsCount; i++) {
+                        labels.push(`Step ${i + 1}`);
+                    }
                 }
             }
 
             labels.push('Finished');
 
             return labels;
+        },
+
+        title() {
+            const { titles } = this;
+            const { dActiveStep } = this;
+
+            if (this.windowTitle) {
+                return this.windowTitle;
+            }
+
+            return titles.length > 0 && titles[dActiveStep - 1] ? titles[dActiveStep - 1] : 'Confirmation';
         },
     },
 

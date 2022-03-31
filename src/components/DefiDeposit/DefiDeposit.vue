@@ -214,6 +214,8 @@
             body-min-height="350px"
             :steps-count="stepsCount"
             :active-step="1"
+            :window-title="windowTitle"
+            :steps="windowSteps"
             @cancel-button-click="onCancelButtonClick"
         />
     </div>
@@ -317,6 +319,8 @@ export default {
             label: 'Amount of collateral',
             id: getUniqueId(),
             stepsCount: 2,
+            windowTitle: '',
+            windowSteps: ['Allow', 'Confirm', 'Finished'],
             // viewsStructureRootNode: 'defi-home',
         };
     },
@@ -665,6 +669,7 @@ export default {
             }
 
             if (!this.submitDisabled) {
+                this.windowTitle = this.deposit ? 'Lock Collateral' : 'Unlock Collateral';
                 this.$refs.confirmationWindow.changeComponent('defi-deposit-confirmation', {
                     params,
                     compName: 'defi-lock-unlock',

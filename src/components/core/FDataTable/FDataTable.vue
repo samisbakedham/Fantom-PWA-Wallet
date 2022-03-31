@@ -156,6 +156,8 @@ import FCard from '../FCard/FCard.vue';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 import { isAriaAction } from '@/utils/aria.js';
 
+const GRID_STORAGE_KEY = 'fantom-wallet-data-grid';
+
 export default {
     components: {
         FCard,
@@ -217,6 +219,20 @@ export default {
             default() {
                 return [];
             },
+        },
+
+        /**
+         * Grid's code used for identification in local storage
+         */
+        code: {
+            type: String,
+            default: '',
+        },
+
+        /** If `true` and `code` prop is set, save info about sorting to local storage. */
+        saveSorting: {
+            type: Boolean,
+            default: true,
         },
 
         /**
@@ -407,6 +423,8 @@ export default {
         this.colClassRE = /\s*_c(\d)\s*/;
         this._sortByCol = -1;
         this._initialSort = true;
+        // Settings stored in local storage. Keys are codes, values are settings.
+        this._settings = this.getStoredSettings();
 
         this.prepareColumns();
     },
@@ -417,8 +435,16 @@ export default {
                 this._initialSort = false;
 
                 setTimeout(() => {
-                    if (this._sortByCol > -1) {
-                        const column = this.columns[this._sortByCol];
+                    const { sorting } = this._settings;
+                    let column = null;
+
+                    if (sorting) {
+                        column = this.getColumnByName(sorting.sortBy);
+                        if (column) {
+                            this.sortByColumn(column, sorting.sortDir);
+                        }
+                    } else if (this._sortByCol > -1) {
+                        column = this.columns[this._sortByCol];
                         this.sortByColumn(column, column.sortDir);
                     }
                 }, 10);
@@ -591,6 +617,10 @@ export default {
             return column;
         },
 
+        getColumnByName(name) {
+            return this.columns.find((column) => column.name === name);
+        },
+
         /**
          * Get data item value.
          *
@@ -621,8 +651,9 @@ export default {
          *
          * @param {Object} _column
          * @param {String} [_sortDir] 'asc'|'desc'
+         * @param {boolean} [_click]
          */
-        sortByColumn(_column, _sortDir) {
+        sortByColumn(_column, _sortDir, _click) {
             if (_column && _column.sortFunc) {
                 const sortByCol = this._sortByCol;
 
@@ -643,7 +674,50 @@ export default {
 
                 this._sortByCol = _column._index;
 
+                if (_click && this.code && this.saveSorting) {
+                    this.saveSettings({
+                        ...this._settings,
+                        sorting: {
+                            sortBy: _column.name,
+                            sortDir: _column.sortDir,
+                        },
+                    });
+                }
+
                 this.items.sort(_column.sortFunc(_column.itemProp || _column.name, _column.sortDir));
+            }
+        },
+
+        /**
+         * @return {Object}
+         */
+        getStoredSettings() {
+            const { localStorage } = window;
+            let settings = {};
+
+            if (this.code && localStorage) {
+                const gridSettings = JSON.parse(localStorage.getItem(GRID_STORAGE_KEY) || '{}');
+
+                if (gridSettings && gridSettings[this.code]) {
+                    settings = gridSettings[this.code];
+                }
+            }
+
+            return settings;
+        },
+
+        /**
+         * @param {Object} settings
+         */
+        saveSettings(settings) {
+            const { localStorage } = window;
+
+            if (this.code && localStorage) {
+                const gridSettings = JSON.parse(localStorage.getItem(GRID_STORAGE_KEY) || '{}');
+
+                gridSettings[this.code] = settings;
+
+                localStorage.setItem(GRID_STORAGE_KEY, JSON.stringify(gridSettings));
             }
         },
 
@@ -683,7 +757,7 @@ export default {
             let elem = _event.target.closest('th');
             const column = elem ? this.getColumnByClass(elem.className) : null;
 
-            this.sortByColumn(column);
+            this.sortByColumn(column, '', true);
         },
 
         /**

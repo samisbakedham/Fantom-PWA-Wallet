@@ -6,14 +6,13 @@
             send-button-label="Withdraw"
             password-label="Please enter your wallet password to withdraw your FTM"
             :on-send-transaction-success="onSendTransactionSuccess"
-            @change-component="onChangeComponent"
+            card-off
+            :show-cancel-button="true"
+            :window-mode="true"
+            class="min-h-100"
+            @cancel-button-click="$emit('cancel-button-click', $event)"
         >
-            <h2 class="cont-with-back-btn" data-focus>
-                <span>Withdraw delegated FTM - Confirmation</span>
-                <button type="button" class="btn light" aria-label="Go to previous page" @click="onBackBtnClick">
-                    Back
-                </button>
-            </h2>
+            <h2 class="not-visible" data-focus>Withdraw delegated FTM - Confirmation</h2>
 
             <div class="transaction-info">
                 <div class="row no-collapse">
@@ -132,37 +131,20 @@ export default {
 
         onSendTransactionSuccess(_data) {
             this.$emit('change-component', {
-                to: 'transaction-success-message',
+                to: 'staking-withdraw-ftm-confirmation-success-message',
                 from: 'withdraw-ftm-confirmation',
                 data: {
                     tx: _data.data.sendTransaction.hash,
                     successMessage: 'Undelegation Successful',
-                    continueTo: 'staking-info',
                     continueToParams: {
                         stakerId: this.stakerId,
                     },
+                    continueTo: 'hide-window',
+                    continueButtonLabel: 'Close',
+                    cardOff: true,
+                    windowMode: true,
                 },
             });
-        },
-
-        onBackBtnClick() {
-            this.$emit('change-component', {
-                to: 'staking-info',
-                from: 'withdraw-ftm-confirmation',
-                data: {
-                    withdrawRequest: this.withdrawRequest,
-                    stakerId: this.stakerId,
-                },
-            });
-        },
-
-        /**
-         * Re-target `'change-component'` event.
-         *
-         * @param {object} _data
-         */
-        onChangeComponent(_data) {
-            this.$emit('change-component', _data);
         },
     },
 };

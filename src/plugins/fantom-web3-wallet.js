@@ -702,7 +702,7 @@ export class FantomWeb3Wallet {
      * @return {String} Corrected mnemonic or empty string.
      */
     correctMnemonic(_mnemonic) {
-        const mnemT = _mnemonic.trim();
+        const mnemT = _mnemonic.toLowerCase().trim();
         let mnemonic = '';
         let mnemArr;
 

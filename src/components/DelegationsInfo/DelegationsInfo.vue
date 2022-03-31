@@ -1,6 +1,8 @@
 <template>
     <div class="delegations-info">
-        <f-tabs class="account-main-content-mt">
+        <h1 data-focus="staking">Staking</h1>
+
+        <f-tabs class="account-main-content-mt__">
             <template #delegations>
                 Wallet Delegations
                 <span class="f-records-count">({{ delegationsRecordsCount }})</span>
@@ -39,6 +41,16 @@
                 </f-card>
             </f-tab>
         </f-tabs>
+
+        <tx-confirmation-window
+            ref="confirmationWindow"
+            body-min-height="350px"
+            window-class="send-transaction-form-tx-window"
+            :window-title="windowTitle"
+            :steps-count="1"
+            :active-step="1"
+            @cancel-button-click="onCancelButtonClick"
+        />
     </div>
 </template>
 
@@ -55,17 +67,20 @@ import {
     SET_ACTIVE_ACCOUNT_BY_ADDRESS,
 } from '@/store/mutations.type.js';
 import { focusElem } from '@/utils/aria.js';
+import TxConfirmationWindow from '@/components/windows/TxConfirmationWindow/TxConfirmationWindow.vue';
 
 export default {
     name: 'DelegationsInfo',
 
-    components: { AllDelegationsList, FTab, FTabs, DelegationList, FCard },
+    components: { TxConfirmationWindow, AllDelegationsList, FTab, FTabs, DelegationList, FCard },
 
     data() {
         return {
             delegationsRecordsCount: 0,
             allDelegationsRecordsCount: 0,
             loadAllDelegations: false,
+            reStake: false,
+            windowTitle: '',
         };
     },
 
@@ -78,11 +93,25 @@ export default {
     },
 
     methods: {
+        /**
+         * @param {string} _address
+         */
+        setActiveAccount(_address) {
+            this.$store.commit(DEACTIVATE_ACTIVE_ACCOUNT);
+            this.$store.commit(SET_ACTIVE_ACCOUNT_BY_ADDRESS, _address);
+            this.$store.commit(SET_ACTIVE_ACCOUNT_ADDRESS, _address);
+        },
+
+        showConfirmationWindow(_compName, _data, _title = '') {
+            this.windowTitle = _title;
+            this.$refs.confirmationWindow.changeComponent(_compName, _data);
+            this.$refs.confirmationWindow.show();
+        },
+
         onAddDelegationBtnClick() {
-            this.$emit('change-component', {
-                to: 'stake-form',
-                from: 'delegations-info',
-                data: {
+            this.$router.push({
+                name: 'staking-stake-form',
+                params: {
                     increaseDelegation: false,
                     stakerInfo: {
                         stakerInfo: {
@@ -98,22 +127,12 @@ export default {
          * @param {object} _item
          */
         onDelegationsRowAction(_item) {
-            this.$emit('change-component', {
-                to: 'staking-info',
-                from: 'delegations-info',
-                data: {
+            this.$router.push({
+                name: 'staking-info',
+                params: {
                     stakerId: _item.delegation.toStakerId,
                 },
             });
-        },
-
-        /**
-         * @param {string} _address
-         */
-        setActiveAccount(_address) {
-            this.$store.commit(DEACTIVATE_ACTIVE_ACCOUNT);
-            this.$store.commit(SET_ACTIVE_ACCOUNT_BY_ADDRESS, _address);
-            this.$store.commit(SET_ACTIVE_ACCOUNT_ADDRESS, _address);
         },
 
         /**
@@ -130,10 +149,9 @@ export default {
                 });
             }
 
-            this.$emit('change-component', {
-                to: 'staking-info',
-                from: 'delegations-info',
-                data: {
+            this.$router.push({
+                name: 'staking-info',
+                params: {
                     stakerId: _item.delegation.toStakerId,
                 },
             });
@@ -152,15 +170,17 @@ export default {
         },
 
         onClaimRewards(_data) {
-            this.$emit('change-component', {
-                to: 'claim-rewards-confirmation',
-                from: 'delegations-info',
-                data: {
+            this.showConfirmationWindow(
+                'claim-rewards-confirmation',
+                {
                     stakerId: _data.delegation.toStakerId,
                     reStake: _data.reStake,
                     fromDelegationList: _data.fromDelegationList,
                 },
-            });
+                _data.reStake ? 'Claim & Restake' : 'Claim Rewards'
+            );
+
+            this.reStake = _data.reStake;
         },
 
         onAllDelegationsClaimRewards(_data) {
@@ -172,17 +192,34 @@ export default {
                     name: 'staking',
                     params: { address },
                 });
-            }
 
-            this.$emit('change-component', {
-                to: 'claim-rewards-confirmation',
-                from: 'delegations-info',
-                data: {
-                    stakerId: _data.delegation.toStakerId,
-                    reStake: _data.reStake,
-                    fromDelegationList: _data.fromDelegationList,
-                },
-            });
+                this.$router.push({
+                    name: 'staking-info',
+                    params: {
+                        stakerId: _data.delegation.toStakerId,
+                        claim: true,
+                        reStake: _data.reStake,
+                    },
+                });
+            } else {
+                this.showConfirmationWindow(
+                    'claim-rewards-confirmation',
+                    {
+                        stakerId: _data.delegation.toStakerId,
+                        reStake: _data.reStake,
+                        fromDelegationList: _data.fromDelegationList,
+                    },
+                    _data.reStake ? 'Claim & Restake' : 'Claim Rewards'
+                );
+
+                this.reStake = _data.reStake;
+            }
+        },
+
+        onCancelButtonClick(cancelBtnClicked) {
+            if (!cancelBtnClicked && this.reStake) {
+                this.$emit('reload-view');
+            }
         },
     },
 };

@@ -98,6 +98,8 @@
             body-min-height="350px"
             :steps-count="2"
             :active-step="1"
+            window-title="Remove Liquidity"
+            :steps="['Allow', 'Confirm', 'Finished']"
             @cancel-button-click="onCancelButtonClick"
         />
     </section>

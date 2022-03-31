@@ -136,6 +136,7 @@ import { sortByHex, sortByLocaleString } from '../../../utils/array-sorting.js';
 import appConfig from '../../../../app.config.js';
 import { cloneObject } from '@/utils';
 import { mapGetters } from 'vuex';
+import { shuffle } from '@/utils/array.js';
 
 export default {
     name: 'ValidatorList',
@@ -199,6 +200,11 @@ export default {
 
                 if (_key === 'stakers') {
                     data = cloneObject(_data.data.stakers);
+
+                    // exclude validators with zero self-stake
+                    data = data.filter((validator) => validator.stake !== '0x0');
+
+                    shuffle(data);
 
                     data.forEach((_item, _idx) => {
                         // _item.total_staked = WEIToFTM(_item.stake) + WEIToFTM(_item.delegatedMe);
@@ -313,7 +319,7 @@ export default {
                     label: this.$t('view_validator_list.total_staked'),
                     formatter: (_value) => formatNumberByLocale(WEIToFTM(_value), 0),
                     sortFunc: sortByHex,
-                    sortDir: 'desc',
+                    // sortDir: 'desc',
                     cssClass: 'align-end',
                 },
                 {

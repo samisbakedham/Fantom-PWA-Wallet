@@ -10,6 +10,208 @@ const appStructure = [
         id: 'wallet',
         _c: [
             {
+                id: 'account',
+                _c: [
+                    {
+                        id: 'account-history',
+                        _c: [
+                            {
+                                id: 'account-blockchain-picker-form',
+                                _c: [
+                                    {
+                                        id: 'account-send-transaction-form',
+                                        _c: [
+                                            {
+                                                id: 'account-transaction-confirmation',
+                                                component: 'transaction-confirmation',
+                                                _c: [
+                                                    {
+                                                        id: 'account-transaction-success-message',
+                                                        component: 'transaction-success-message',
+                                                    },
+                                                    {
+                                                        id: 'account-transaction-reject-message',
+                                                        component: 'transaction-reject-message',
+                                                    },
+                                                ],
+                                            },
+                                            { id: 'account-receive' },
+                                        ],
+                                    },
+                                ],
+                            },
+                            {
+                                id: 'account-send-erc20',
+                            },
+                        ],
+                    },
+                ],
+            },
+            {
+                id: 'staking',
+                _c: [
+                    {
+                        id: 'staking-delegations-info',
+                        _c: [
+                            {
+                                id: 'staking-info',
+                                _c: [
+                                    {
+                                        id: 'staking-unstake-ftm',
+                                        component: 'unstake-f-t-m',
+                                        _c: [
+                                            {
+                                                id: 'staking-delegation-unlock-confirmation',
+                                                component: 'delegation-unlock-confirmation',
+                                                _c: [
+                                                    {
+                                                        id: 'staking-delegation-unlock-confirmation-success-message',
+                                                        component: 'transaction-success-message',
+                                                        _c: [
+                                                            {
+                                                                id: 'staking-unstake-confirmation',
+                                                                component: 'unstake-confirmation',
+                                                                _c: [
+                                                                    {
+                                                                        id:
+                                                                            'staking-unstake-confirmation-success-message',
+                                                                        component: 'transaction-success-message',
+                                                                    },
+                                                                    {
+                                                                        id:
+                                                                            'staking-unstake-confirmation-reject-message',
+                                                                        component: 'transaction-reject-message',
+                                                                    },
+                                                                ],
+                                                            },
+                                                        ],
+                                                    },
+                                                    {
+                                                        id: 'staking-delegation-unlock-confirmation-reject-message',
+                                                        component: 'transaction-reject-message',
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        id: 'staking-claim-rewards-confirmation',
+                                        component: 'claim-rewards-confirmation',
+                                        _c: [
+                                            {
+                                                id: 'staking-claim-rewards-confirmation-success-message',
+                                                component: 'transaction-success-message',
+                                            },
+                                            {
+                                                id: 'staking-claim-rewards-confirmation-reject-message',
+                                                component: 'transaction-reject-message',
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        id: 'staking-delegation-lock',
+                                        component: 'delegation-lock',
+                                        _c: [
+                                            {
+                                                id: 'staking-delegation-lock-confirmation',
+                                                component: 'delegation-lock-confirmation',
+                                                _c: [
+                                                    {
+                                                        id: 'staking-delegation-lock-confirmation-success-message',
+                                                        component: 'transaction-success-message',
+                                                    },
+                                                    {
+                                                        id: 'staking-delegation-lock-confirmation-reject-message',
+                                                        component: 'transaction-reject-message',
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        id: 'staking-mint-sftm-confirmation',
+                                        component: 'defi-mint-s-f-t-m-confirmation',
+                                        _c: [
+                                            {
+                                                id: 'staking-mint-sftm-confirmation-success-message',
+                                                component: 'transaction-success-message',
+                                            },
+                                            {
+                                                id: 'staking-mint-sftm-confirmation-reject-message',
+                                                component: 'transaction-reject-message',
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        id: 'staking-repay-sftm-confirmation',
+                                        component: 'defi-repay-s-f-t-m-confirmation',
+                                        _c: [
+                                            {
+                                                id: 'staking-repay-sftm-confirmation-success-message',
+                                                component: 'transaction-success-message',
+                                                _c: [
+                                                    {
+                                                        id: 'staking-repay-sftm-confirmation2',
+                                                        component: 'defi-repay-s-f-t-m-confirmation',
+                                                        _c: [
+                                                            {
+                                                                id: 'staking-repay-sftm-confirmation-success-message2',
+                                                                component: 'transaction-success-message',
+                                                            },
+                                                            {
+                                                                id: 'staking-repay-sftm-confirmation-reject-message2',
+                                                                component: 'transaction-reject-message',
+                                                            },
+                                                        ],
+                                                    },
+                                                ],
+                                            },
+                                            {
+                                                id: 'staking-repay-sftm-confirmation-reject-message',
+                                                component: 'transaction-reject-message',
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        id: 'staking-withdraw-ftm-confirmation',
+                                        component: 'withdraw-f-t-m-confirmation',
+                                        _c: [
+                                            {
+                                                id: 'staking-withdraw-ftm-confirmation-success-message',
+                                                component: 'transaction-success-message',
+                                            },
+                                            {
+                                                id: 'staking-withdraw-ftm-confirmation-reject-message',
+                                                component: 'transaction-reject-message',
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                            {
+                                id: 'staking-stake-form',
+                                _c: [
+                                    {
+                                        id: 'staking-stake-form-confirmation',
+                                        component: 'stake-confirmation',
+                                        _c: [
+                                            {
+                                                id: 'staking-stake-form-success-message',
+                                                component: 'transaction-success-message',
+                                            },
+                                            {
+                                                id: 'staking-stake-form-reject-message',
+                                                component: 'transaction-reject-message',
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            },
+            {
                 id: 'defi-fmint',
                 _c: [
                     { id: 'defi-lock' },

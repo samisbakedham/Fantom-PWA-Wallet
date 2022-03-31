@@ -1,18 +1,20 @@
 <template>
-    <div class="view-settings">
-        <h1>Settings</h1>
+    <div class="view-settings std-view">
+        <main class="main">
+            <h1>Settings</h1>
 
-        <h2>fWallet</h2>
-        <settings-form />
+            <h2>fWallet</h2>
+            <settings-form />
 
-        <h2>fUNI</h2>
-        <f-uniswap-settings />
+            <h2>fUNI</h2>
+            <f-uniswap-settings />
 
-        <h2>Metamask</h2>
-        <m-m-settings />
+            <h2>Metamask</h2>
+            <m-m-settings />
 
-        <h2>Links</h2>
-        <settings-links />
+            <h2>Links</h2>
+            <settings-links />
+        </main>
     </div>
 </template>
 

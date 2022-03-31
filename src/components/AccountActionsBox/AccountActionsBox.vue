@@ -10,7 +10,12 @@
                 </router-link>
             </li>
             <li>
-                <router-link :to="{ name: 'account-send' }" class="action" title="Send" aria-label="Send FTM">
+                <router-link
+                    :to="{ name: 'account-blockchain-picker-form' }"
+                    class="action"
+                    title="Send"
+                    aria-label="Send FTM"
+                >
                     <span class="btn large same-size round">
                         <icon data="@/assets/svg/send.svg" width="20" height="20" aria-hidden="true" />
                     </span>

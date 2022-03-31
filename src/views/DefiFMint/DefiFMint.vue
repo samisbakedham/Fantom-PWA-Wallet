@@ -219,6 +219,7 @@
             body-min-height="350px"
             :steps-count="1"
             :active-step="1"
+            :window-title="windowTitle"
             @cancel-button-click="onCancelButtonClick"
         />
 
@@ -323,6 +324,7 @@ export default {
             collateralPositionsRecordsCount: 0,
             synthsPositionsRecordsCount: 0,
             assetsRecordsCount: 0,
+            windowTitle: '',
             id: getUniqueId(),
         };
     },
@@ -530,6 +532,7 @@ export default {
 
         onClaimMintRewards(_data) {
             if (this.canClaimRewards) {
+                this.windowTitle = 'Claim Rewards';
                 this.$refs.confirmationWindow.changeComponent('defi-f-mint-claim-rewards-confirmation', {
                     params: _data,
                 });
@@ -539,6 +542,7 @@ export default {
 
         onClaimRewardsBtnClick() {
             if (this.canClaimRewards) {
+                this.windowTitle = 'Claim Rewards';
                 this.$refs.confirmationWindow.changeComponent('defi-f-mint-claim-rewards-confirmation', {
                     params: { pendingRewards: this.pendingRewardsWFTM, token: { ...this.wftmToken } },
                 });
@@ -548,6 +552,7 @@ export default {
 
         onPushRewardsBtnClick() {
             if (this.canPushRewards) {
+                this.windowTitle = 'Push Rewards';
                 this.$refs.confirmationWindow.changeComponent('defi-f-mint-push-rewards-confirmation', {
                     params: { token: { ...this.wftmToken } },
                 });

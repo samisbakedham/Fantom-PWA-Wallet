@@ -31,6 +31,7 @@
                     :cancel-button-label="cancelButtonLabel"
                     :show-cancel-button="showCancelButton"
                     :max-fee="tx ? tx._fee : -1"
+                    :loading="sending"
                     @f-form-submit="onFFormSubmit"
                     @cancel-button-click="$emit('cancel-button-click', $event)"
                 />
@@ -66,13 +67,13 @@
         >
             <div class="align-center">
                 <div v-if="!$mm.isInstalled()">
-                    MM is not installed.
+                    Metamask is not installed.
                 </div>
                 <div v-else-if="!$mm.isCorrectChainId()">
-                    Please, select Opera chain in MM.
+                    Please, select Opera chain in Metamask.
                 </div>
                 <div v-else-if="mmAccount.toLowerCase() !== currentAccount.address.toLowerCase()">
-                    Please, select account <b>{{ currentAccount.address }}</b> in MM.
+                    Please, select account <b>{{ currentAccount.address }}</b> in Metamask.
                 </div>
             </div>
         </f-window>
@@ -203,6 +204,7 @@ export default {
             error: null,
             waiting: false,
             disabledSubmit: true,
+            sending: false,
             dGasLimit: '',
             gasInfo: {},
         };
@@ -299,6 +301,8 @@ export default {
             data.pwd = '';
 
             if (currentAccount && this.tx && fWallet.isValidAddress(this.tx.to)) {
+                this.sending = true;
+
                 this.tx.nonce = await fWallet.getTransactionCount(currentAccount.address);
                 this.tx.nonce = `0x${this.tx.nonce.toString(16)}`;
                 this.tx.chainId = appConfig.chainId;
@@ -350,6 +354,7 @@ export default {
                         } catch (_error) {
                             console.error(_error);
                             this.errorMsg = _error.toString();
+                            this.sending = false;
                             // this.errorMsg = 'Invalid password';
                         }
                     }
@@ -370,6 +375,7 @@ export default {
                         this.error = _error;
                         this.$refs.confirmationWindow.hide();
                         // this.errorMsg = _error.toString();
+                        this.sending = false;
                     }
                 } else if (currentAccount.isMetamaskAccount) {
                     if (this.areMMParamsOk()) {
@@ -426,6 +432,7 @@ export default {
                             }
 
                             this.waiting = false;
+                            this.sending = false;
                         }
                     }
                 } else if (currentAccount.isWalletConnectAccount) {
@@ -463,6 +470,7 @@ export default {
                             }
 
                             this.waiting = false;
+                            this.sending = false;
                         }
                     }
                 }
@@ -470,6 +478,7 @@ export default {
                 if (rawTx) {
                     // console.log('rawTx', rawTx);
                     this.sendTransaction(rawTx);
+                    // this.sending = false;
 
                     setTimeout(() => {
                         this.$store.dispatch(UPDATE_ACCOUNT_BALANCE);

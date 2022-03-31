@@ -1,25 +1,14 @@
 <template>
-    <div class="stake-form account-main-content-mt" :class="{ 'increase-delegation': increaseDelegation }">
-        <f-card class="f-card-double-padding">
-            <f-form ref="stakeForm" center-form @f-form-submit="onFormSubmit">
-                <fieldset class="">
-                    <legend class="h2" data-focus>
-                        <div class="cont-with-back-btn">
-                            <span
-                                >Delegate FTM <span class="f-steps"><b>1</b> / 2</span></span
-                            >
-                            <a
-                                href="#"
-                                class="btn light break-word"
-                                style="max-width: 100%;"
-                                aria-label="Go to previous page"
-                                @click.prevent="onPreviousBtnClick"
-                            >
-                                Back
-                            </a>
-                        </div>
-                    </legend>
+    <div class="stake-form" :class="{ 'increase-delegation': d_increaseDelegation }">
+        <h1 :id="labelId" data-focus class="with-back-btn align-center" aria-label="Delegate FTM">
+            <span>Delegate FTM</span>
+            <f-back-button ref="backButton" :route-name="getBackButtonRoute('staking-stake-form')" />
+        </h1>
+        <br />
 
+        <f-card class="f-card-double-padding">
+            <f-form ref="stakeForm" center-form :aria-labelledby="labelId" @f-form-submit="onFormSubmit">
+                <fieldset class="">
                     <div class="form-body">
                         <f-input
                             v-model="amount"
@@ -55,7 +44,7 @@
                             autocomplete="off"
                             name="validator"
                             readonly
-                            :disabled="increaseDelegation"
+                            :disabled="d_increaseDelegation"
                             disabled-as-text
                             class="validator-select"
                             :validator="checkValidator"
@@ -86,6 +75,16 @@
         </f-card>
 
         <validator-picker-window ref="validatorPickerWindow" @validator-selected="onValidatorSelected" />
+
+        <tx-confirmation-window
+            ref="confirmationWindow"
+            body-min-height="350px"
+            window-class="send-transaction-form-tx-window"
+            window-title="Delegate FTM"
+            :steps-count="1"
+            :active-step="1"
+            @cancel-button-click="onCancelButtonClick"
+        />
     </div>
 </template>
 
@@ -99,6 +98,10 @@ import { mapGetters } from 'vuex';
 import { focusElem, isAriaAction } from '../../utils/aria.js';
 import sfcUtils from 'fantom-ledgerjs/src/sfc-utils.js';
 import { GAS_LIMITS } from '../../plugins/fantom-web3-wallet.js';
+import { getUniqueId } from '@/utils';
+import FBackButton from '@/components/core/FBackButton/FBackButton.vue';
+import { viewHelpersMixin } from '@/mixins/view-helpers.js';
+import TxConfirmationWindow from '@/components/windows/TxConfirmationWindow/TxConfirmationWindow.vue';
 
 // import { formatHexToInt } from '../../filters.js';
 // import { WEIToFTM } from '../../utils/transactions.js';
@@ -106,7 +109,9 @@ import { GAS_LIMITS } from '../../plugins/fantom-web3-wallet.js';
 export default {
     name: 'StakeForm',
 
-    components: { ValidatorPickerWindow, FInput, FMessage, FForm, FCard },
+    components: { TxConfirmationWindow, FBackButton, ValidatorPickerWindow, FInput, FMessage, FForm, FCard },
+
+    mixins: [viewHelpersMixin],
 
     props: {
         /** Increase delegation mode. */
@@ -135,6 +140,9 @@ export default {
 
     data() {
         return {
+            d_increaseDelegation: false,
+            d_stakerInfo: {},
+            d_stakerId: '',
             amountErrMsg: 'Invalid amount',
             gasPrice: '',
             validator: 'Select a Validator',
@@ -146,6 +154,7 @@ export default {
                 name: '',
             },
             amount: '',
+            labelId: getUniqueId(),
         };
     },
 
@@ -182,6 +191,8 @@ export default {
     },
 
     created() {
+        this.setDataFromParams();
+
         this.$fWallet.getGasPrice().then((_gasPrice) => {
             this.gasPrice = _gasPrice;
         });
@@ -189,7 +200,7 @@ export default {
 
     // activated() {
     mounted() {
-        const { stakerInfo } = this;
+        const { d_stakerInfo } = this;
 
         this.validator = 'Select a Validator';
         this.validatorInfo = {
@@ -198,11 +209,11 @@ export default {
             name: '',
         };
 
-        if (stakerInfo && stakerInfo.id) {
+        if (d_stakerInfo && d_stakerInfo.id) {
             this.validatorInfo = {
-                id: stakerInfo.id,
-                address: stakerInfo.stakerAddress,
-                name: stakerInfo.stakerInfo.name,
+                id: d_stakerInfo.id,
+                address: d_stakerInfo.stakerAddress,
+                name: d_stakerInfo.stakerInfo.name,
             };
 
             this.updateValidatorInfo().then(() => {
@@ -291,7 +302,7 @@ export default {
             const validatorId = parseInt(this.validatorInfo.id, 16);
             let delegationTx = null;
 
-            if (this.increaseDelegation) {
+            if (this.d_increaseDelegation) {
                 delegationTx = sfcUtils.increaseDelegationTx(amountWei, validatorId);
             } else {
                 delegationTx = sfcUtils.createDelegationTx(amountWei, validatorId);
@@ -299,23 +310,42 @@ export default {
 
             const tx = await this.$fWallet.getSFCTransactionToSign(delegationTx, this.currentAccount.address);
 
-            this.$emit('change-component', {
+            const data = {
+                amount: amount,
+                ...this.validatorInfo,
+                tx,
+                increaseDelegation: this.d_increaseDelegation,
+                stakerInfo: this.d_stakerInfo || this.validatorInfo,
+                previousComponent: this.previousComponent,
+                stakerId: this.d_stakerId,
+            };
+
+            this.$refs.confirmationWindow.changeComponent('stake-confirmation', {
+                stakeData: data,
+                increaseDelegation: data.increaseDelegation,
+                stakerInfo: data.stakerInfo,
+                previousComponent: data.previousComponent,
+                stakerId: data.stakerId,
+            });
+            this.$refs.confirmationWindow.show();
+
+            /*this.$emit('change-component', {
                 to: 'stake-confirmation',
                 from: 'stake-form',
                 data: {
                     amount: amount,
                     ...this.validatorInfo,
                     tx,
-                    increaseDelegation: this.increaseDelegation,
-                    stakerInfo: this.stakerInfo || this.validatorInfo,
+                    increaseDelegation: this.d_increaseDelegation,
+                    stakerInfo: this.d_stakerInfo || this.validatorInfo,
                     previousComponent: this.previousComponent,
-                    stakerId: this.stakerId,
+                    stakerId: this.d_stakerId,
                 },
-            });
+            });*/
         },
 
         onValidatorSelected(_validatorInfo) {
-            if (!this.increaseDelegation) {
+            if (!this.d_increaseDelegation) {
                 this.validator = `${_validatorInfo.name}, ${parseInt(_validatorInfo.id, 16)}`;
                 this.validatorInfo = { ..._validatorInfo };
                 this.updateValidatorInfo().then(() => {
@@ -325,25 +355,15 @@ export default {
         },
 
         onSelectValidatorClick() {
-            if (!this.increaseDelegation) {
+            if (!this.d_increaseDelegation) {
                 this.$refs.validatorPickerWindow.show();
             }
         },
 
         onSelectValidatorKeyup(_event) {
-            if (!this.increaseDelegation && isAriaAction(_event)) {
+            if (!this.d_increaseDelegation && isAriaAction(_event)) {
                 this.$refs.validatorPickerWindow.show();
             }
-        },
-
-        onPreviousBtnClick() {
-            this.$emit('change-component', {
-                to: this.previousComponent,
-                from: 'stake-form',
-                data: {
-                    stakerId: this.stakerId,
-                },
-            });
         },
 
         async onFormSubmit(_event) {
@@ -364,6 +384,12 @@ export default {
             }
 
             this.amount = amount.toString();
+        },
+
+        onCancelButtonClick(cancelBtnClicked) {
+            if (!cancelBtnClicked) {
+                this.$refs.backButton.goBack();
+            }
         },
     },
 };

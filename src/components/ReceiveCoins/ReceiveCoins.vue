@@ -1,17 +1,24 @@
 <template>
-    <f-card class="receive-coins f-card-double-padding">
-        <h2 class="align-start" data-focus>Receive Opera FTM</h2>
+    <div>
+        <h2 class="align-center" data-focus>Receive Opera FTM</h2>
 
-        <h3 :id="labelId" class="align-center h2">Which blockchain are you receiving FTM from?</h3>
+        <f-card class="receive-coins f-card-double-padding">
+            <h3 :id="labelId" class="align-center">Which blockchain are you receiving FTM from?</h3>
 
-        <blockchain-picker disable-e-t-h disable-b-n-b :aria-labelledby="labelId" @blockchain-pick="onBlockchainPick" />
+            <blockchain-picker
+                disable-e-t-h
+                disable-b-n-b
+                :aria-labelledby="labelId"
+                @blockchain-pick="onBlockchainPick"
+            />
 
-        <component
-            :is="currentComponent"
-            v-bind="currentComponentProperties"
-            @change-component="onChangeComponent"
-        ></component>
-    </f-card>
+            <component
+                :is="currentComponent"
+                v-bind="currentComponentProperties"
+                @change-component="onChangeComponent"
+            ></component>
+        </f-card>
+    </div>
 </template>
 
 <script>

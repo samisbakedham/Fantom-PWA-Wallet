@@ -194,6 +194,7 @@
                     body-min-height="350px"
                     :steps-count="1"
                     :active-step="1"
+                    :window-title="windowTitle"
                     @cancel-button-click="onCancelButtonClick"
                 />
             </template>
@@ -286,6 +287,7 @@ export default {
             loading: false,
             proposalError: '',
             optionStates: [],
+            windowTitle: '',
             explorerUrl: appConfig.explorerUrl,
         };
     },
@@ -670,6 +672,7 @@ export default {
                         votes: optionIdxs.map((_idx) => `0x${_idx.toString(16)}`),
                     };
 
+                    this.windowTitle = 'Vote';
                     this.$refs.confirmationWindow.changeComponent('gov-proposal-confirmation', {
                         ...params,
                         props: { ...params },
@@ -707,6 +710,7 @@ export default {
                         proposal: cloneObject(this.d_proposal),
                     };
 
+                    this.windowTitle = 'Cancel Vote';
                     this.$refs.confirmationWindow.changeComponent('gov-cancel-vote-confirmation', {
                         ...params,
                         props: { ...params },
