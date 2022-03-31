@@ -201,6 +201,9 @@ export default {
                 if (_key === 'stakers') {
                     data = cloneObject(_data.data.stakers);
 
+                    // exclude validators with zero self-stake
+                    data = data.filter((validator) => validator.stake !== '0x0');
+
                     shuffle(data);
 
                     data.forEach((_item, _idx) => {
