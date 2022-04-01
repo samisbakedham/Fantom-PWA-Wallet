@@ -1,6 +1,6 @@
 <template>
     <span class="address-field form-field">
-        <f-input ref="input" v-model="inputValue" v-bind="fInputProps" @input="onInput">
+        <f-input ref="input" v-model="inputValue" v-bind="fInputProps" @input="throttledInput">
             <template #top="sProps">
                 <div class="input-label-layout">
                     <label :for="sProps.inputId">{{ sProps.label }}</label>
@@ -48,17 +48,15 @@ import FInput from '../core/FInput/FInput.vue';
 import { inputMixin } from '../../mixins/input.js';
 import AddressPickerWindow from '../windows/AddressPickerWindow/AddressPickerWindow.vue';
 import { mapGetters } from 'vuex';
-import { ethers } from 'ethers';
 import ContactDetailWindow from '../windows/ContactDetailWindow/ContactDetailWindow.vue';
 import { ADD_CONTACT } from '../../store/actions.type.js';
-import {
-  abi,
-  contract_address
-} from './fns.js';
+import { abi, contract_address } from './fns.js';
+import Web3 from 'web3';
+import appConfig from '../../../app.config.js';
+import { debounce } from '@/utils';
 
-const ethersProvider = new ethers.providers.JsonRpcProvider("https://rpc.ftm.tools");
-const contract = new ethers.Contract(contract_address, abi, ethersProvider);
-const functions = contract.functions;
+const web3 = new Web3(appConfig.rpc);
+const contract = new web3.eth.Contract(abi, contract_address);
 
 /**
  * Input field with possibility to pick an address from address book or wallets and for adding address to address book.
@@ -88,6 +86,7 @@ export default {
             /** @type {WalletContact} */
             contactData: {},
             addAddressBtnVisible: false,
+            throttledInput: debounce((_event) => this.onInput(_event), 250),
         };
     },
 
@@ -123,11 +122,19 @@ export default {
         },
 
         async resolveName(_name) {
-          var isOwned = await functions.isOwnedByMapping(_name);
-          if (isOwned[0]) {
-            var address = await functions.getOwnerOfName(_name);
-            this.inputValue = address[0];
-          }
+            if (!_name || _name === '0X') {
+                return;
+            }
+
+            const isOwned = await contract.methods.isOwnedByMapping(_name).call();
+
+            if (isOwned) {
+                const address = await contract.methods.getOwnerOfName(_name).call();
+
+                if (address) {
+                    this.inputValue = address;
+                }
+            }
         },
 
         async validate() {
