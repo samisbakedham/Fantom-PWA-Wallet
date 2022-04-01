@@ -50,13 +50,7 @@ import AddressPickerWindow from '../windows/AddressPickerWindow/AddressPickerWin
 import { mapGetters } from 'vuex';
 import ContactDetailWindow from '../windows/ContactDetailWindow/ContactDetailWindow.vue';
 import { ADD_CONTACT } from '../../store/actions.type.js';
-import { abi, contract_address } from './fns.js';
-import Web3 from 'web3';
-import appConfig from '../../../app.config.js';
 import { debounce } from '@/utils';
-
-const web3 = new Web3(appConfig.rpc);
-const contract = new web3.eth.Contract(abi, contract_address);
 
 /**
  * Input field with possibility to pick an address from address book or wallets and for adding address to address book.
@@ -121,22 +115,6 @@ export default {
                 );
         },
 
-        async resolveName(_name) {
-            if (!_name || _name === '0X') {
-                return;
-            }
-
-            const isOwned = await contract.methods.isOwnedByMapping(_name).call();
-
-            if (isOwned) {
-                const address = await contract.methods.getOwnerOfName(_name).call();
-
-                if (address) {
-                    this.inputValue = address;
-                }
-            }
-        },
-
         async validate() {
             await this.$refs.input.validate();
         },
@@ -175,7 +153,6 @@ export default {
         },
 
         onInput(_value) {
-            this.resolveName(_value.toUpperCase());
             this.setAddAddressBtnVisibility(_value.trim());
             this.$emit('input', _value);
         },
