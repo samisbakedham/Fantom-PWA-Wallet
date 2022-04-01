@@ -1,3 +1,4 @@
+//
 const appConfig = {
     // app title
     name: 'Fantom fWallet',
