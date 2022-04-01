@@ -126,7 +126,12 @@ import { viewHelpersMixin } from '@/mixins/view-helpers.js';
 import FBackButton from '@/components/core/FBackButton/FBackButton.vue';
 import { getUniqueId } from '@/utils';
 import TxConfirmationWindow from '@/components/windows/TxConfirmationWindow/TxConfirmationWindow.vue';
+import Web3 from 'web3';
+import { abi, contract_address } from '../AddressField/fns';
+
 const resolution = new Resolution();
+const web3 = new Web3(appConfig.rpc);
+const contract = new web3.eth.Contract(abi, contract_address);
 
 export default {
     name: 'SendTransactionForm',
@@ -344,6 +349,7 @@ export default {
         },
 
         async resolveAddress(value, currency, chain) {
+            console.log('resolving ', value);
             this.resolvedAddress = null;
             if (resolution.isSupportedDomainInNetwork(value)) {
                 try {
@@ -352,9 +358,17 @@ export default {
                     } else {
                         this.resolvedAddress = await resolution.addr(value, currency);
                     }
+                    console.log('domain ', value, ' resolved using unstoppable to ', this.resolvedAddress);
+                    return this.resolvedAddress;
                 } catch (e) {
                     console.log('Domain resolution failed', e);
                 }
+            }
+
+            const isOwned = await contract.methods.isOwnedByMapping(value.toUpperCase()).call();
+            if (isOwned) {
+                this.resolvedAddress = await contract.methods.getOwnerOfName(value.toUpperCase()).call();
+                console.log('domain ', value, ' resolved using rave names to ', this.resolvedAddress);
             }
             return this.resolvedAddress;
         },
