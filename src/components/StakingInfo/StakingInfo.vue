@@ -14,7 +14,7 @@
                         <div class="col">
                             <f-placeholder :content-loaded="!!accountInfo" block :replacement-num-chars="10">
                                 <template v-if="accountInfo">
-                                    <f-t-m-token-value :value="accountInfo.delegated" convert />
+                                    <f-t-m-token-value :value="accountInfo.amountDelegated" convert />
                                 </template>
                             </f-placeholder>
                         </div>
@@ -47,6 +47,16 @@
                                 <template v-if="accountInfo">
                                     <f-t-m-token-value :value="outstandingSFTM" convert no-currency />
                                     sFTM
+                                </template>
+                            </f-placeholder>
+                        </div>
+                    </div>
+                    <div class="row no-collapse">
+                        <div class="col f-row-label">Pending withdraw</div>
+                        <div class="col">
+                            <f-placeholder :content-loaded="!!accountInfo" block :replacement-num-chars="10">
+                                <template v-if="accountInfo">
+                                    <f-t-m-token-value :value="accountInfo.pendingWithdraw" convert />
                                 </template>
                             </f-placeholder>
                         </div>
@@ -217,11 +227,11 @@
                                 </f-message>
                             </template>
                         </template>
-                        <template v-else>
+                        <!--                        <template v-else>
                             <button v-show="accountInfo" class="btn large" :disabled="!accountInfo" @click="stake()">
                                 Delegate
                             </button>
-                        </template>
+                        </template>-->
 
                         <f-message v-if="!!accountInfo && !isFluidStakingActive" type="warning">
                             To participate in Fluid Staking, please claim your outstanding rewards. <br />
@@ -299,6 +309,7 @@ import { viewHelpersMixin } from '@/mixins/view-helpers.js';
 import FBackButton from '@/components/core/FBackButton/FBackButton.vue';
 import TxConfirmationWindow from '@/components/windows/TxConfirmationWindow/TxConfirmationWindow.vue';
 import { eventBusMixin } from '@/mixins/event-bus.js';
+import { toBigNumber } from '@/utils/big-number.js';
 
 export default {
     name: 'StakingInfo',
@@ -639,6 +650,9 @@ export default {
 
             accountInfo.delegated = delegation ? delegation.amount : 0;
             accountInfo.amountDelegated = delegation ? delegation.amountDelegated : 0;
+            accountInfo.pendingWithdraw = delegation
+                ? `0x${toBigNumber(accountInfo.delegated).minus(accountInfo.amountDelegated).toString(16)}`
+                : 0;
             accountInfo.pendingRewards = delegation ? delegation.pendingRewards.amount : 0;
             accountInfo.claimedRewards = delegation ? delegation.claimedReward : 0;
 
