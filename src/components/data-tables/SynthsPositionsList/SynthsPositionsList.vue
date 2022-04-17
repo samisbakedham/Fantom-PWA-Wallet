@@ -73,20 +73,24 @@
                 <div v-if="column" class="row no-collapse no-vert-col-padding">
                     <div class="col-6 f-row-label">{{ column.label }}</div>
                     <div class="col break-word">
-                        <router-link :to="{ name: 'defi-mint', params: { tokenAddress: item.address } }">
-                            Mint
-                        </router-link>
-                        ,
+                        <template v-if="item.canMint">
+                            <router-link :to="{ name: 'defi-mint', params: { tokenAddress: item.address } }">
+                                Mint
+                            </router-link>
+                            ,
+                        </template>
                         <router-link :to="{ name: 'defi-repay', params: { tokenAddress: item.address } }">
                             Repay
                         </router-link>
                     </div>
                 </div>
                 <template v-else>
-                    <router-link :to="{ name: 'defi-mint', params: { tokenAddress: item.address } }">
-                        Mint
-                    </router-link>
-                    <br />
+                    <template v-if="item.canMint">
+                        <router-link :to="{ name: 'defi-mint', params: { tokenAddress: item.address } }">
+                            Mint
+                        </router-link>
+                        <br />
+                    </template>
                     <router-link :to="{ name: 'defi-repay', params: { tokenAddress: item.address } }">
                         Repay
                     </router-link>
@@ -208,7 +212,7 @@ export default {
          * @param {DefiToken[]} _value
          */
         async tokens(_value) {
-            let tokens = _value.filter((_item) => _item.isActive && _item.canMint && _item.symbol !== 'FTM');
+            let tokens = _value.filter((_item) => _item.isActive && _item.symbol !== 'FTM');
 
             const items = tokens.filter((_item) => {
                 const debt = this.getDebt(_item);

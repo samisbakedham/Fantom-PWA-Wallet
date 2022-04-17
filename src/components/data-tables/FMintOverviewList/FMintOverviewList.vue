@@ -183,7 +183,7 @@
                             </template>
                         </template>
                         <template v-if="item._debt > 0">
-                            <template v-if="usedInFMint(item)">
+                            <template v-if="item.canMint">
                                 <router-link
                                     :to="{
                                         path: `/fmint/${item._fMintAccount.address}/mint`,
@@ -193,15 +193,15 @@
                                     Mint
                                 </router-link>
                                 ,
-                                <router-link
-                                    :to="{
-                                        path: `/fmint/${item._fMintAccount.address}/repay`,
-                                        query: { tokenAddress: item.address },
-                                    }"
-                                >
-                                    Repay
-                                </router-link>
                             </template>
+                            <router-link
+                                :to="{
+                                    path: `/fmint/${item._fMintAccount.address}/repay`,
+                                    query: { tokenAddress: item.address },
+                                }"
+                            >
+                                Repay
+                            </router-link>
                         </template>
                         <!--                        <template v-if="canClaimRewards(item.rewards)">
                             ,<a
@@ -244,7 +244,7 @@
                         </template>
                     </template>
                     <template v-if="item._debt > 0">
-                        <template v-if="usedInFMint(item)">
+                        <template v-if="item.canMint">
                             <router-link
                                 :to="{
                                     path: `/fmint/${item._fMintAccount.address}/mint`,
@@ -254,15 +254,15 @@
                                 Mint
                             </router-link>
                             <br />
-                            <router-link
-                                :to="{
-                                    path: `/fmint/${item._fMintAccount.address}/repay`,
-                                    query: { tokenAddress: item.address },
-                                }"
-                            >
-                                Repay
-                            </router-link>
                         </template>
+                        <router-link
+                            :to="{
+                                path: `/fmint/${item._fMintAccount.address}/repay`,
+                                query: { tokenAddress: item.address },
+                            }"
+                        >
+                            Repay
+                        </router-link>
                     </template>
                     <!--                    <template v-if="canClaimRewards(item.rewards)">
                         <br />
@@ -429,9 +429,7 @@ export default {
             ]);
 
             const fMintAccount = result[0];
-            const tokens = result[1].filter(
-                (_item) => _item.isActive && (_item.canDeposit || _item.canMint) && _item.symbol !== 'FTM'
-            );
+            const tokens = result[1].filter((_item) => _item.isActive && _item.symbol !== 'FTM');
 
             this.wftmToken = tokens.find((_item) => _item.symbol === 'WFTM');
 
@@ -526,14 +524,6 @@ export default {
             const collateral = '_collateral' in _token ? _token._collateral : this.getCollateral(_token, _account);
 
             return collateral > 0 ? collateral : 0;
-        },
-
-        /**
-         * @param {DefiToken} _token
-         * @return {boolean}
-         */
-        usedInFMint(_token) {
-            return _token.symbol === 'WFTM' || _token.canMint;
         },
 
         /**

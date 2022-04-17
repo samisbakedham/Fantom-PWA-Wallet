@@ -136,7 +136,8 @@
                     </button>
                 </div>
                 <div class="col align-end align-center-md">
-                    <router-link :to="{ name: 'defi-mint' }" class="btn large">Mint Synths</router-link>
+                    <button v-if="mintableTokens.length === 0" disabled class="btn large">Mint Synths</button>
+                    <router-link v-else :to="{ name: 'defi-mint' }" class="btn large">Mint Synths</router-link>
                     <br />
                     <router-link :to="{ name: 'defi-repay' }" class="btn large secondary">Repay Synths</router-link>
                 </div>
@@ -338,7 +339,7 @@ export default {
         },
 
         debtFUSD() {
-            return this.mintableTokens.reduce((_prev, _token) => {
+            return this.tokens.reduce((_prev, _token) => {
                 return _prev + this.$defi.convertTokenValue(this.getDebt(_token), _token, this.fusdToken);
             }, 0);
         },
