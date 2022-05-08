@@ -1,6 +1,6 @@
-import Web3 from "web3";
-import web3Utils from "web3-utils";
-import {AbiItem} from 'web3-utils';
+import Web3 from 'web3';
+import web3Utils from 'web3-utils';
+import { AbiItem } from 'web3-utils';
 
 // SFC_CONTRACT_ADDRESS is the address on which the SFC smart contract is deployed.
 const SFC_CONTRACT_ADDRESS = '0xfc00face00000000000000000000000000000000';
@@ -23,7 +23,7 @@ const OPERA_CHAIN_ID = '0xfa';
  */
 function encodeCall(client, abi, params) {
     // make a Web3 instance if needed
-    if ("object" !== typeof client || !client.hasOwnProperty('eth')) {
+    if ('object' !== typeof client || !client.hasOwnProperty('eth')) {
         client = new Web3();
     }
     return client.eth.abi.encodeFunctionCall(abi, params);
@@ -45,30 +45,34 @@ function createDelegationTx(amount, to, web3Client) {
     }
 
     // validate staking id to be uint
-    if (!Number.isInteger(to) || (0 >= to)) {
+    if (!Number.isInteger(to) || 0 >= to) {
         throw 'Validator id must be positive unsigned integer value.';
     }
 
     // make the transaction
     return {
         chainId: OPERA_CHAIN_ID,
-        to: SFC_CONTRACT_ADDRESS, /* SFC Contract */
+        to: SFC_CONTRACT_ADDRESS /* SFC Contract */,
         value: web3Utils.numberToHex(amount),
-        data: encodeCall(web3Client, {
-            "constant": false,
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "toValidatorID",
-                    "type": "uint256"
-                }
-            ],
-            "name": "delegate",
-            "outputs": [],
-            "payable": true,
-            "stateMutability": "payable",
-            "type": "function"
-        }, [web3Utils.numberToHex(to)]),
+        data: encodeCall(
+            web3Client,
+            {
+                constant: false,
+                inputs: [
+                    {
+                        internalType: 'uint256',
+                        name: 'toValidatorID',
+                        type: 'uint256',
+                    },
+                ],
+                name: 'delegate',
+                outputs: [],
+                payable: true,
+                stateMutability: 'payable',
+                type: 'function',
+            },
+            [web3Utils.numberToHex(to)]
+        ),
     };
 }
 
@@ -99,28 +103,32 @@ function increaseDelegationTx(amount, to, web3Client) {
  */
 function claimDelegationRewardsCompoundTx(maxEpochs, to, web3Client) {
     // validate staking id to be uint
-    if (!Number.isInteger(to) || (0 >= to)) {
+    if (!Number.isInteger(to) || 0 >= to) {
         throw 'Validator id must be positive unsigned integer value.';
     }
     return {
         chainId: OPERA_CHAIN_ID,
-        to: SFC_CONTRACT_ADDRESS, /* SFC Contract */
+        to: SFC_CONTRACT_ADDRESS /* SFC Contract */,
         value: ZERO_AMOUNT,
-        data: encodeCall(web3Client, {
-            "constant": false,
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "toValidatorID",
-                    "type": "uint256"
-                }
-            ],
-            "name": "restakeRewards",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        }, [web3Utils.numberToHex(to)])
+        data: encodeCall(
+            web3Client,
+            {
+                constant: false,
+                inputs: [
+                    {
+                        internalType: 'uint256',
+                        name: 'toValidatorID',
+                        type: 'uint256',
+                    },
+                ],
+                name: 'restakeRewards',
+                outputs: [],
+                payable: false,
+                stateMutability: 'nonpayable',
+                type: 'function',
+            },
+            [web3Utils.numberToHex(to)]
+        ),
     };
 }
 
@@ -136,29 +144,33 @@ function claimDelegationRewardsCompoundTx(maxEpochs, to, web3Client) {
  */
 function claimDelegationRewardsTx(maxEpochs, to, web3Client) {
     // validate staking id to be uint
-    if (!Number.isInteger(to) || (0 >= to)) {
+    if (!Number.isInteger(to) || 0 >= to) {
         throw 'Validator id must be positive unsigned integer value.';
     }
 
     return {
         chainId: OPERA_CHAIN_ID,
-        to: SFC_CONTRACT_ADDRESS, /* SFC Contract */
+        to: SFC_CONTRACT_ADDRESS /* SFC Contract */,
         value: ZERO_AMOUNT,
-        data: encodeCall(web3Client, {
-            "constant": false,
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "toValidatorID",
-                    "type": "uint256"
-                }
-            ],
-            "name": "claimRewards",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        }, [web3Utils.numberToHex(to)])
+        data: encodeCall(
+            web3Client,
+            {
+                constant: false,
+                inputs: [
+                    {
+                        internalType: 'uint256',
+                        name: 'toValidatorID',
+                        type: 'uint256',
+                    },
+                ],
+                name: 'claimRewards',
+                outputs: [],
+                payable: false,
+                stateMutability: 'nonpayable',
+                type: 'function',
+            },
+            [web3Utils.numberToHex(to)]
+        ),
     };
 }
 
@@ -204,42 +216,43 @@ function prepareToWithdrawDelegationTx(to, web3Client) {
  */
 function prepareToWithdrawDelegationPartTx(requestId, to, amount, web3Client) {
     // validate staking id to be uint
-    if (!Number.isInteger(to) || (0 >= to)) {
+    if (!Number.isInteger(to) || 0 >= to) {
         throw 'Validator id must be positive unsigned integer value.';
     }
 
     return {
         chainId: OPERA_CHAIN_ID,
-        to: SFC_CONTRACT_ADDRESS, /* SFC Contract */
+        to: SFC_CONTRACT_ADDRESS /* SFC Contract */,
         value: ZERO_AMOUNT,
-        data: encodeCall(web3Client, {
-            "constant": false,
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "toValidatorID",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "wrID",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "amount",
-                    "type": "uint256"
-                }
-            ],
-            "name": "undelegate",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        }, [
-            web3Utils.numberToHex(to),
-            web3Utils.numberToHex(requestId),
-            web3Utils.numberToHex(amount)])
+        data: encodeCall(
+            web3Client,
+            {
+                constant: false,
+                inputs: [
+                    {
+                        internalType: 'uint256',
+                        name: 'toValidatorID',
+                        type: 'uint256',
+                    },
+                    {
+                        internalType: 'uint256',
+                        name: 'wrID',
+                        type: 'uint256',
+                    },
+                    {
+                        internalType: 'uint256',
+                        name: 'amount',
+                        type: 'uint256',
+                    },
+                ],
+                name: 'undelegate',
+                outputs: [],
+                payable: false,
+                stateMutability: 'nonpayable',
+                type: 'function',
+            },
+            [web3Utils.numberToHex(to), web3Utils.numberToHex(requestId), web3Utils.numberToHex(amount)]
+        ),
     };
 }
 
@@ -256,43 +269,41 @@ function prepareToWithdrawDelegationPartTx(requestId, to, amount, web3Client) {
  * @return {{data: string, to: *, value: string}}
  */
 function withdrawPartTx(to, requestId, web3Client) {
-    // request id has to be uint
-    if (!Number.isInteger(requestId) || (0 >= requestId)) {
-        throw 'Request id must be a valid numeric identifier.';
-    }
-
     // validate staking id to be uint
-    if (!Number.isInteger(to) || (0 >= to)) {
+    if (!Number.isInteger(to) || 0 >= to) {
         throw 'Validator id must be positive unsigned integer value.';
     }
 
     return {
         chainId: OPERA_CHAIN_ID,
-        to: SFC_CONTRACT_ADDRESS, /* SFC Contract */
+        to: SFC_CONTRACT_ADDRESS /* SFC Contract */,
         value: ZERO_AMOUNT,
-        data: encodeCall(web3Client, {
-            "constant": false,
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "toValidatorID",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "wrID",
-                    "type": "uint256"
-                }
-            ],
-            "name": "withdraw",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        }, [web3Utils.numberToHex(to), web3Utils.numberToHex(requestId)])
+        data: encodeCall(
+            web3Client,
+            {
+                constant: false,
+                inputs: [
+                    {
+                        internalType: 'uint256',
+                        name: 'toValidatorID',
+                        type: 'uint256',
+                    },
+                    {
+                        internalType: 'uint256',
+                        name: 'wrID',
+                        type: 'uint256',
+                    },
+                ],
+                name: 'withdraw',
+                outputs: [],
+                payable: false,
+                stateMutability: 'nonpayable',
+                type: 'function',
+            },
+            [web3Utils.numberToHex(to), requestId]
+        ),
     };
 }
-
 
 /**
  * withdrawDelegationTx creates a transaction withdrawing prepared delegation.
@@ -321,7 +332,7 @@ function lockupDelegationTx(to, duration, amount, web3Client) {
     }
 
     // validate staking id to be uint
-    if (!Number.isInteger(to) || (0 >= to)) {
+    if (!Number.isInteger(to) || 0 >= to) {
         throw 'Validator id must be positive unsigned integer value.';
     }
 
@@ -331,43 +342,43 @@ function lockupDelegationTx(to, duration, amount, web3Client) {
     }
 
     // validate maximal duration
-    if (duration > (365 * 86400)) {
+    if (duration > 365 * 86400) {
         throw 'The lock duration must be at most 365 days.';
     }
 
     return {
         chainId: OPERA_CHAIN_ID,
-        to: SFC_CONTRACT_ADDRESS, /* SFC Contract */
+        to: SFC_CONTRACT_ADDRESS /* SFC Contract */,
         value: ZERO_AMOUNT,
-        data: encodeCall(web3Client, {
-            "constant": false,
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "toValidatorID",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "lockupDuration",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "amount",
-                    "type": "uint256"
-                }
-            ],
-            "name": "lockStake",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        }, [
-            web3Utils.numberToHex(to),
-            web3Utils.numberToHex(duration),
-            web3Utils.numberToHex(amount)
-        ])
+        data: encodeCall(
+            web3Client,
+            {
+                constant: false,
+                inputs: [
+                    {
+                        internalType: 'uint256',
+                        name: 'toValidatorID',
+                        type: 'uint256',
+                    },
+                    {
+                        internalType: 'uint256',
+                        name: 'lockupDuration',
+                        type: 'uint256',
+                    },
+                    {
+                        internalType: 'uint256',
+                        name: 'amount',
+                        type: 'uint256',
+                    },
+                ],
+                name: 'lockStake',
+                outputs: [],
+                payable: false,
+                stateMutability: 'nonpayable',
+                type: 'function',
+            },
+            [web3Utils.numberToHex(to), web3Utils.numberToHex(duration), web3Utils.numberToHex(amount)]
+        ),
     };
 }
 
@@ -387,7 +398,7 @@ function relockDelegationTx(to, duration, amount, web3Client) {
     }
 
     // validate staking id to be uint
-    if (!Number.isInteger(to) || (0 >= to)) {
+    if (!Number.isInteger(to) || 0 >= to) {
         throw 'Validator id must be positive unsigned integer value.';
     }
 
@@ -397,43 +408,43 @@ function relockDelegationTx(to, duration, amount, web3Client) {
     }
 
     // validate maximal duration
-    if (duration > (365 * 86400)) {
+    if (duration > 365 * 86400) {
         throw 'The lock duration must be at most 365 days.';
     }
 
     return {
         chainId: OPERA_CHAIN_ID,
-        to: SFC_CONTRACT_ADDRESS, /* SFC Contract */
+        to: SFC_CONTRACT_ADDRESS /* SFC Contract */,
         value: ZERO_AMOUNT,
-        data: encodeCall(web3Client, {
-            "constant": false,
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "toValidatorID",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "lockupDuration",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "amount",
-                    "type": "uint256"
-                }
-            ],
-            "name": "relockStake",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        }, [
-            web3Utils.numberToHex(to),
-            web3Utils.numberToHex(duration),
-            web3Utils.numberToHex(amount)
-        ])
+        data: encodeCall(
+            web3Client,
+            {
+                constant: false,
+                inputs: [
+                    {
+                        internalType: 'uint256',
+                        name: 'toValidatorID',
+                        type: 'uint256',
+                    },
+                    {
+                        internalType: 'uint256',
+                        name: 'lockupDuration',
+                        type: 'uint256',
+                    },
+                    {
+                        internalType: 'uint256',
+                        name: 'amount',
+                        type: 'uint256',
+                    },
+                ],
+                name: 'relockStake',
+                outputs: [],
+                payable: false,
+                stateMutability: 'nonpayable',
+                type: 'function',
+            },
+            [web3Utils.numberToHex(to), web3Utils.numberToHex(duration), web3Utils.numberToHex(amount)]
+        ),
     };
 }
 
@@ -452,43 +463,44 @@ function unlockDelegationTx(to, amount, web3Client) {
     }
 
     // validate staking id to be uint
-    if (!Number.isInteger(to) || (0 >= to)) {
+    if (!Number.isInteger(to) || 0 >= to) {
         throw 'Validator id must be positive unsigned integer value.';
     }
 
     return {
         chainId: OPERA_CHAIN_ID,
-        to: SFC_CONTRACT_ADDRESS, /* SFC Contract */
+        to: SFC_CONTRACT_ADDRESS /* SFC Contract */,
         value: ZERO_AMOUNT,
-        data: encodeCall(web3Client, {
-            "constant": false,
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "toValidatorID",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "amount",
-                    "type": "uint256"
-                }
-            ],
-            "name": "unlockStake",
-            "outputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        }, [
-            web3Utils.numberToHex(to),
-            web3Utils.numberToHex(amount)
-        ])
+        data: encodeCall(
+            web3Client,
+            {
+                constant: false,
+                inputs: [
+                    {
+                        internalType: 'uint256',
+                        name: 'toValidatorID',
+                        type: 'uint256',
+                    },
+                    {
+                        internalType: 'uint256',
+                        name: 'amount',
+                        type: 'uint256',
+                    },
+                ],
+                name: 'unlockStake',
+                outputs: [
+                    {
+                        internalType: 'uint256',
+                        name: '',
+                        type: 'uint256',
+                    },
+                ],
+                payable: false,
+                stateMutability: 'nonpayable',
+                type: 'function',
+            },
+            [web3Utils.numberToHex(to), web3Utils.numberToHex(amount)]
+        ),
     };
 }
 
@@ -519,29 +531,33 @@ function sfcTokenizeLockedStake(web3Client, tokenizer, stakerId) {
     }
 
     // validate staking id to be uint
-    if (!Number.isInteger(stakerId) || (0 >= stakerId)) {
+    if (!Number.isInteger(stakerId) || 0 >= stakerId) {
         throw 'Validator id must be positive unsigned integer value.';
     }
 
     return {
         to: tokenizer,
         value: ZERO_AMOUNT,
-        data: encodeCall(web3Client, {
-            "constant": false,
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "toStakerID",
-                    "type": "uint256"
-                }
-            ],
-            "name": "mintSFTM",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        }, [stakerId]),
-        chainId: OPERA_CHAIN_ID
+        data: encodeCall(
+            web3Client,
+            {
+                constant: false,
+                inputs: [
+                    {
+                        internalType: 'uint256',
+                        name: 'toStakerID',
+                        type: 'uint256',
+                    },
+                ],
+                name: 'mintSFTM',
+                outputs: [],
+                payable: false,
+                stateMutability: 'nonpayable',
+                type: 'function',
+            },
+            [stakerId]
+        ),
+        chainId: OPERA_CHAIN_ID,
     };
 }
 
@@ -564,36 +580,38 @@ function sfcRedeemTokenizedStake(web3Client, tokenizer, stakerId, amount) {
     }
 
     // validate staking id to be uint
-    if (!Number.isInteger(stakerId) || (0 >= stakerId)) {
+    if (!Number.isInteger(stakerId) || 0 >= stakerId) {
         throw 'Validator id must be positive unsigned integer value.';
     }
 
     return {
         to: tokenizer,
         value: ZERO_AMOUNT,
-        data: encodeCall(web3Client, {
-            "constant": false,
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "stakerID",
-                    "type": "uint256"
-                }, {
-                    "internalType": "uint256",
-                    "name": "amount",
-                    "type": "uint256"
-                }
-            ],
-            "name": "redeemSFTM",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        }, [
-            web3Utils.numberToHex(stakerId),
-            web3Utils.numberToHex(amount)
-        ]),
-        chainId: OPERA_CHAIN_ID
+        data: encodeCall(
+            web3Client,
+            {
+                constant: false,
+                inputs: [
+                    {
+                        internalType: 'uint256',
+                        name: 'stakerID',
+                        type: 'uint256',
+                    },
+                    {
+                        internalType: 'uint256',
+                        name: 'amount',
+                        type: 'uint256',
+                    },
+                ],
+                name: 'redeemSFTM',
+                outputs: [],
+                payable: false,
+                stateMutability: 'nonpayable',
+                type: 'function',
+            },
+            [web3Utils.numberToHex(stakerId), web3Utils.numberToHex(amount)]
+        ),
+        chainId: OPERA_CHAIN_ID,
     };
 }
 
@@ -613,5 +631,5 @@ export default {
     unlockDelegationTx,
     unstashRewardsTx,
     sfcTokenizeLockedStake,
-    sfcRedeemTokenizedStake
+    sfcRedeemTokenizedStake,
 };

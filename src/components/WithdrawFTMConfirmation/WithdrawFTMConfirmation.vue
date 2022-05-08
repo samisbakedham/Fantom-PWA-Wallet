@@ -118,10 +118,7 @@ export default {
 
             if (withdrawRequest.withdrawRequestID) {
                 this.tx = await this.$fWallet.getSFCTransactionToSign(
-                    sfcUtils.withdrawPartTx(
-                        parseInt(withdrawRequest.stakerID, 16),
-                        parseInt(withdrawRequest.withdrawRequestID, 16)
-                    ),
+                    sfcUtils.withdrawPartTx(parseInt(withdrawRequest.stakerID, 16), withdrawRequest.withdrawRequestID),
                     this.currentAccount.address
                 );
             } else {
