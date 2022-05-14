@@ -1,9 +1,9 @@
 //
 const appConfig = {
     // app title
-    name: 'Fantom fWallet',
+    name: 'Candle Wallet',
     // app description
-    description: 'Fantom fWallet',
+    description: 'Candle Wallet',
     // app keywords
     keywords: 'fantom, opera, wallet',
     // apollo client settings
@@ -45,11 +45,11 @@ const appConfig = {
         defaultProviderIndex: 'random',
     },
     // Opera chain id
-    chainId: '0xfa',
+    chainId: '0x216',
     // JSON-RPC endpoint
-    rpc: 'https://rpcapi.fantom.network/',
+    rpc: 'https://rpc.cndlchain.com/',
     // used in links pointing to fantom explorer
-    explorerUrl: 'https://ftmscan.com/',
+    explorerUrl: 'https://candleexplorer.com/',
     // used in links pointing to validators
     explorerUrl2: 'https://explorer.fantom.network/',
     // used in links pointing to fantom explorer's transaction detail
