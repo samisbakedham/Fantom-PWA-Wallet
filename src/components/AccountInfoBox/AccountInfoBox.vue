@@ -8,7 +8,7 @@
                         <span class="not-visible">Available balance</span>
                         <span>
                             <f-t-m-token-value :value="accountBalance" convert no-currency />
-                            <span class="ftm"> FTM</span>
+                            <span class="ftm"> CNDL</span>
                         </span>
                     </h2>
                     <div class="currency">

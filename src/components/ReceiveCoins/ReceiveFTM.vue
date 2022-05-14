@@ -1,7 +1,7 @@
 <template>
     <div class="receive-ftm">
         <div class="align-center">
-            Send your Opera FTM to:
+            Send your Opera CNDL to:
 
             <h3 class="address break-word" :class="addressCssClass">
                 {{ currentAccount.address }} &nbsp;
@@ -20,7 +20,7 @@
                 >
                     <template #popover-text>
                         Address copied to clipboard. <br />
-                        Warning: Use this address to receive Opera FTM only. If you are receiving FTM-ERC20 you need to
+                        Warning: Use this address to receive Opera CNDL only. If you are receiving CNDL-ERC20 you need to
                         use a different address!
                     </template>
                 </f-copy-button>
@@ -46,7 +46,7 @@
 
         <q-r-code-window ref="qrWindow" :address="currentAccount.address">
             <f-message type="warning" with-icon>
-                Warning: Use this address to receive Opera FTM only. If you are receiving FTM-ERC20 you need to use a
+                Warning: Use this address to receive Opera CNDL only. If you are receiving CNDL-ERC20 you need to use a
                 different address!
             </f-message>
         </q-r-code-window>

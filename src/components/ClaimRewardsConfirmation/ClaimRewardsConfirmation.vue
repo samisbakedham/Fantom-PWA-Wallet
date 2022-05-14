@@ -50,7 +50,7 @@
                 with-icon
                 style="margin-bottom: 16px;"
             >
-                Staking limit reached. You can restake max {{ delegatedLimit }} FTM on validator
+                Staking limit reached. You can restake max {{ delegatedLimit }} CNDL on validator
                 {{ dAccountInfo.stakerInfo.stakerInfo.name }}, {{ dAccountInfo.stakerId }}
             </f-message>
 
