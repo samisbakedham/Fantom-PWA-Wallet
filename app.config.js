@@ -5,38 +5,18 @@ const appConfig = {
     // app description
     description: 'Candle Wallet',
     // app keywords
-    keywords: 'fantom, opera, wallet',
+    keywords: 'candle, wallet',
     // apollo client settings
     apollo: {
         // list of providers. if one of them is unavailable, another is randomly picked
         providers: [
             {
-                http: 'https://xapi-nodea.fantom.network/',
+                http: 'https://rpc.cndlchain.com/',
                 // for subscriptions
                 ws: '',
             },
             {
-                http: 'https://xapi-nodeb.fantom.network/',
-                // for subscriptions
-                ws: '',
-            },
-            {
-                http: 'https://xapi-nodec.fantom.network/',
-                // for subscriptions
-                ws: '',
-            },
-            {
-                http: 'https://xapi-noded.fantom.network/',
-                // for subscriptions
-                ws: '',
-            },
-            {
-                http: 'https://xapi-nodee.fantom.network/',
-                // for subscriptions
-                ws: '',
-            },
-            {
-                http: 'https://xapi-nodef.fantom.network/',
+                http: 'https://network.cndlchain.com/',
                 // for subscriptions
                 ws: '',
             },
@@ -100,7 +80,7 @@ const appConfig = {
     // pwa settings
     pwa: {
         // name used in pwa manifest
-        name: 'Fantom fWallet',
+        name: 'Candle Wallet',
         categories: ['finance'],
     },
     // determines if app is chrome extension
@@ -110,9 +90,9 @@ const appConfig = {
         // chrome extension version - increase version number, if you want to publish in the chrome web store
         version: '0.0.1',
         // chrome extension name
-        name: 'Fantom fWallet',
+        name: 'Candle fWallet',
         // chrome extension description
-        description: 'Fantom fWallet',
+        description: 'Candle fWallet',
         // output directory for application
         outputDir: 'chrome-extension/dist',
         // output directory for application (relative to outputDir)
