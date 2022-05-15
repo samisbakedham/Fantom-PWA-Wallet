@@ -4,7 +4,7 @@
             :tx="tx"
             confirmation-comp-name="withdraw-ftm-confirmation"
             send-button-label="Withdraw"
-            password-label="Please enter your wallet password to withdraw your FTM"
+            password-label="Please enter your wallet password to withdraw your CNDL"
             :on-send-transaction-success="onSendTransactionSuccess"
             card-off
             :show-cancel-button="true"
@@ -12,7 +12,7 @@
             class="min-h-100"
             @cancel-button-click="$emit('cancel-button-click', $event)"
         >
-            <h2 class="not-visible" data-focus>Withdraw delegated FTM - Confirmation</h2>
+            <h2 class="not-visible" data-focus>Withdraw delegated CNDL - Confirmation</h2>
 
             <div class="transaction-info">
                 <div class="row no-collapse">
